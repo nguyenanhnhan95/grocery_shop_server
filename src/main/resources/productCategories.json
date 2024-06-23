@@ -1,0 +1,95 @@
+{
+  "productCategories": [
+    {
+      "name": "Tạp hóa",
+      "href": "/category/tap-hoa",
+      "children": [
+        {
+          "name": "Đồ ăn sáng",
+          "href": "/category/do-an-sang"
+        },
+        {
+          "name": "Đồ uống",
+          "href": "/category/do-uong"
+        },
+        {
+          "name": "Rượu bia",
+          "href": "/category/ruou-bia"
+        },
+        {
+          "name": "Chăm sóc nhà cửa",
+          "href": "/category/cham-soc-nha-cua"
+        },
+        {
+          "name": "Kẹo & Socola",
+          "href": "/category/keo-socola"
+        },
+        {
+          "name": "Nấu ăn & Làm bánh",
+          "href": "/category/nau-an-lam-banh"
+        },
+        {
+          "name": "Phụ kiện hút thuốc",
+          "href": "/category/phu-kien-hut-thuoc"
+        },
+        {
+          "name": "Snacks - Đồ ăn",
+          "href": "/category/snacks-do-an"
+        }
+      ]
+    },
+    {
+      "name": "Làm đẹp",
+      "href": "/category/lam-dep",
+      "children": [
+        {
+          "name": "Trang điểm",
+          "href": "/category/trang-diem"
+        },
+        {
+          "name": "Chăm sóc da",
+          "href": "/category/cham-soc-da"
+        },
+        {
+          "name": "Chăm sóc tóc",
+          "href": "/category/cham-soc-toc"
+        },
+        {
+          "name": "Dụng cụ làm đẹp",
+          "href": "/category/dung-cu-lam-dep"
+        },
+        {
+          "name": "Nước hoa",
+          "href": "/category/nuoc-hoa"
+        },
+        {
+          "name": "Chăm sóc cơ thể",
+          "href": "/category/cham-soc-co-the"
+        }
+      ]
+    }
+    ,{
+      "name": "Mẹ & Bé",
+      "href": "/category/me-be",
+      "children": [
+        {
+          "name": "Tã & Dụng cụ vệ sinh",
+          "href": "/category/dung-cu-ve-sinh"
+        },
+        {
+          "name": "Tắm & Chăm sóc cơ thể",
+          "href": "/category/tam-cham-soc-co-the"
+        },
+        {
+          "name": "Tã & Dụng cụ vệ sinh",
+          "href": "/category/ta-dung-cu-ve-sinh"
+        }
+      ,
+        {
+          "name": "Dụng cụ học tập",
+          "href": "/category/dung-cu-hoc-tap"
+        }
+      ]
+    }
+  ]
+}
