@@ -40,14 +40,14 @@ jobs:
         host: ${{secrets.EC2_HOST}}
         username: ${{secrets.EC2_USER_NAME}}
         key: ${{secrets.EC2_PRIVATE_KEY}}
-        script: |
-          echo "SSH connection successful"
-          docker stop grocery-shop || true
-          docker rm grocery-shop || true
-          docker pull ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
-          run: docker-compose  up --build
-          - name: Check running containers
-          run: docker ps -a
+        # script: |
+        #   echo "SSH connection successful"
+        #   docker stop grocery-shop || true
+        #   docker rm grocery-shop || true
+        #   docker pull ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
+        #   run: docker-compose  up --build
+        #   - name: Check running containers
+        #   run: docker ps -a
         
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
