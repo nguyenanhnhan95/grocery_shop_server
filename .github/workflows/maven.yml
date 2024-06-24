@@ -42,7 +42,7 @@ jobs:
         key: ${{secrets.EC2_PRIVATE_KEY}}
         script: |
          echo "SSH connection successful"
-         echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+         echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
          if [ "$(docker ps -aq -f name=grocery-shop)" ]; 
          then docker stop grocery-shop
          docker rm grocery-shop
