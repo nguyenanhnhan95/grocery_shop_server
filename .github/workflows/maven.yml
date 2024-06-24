@@ -41,14 +41,15 @@ jobs:
         username: ${{secrets.EC2_USER_NAME}}
         key: ${{secrets.EC2_PRIVATE_KEY}}
         script: |
-          echo "SSH connection successful"
-          docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_TOKEN }}
-          docker stop grocery-shop || true
-          # docker rm grocery-shop || true
-          # docker pull ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
-        #   run: docker-compose  up --build
-        #   - name: Check running containers
-        #   run: docker ps -a
+         echo "SSH connection successful"
+         echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+         if [ "$(docker ps -aq -f name=grocery-shop)" ]; 
+         then docker stop grocery-shop
+         docker rm grocery-shop
+         fi
+         docker pull ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
+         docker-compose up --build -d
+         docker ps -a
         
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
