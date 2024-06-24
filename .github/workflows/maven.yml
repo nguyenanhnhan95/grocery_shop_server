@@ -41,21 +41,11 @@ jobs:
         username: ${{secrets.EC2_USER_NAME}}
         key: ${{secrets.EC2_PRIVATE_KEY}}
         script: |
-         if ! command -v docker &> /dev/null
-            then
-              echo "Docker could not be found. Installing..."
-              curl -fsSL https://get.docker.com -o get-docker.sh
-              sh get-docker.sh
-              sudo usermod -aG docker $USER
-              newgrp docker
-            else
-              echo "Docker is already installed"
-            fi
           echo "SSH connection successful"
-          docker login
+          docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_TOKEN }}
           docker stop grocery-shop || true
-          docker rm grocery-shop || true
-          docker pull ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
+          # docker rm grocery-shop || true
+          # docker pull ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
         #   run: docker-compose  up --build
         #   - name: Check running containers
         #   run: docker ps -a
