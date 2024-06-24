@@ -42,6 +42,7 @@ jobs:
         key: ${{secrets.EC2_PRIVATE_KEY}}
         script: |
           echo "SSH connection successful"
+          docker login
           docker stop grocery-shop || true
           docker rm grocery-shop || true
           docker pull ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
