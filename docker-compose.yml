@@ -11,7 +11,7 @@ services:
       MYSQL_DATABASE: grocery_shop
       MYSQL_ROOT_PASSWORD: codegym2023
   react-app:
-    container_name: ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-client
+    container_name: anhnhan/grocery_shop:grocery-shop-client
     image: grocery-shop-client
     ports:
       - 3000:3000
