@@ -1,8 +1,8 @@
 version: "3.1"
 services:
-  mysqldb:
+  mysql:
     container_name: mysqldb
-    image: ${{ secrets.DOCKER_HUB_NAME_TAG }}:mysqldb
+    image: mysql
     ports:
       - 3307:3306
     volumes:
