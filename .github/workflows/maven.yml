@@ -48,7 +48,7 @@ jobs:
          docker rm grocery-shop
          fi
          docker pull ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
-         docker-compose up --build -d
+         run: docker-compose -f "docker-compose.yml" up -d --build
          docker ps -a
         
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
