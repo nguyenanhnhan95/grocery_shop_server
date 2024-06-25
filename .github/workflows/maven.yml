@@ -46,7 +46,7 @@ jobs:
          if [ "$(docker images -q ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server )" ]; 
          then 
          echo "grocery-shop-server exsiting"
-         docker rm ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
+         docker rmi ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
          
          fi
          docker pull ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
