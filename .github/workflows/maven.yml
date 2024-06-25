@@ -49,7 +49,7 @@ jobs:
          docker rmi ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
          
          fi
-         docker pull ${{ secrets.DOCKER_HUB_NAME_TAG }}:mysqldb
+         docker pull ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
           if [ "$(docker images -q ${{ secrets.DOCKER_HUB_NAME_TAG }}:mysqldb )" ]; 
          then 
          echo "grocery-shop-server exsiting"
