@@ -46,7 +46,7 @@ jobs:
          if [ "$(docker images -q ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server )" ]; 
          then 
          echo "grocery-shop-server exsiting"
-         docker rm grocery-shop-server
+         docker rm ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
          fi
          docker pull ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
          run: docker-compose -f docker-compose up -d --build
