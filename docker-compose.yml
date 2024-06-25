@@ -10,22 +10,11 @@ services:
     environment:
       MYSQL_DATABASE: grocery_shop
       MYSQL_ROOT_PASSWORD: codegym2023
-  springboot-app:
-    container_name: grocery-shop-server
-    image: ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
-    ports:
-      - 8080:8080
-    depends_on:
-      - mysqldb
-    env_file:
-      - variables.env
   react-app:
     container_name: ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-client
     image: grocery-shop-client
     ports:
       - 3000:3000
-    depends_on:
-      - springboot-app
 
 
 
