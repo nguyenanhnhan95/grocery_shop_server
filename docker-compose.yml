@@ -2,7 +2,7 @@ version: "3.1"
 services:
   mysqldb:
     container_name: mysqldb
-    image: mysqldb
+    image: ${{ secrets.DOCKER_HUB_NAME_TAG }}:mysqldb
     ports:
       - 3307:3306
     volumes:
@@ -12,7 +12,7 @@ services:
       MYSQL_ROOT_PASSWORD: codegym2023
   springboot-app:
     container_name: grocery-shop-server
-    image: grocery-shop-server
+    image: ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
     ports:
       - 8080:8080
     depends_on:
@@ -20,7 +20,7 @@ services:
     env_file:
       - variables.env
   react-app:
-    container_name: grocery-shop-client
+    container_name: ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-client
     image: grocery-shop-client
     ports:
       - 3000:3000
