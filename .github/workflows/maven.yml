@@ -43,11 +43,11 @@ jobs:
         script: |
          echo "SSH connection successful"
          echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
-         # if [ "$(docker ps -aq -f name=grocery-shop-server)" ]; 
-         # then docker stop grocery-shop-server
+         if [ "$(docker ps -aq -f name=grocery-shop-server)" ]; 
+         then 
+         echo "grocery-shop-server exsiting"
          docker rm grocery-shop-server
          fi
-         docker rmi ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
          docker pull ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
          run: docker-compose -f docker-compose up -d --build
          docker images
