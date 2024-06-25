@@ -49,8 +49,14 @@ jobs:
          docker rmi ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
          
          fi
-         docker pull ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
-         run: docker-compose -f docker-compose up -d --build
+         docker pull ${{ secrets.DOCKER_HUB_NAME_TAG }}:mysqldb
+          if [ "$(docker images -q ${{ secrets.DOCKER_HUB_NAME_TAG }}:mysqldb )" ]; 
+         then 
+         echo "grocery-shop-server exsiting"
+         docker rmi ${{ secrets.DOCKER_HUB_NAME_TAG }}:mysqldb
+         
+         fi
+         docker pull ${{ secrets.DOCKER_HUB_NAME_TAG }}:mysqldb
          docker images
         
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
