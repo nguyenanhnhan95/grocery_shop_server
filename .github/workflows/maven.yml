@@ -43,20 +43,20 @@ jobs:
         script: |
          echo "SSH connection successful"
          echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
-         if [ "$(docker images -q ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server )" ]; 
+         check_and_remove_image() {
+         local image_name=$1
+         if [ "$(docker images -q ${image_name})" ]; 
          then 
-         echo "grocery-shop-server exsiting"
-         docker rmi ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
-         
+         echo "${image_name} existing"
+         docker rmi ${image_name}
          fi
+         }
+         check_and_remove_image "${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server"
          docker pull ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
-          if [ "$(docker images -q ${{ secrets.DOCKER_HUB_NAME_TAG }}:mysqldb )" ]; 
-         then 
-         echo "grocery-shop-server exsiting"
-         docker rmi ${{ secrets.DOCKER_HUB_NAME_TAG }}:mysqldb
-         
-         fi
+         check_and_remove_image "${{ secrets.DOCKER_HUB_NAME_TAG }}:mysqldb"
          docker pull ${{ secrets.DOCKER_HUB_NAME_TAG }}:mysqldb
+         check_and_remove_image "${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-client"
+         docker pull ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-client
          docker images
         
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
