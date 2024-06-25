@@ -47,6 +47,7 @@ jobs:
          then 
          echo "grocery-shop-server exsiting"
          docker rm ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
+         
          fi
          docker pull ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
          run: docker-compose -f docker-compose up -d --build
