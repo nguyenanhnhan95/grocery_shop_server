@@ -43,7 +43,7 @@ jobs:
         script: |
          echo "SSH connection successful"
          echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
-         if [ "$(docker ps -aq -f name=grocery-shop-server)" ]; 
+         if [ "$(docker images -q ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server )" ]; 
          then 
          echo "grocery-shop-server exsiting"
          docker rm grocery-shop-server
