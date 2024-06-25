@@ -53,8 +53,6 @@ jobs:
          }
          check_and_remove_image "${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server"
          docker pull ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
-         check_and_remove_image "${{ secrets.DOCKER_HUB_NAME_TAG }}:mysqldb"
-         docker pull ${{ secrets.DOCKER_HUB_NAME_TAG }}:mysqldb
          check_and_remove_image "${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-client"
          docker pull ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-client
          docker images
