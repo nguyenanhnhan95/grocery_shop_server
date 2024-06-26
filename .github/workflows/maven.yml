@@ -48,15 +48,15 @@ jobs:
          if [ "$(docker images -q ${image_name})" ]; 
          then 
          echo "${image_name} existing"
-         docker rmi ${image_name}
+         sudo docker rmi ${image_name}
          fi
          }
          
          check_and_remove_image "${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server"
-         docker pull ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
+         sudo docker pull ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
          check_and_remove_image "${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-client"
-         docker pull ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-client
-         docker images
+         sudo docker pull ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-client
+         sudo docker images
     
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
