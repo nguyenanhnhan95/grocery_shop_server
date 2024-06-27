@@ -42,13 +42,11 @@ jobs:
           fi
           }
           check_image_docker_hub "${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server"
-          docker images
+          docker images ${{ secrets.DOCKER_HUB_NAME_TAG }}
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
       - name: Docker Push
         run: docker push ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
-      - name: Docker pull mysql
-        run: docker pull mysql ${{ secrets.DOCKER_HUB_NAME_TAG }}:mysqldb
       - name: Deploy to EC2 instance
         uses: appleboy/ssh-action@master
         with:
