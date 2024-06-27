@@ -21,6 +21,7 @@ public class CategoryProductProperties {
 
     public CategoryProductProperties() {
         try {
+            logger.info("CategoryProductProperties execution started.");
             ProductCategoryObject productCategoryObject = new ResourceJsonLoader().readValue(CONFIG_FILE, ProductCategoryObject.class);
             if (productCategoryObject != null) {
                 productCategories = productCategoryObject.getProductCategories();

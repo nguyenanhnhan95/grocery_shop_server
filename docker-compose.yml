@@ -1,6 +1,6 @@
 version: "3"
 services:
-  mysql:
+  mysqldb:
     container_name: mysqldb
     image: mysql:latest
     restart: unless-stopped
@@ -13,7 +13,8 @@ services:
       MYSQL_ROOT_PASSWORD: codegym2023
   springboot-app:
     container_name: grocery-shop-server
-    image: anhnhan/grocery_shop:grocery-shop-server
+    image: grocery-shop-server
+    restart: on-failure
     ports:
       - 8080:8080
     depends_on:
@@ -22,7 +23,7 @@ services:
       - variables.env
   react-app:
     container_name: grocery-shop-client
-    image: anhnhan/grocery_shop:grocery-shop-client
+    image: grocery-shop-client
     ports:
       - 3000:3000
 volumes:

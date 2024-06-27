@@ -97,7 +97,7 @@ public class SecurityConfig {
                         .requestMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN","ROLE_EMPLOYEE")
                         .requestMatchers("/products-variation/**","/products-variation-option/**","/shop-promotion/**")
                         .authenticated()
-                        .requestMatchers("/user/**")
+                        .requestMatchers("/user/**","/menu/admin-side/**")
                         .authenticated()
                 )
                 .logout((logout)->logout.logoutUrl("/logout")

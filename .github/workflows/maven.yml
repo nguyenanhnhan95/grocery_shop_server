@@ -29,11 +29,25 @@ jobs:
       with:
         username: ${{ secrets.DOCKER_HUB_USER_NAME }}
         password: ${{ secrets.DOCKER_HUB_TOKEN }}
-        
+        script: |
+          echo "docker-hub connection successful"
+          check_image_docker_hub() {
+          local image_name=$1
+          if [ "$(docker images -q ${image_name})" ]; 
+          then 
+          echo "${image_name} existing"
+          docker rmi ${image_name}
+          fi
+          }
+          check_image_docker_hub "${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server"
+          check_image_docker_hub "${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-client"
+          docker images
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
     - name: Docker Push
       run: docker push ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
+    - name: Docker Push mysql
+      run: docker push ${{ secrets.DOCKER_HUB_NAME_TAG }}:mysql
     - name: Deploy to EC2 instance
       uses: appleboy/ssh-action@master
       with:

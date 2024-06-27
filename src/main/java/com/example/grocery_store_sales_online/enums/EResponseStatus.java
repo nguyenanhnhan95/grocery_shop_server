@@ -16,7 +16,10 @@ public enum EResponseStatus implements IEnumComboItem {
     DELETE_SUCCESS(200,"Đã xóa dự liệu thành công"),
     DELETE_FAIL(400,"Lỗi xóa dữ liệu "),
     LOGOUT_SUCCESS(200,"log out thành công"),
-    LOGOUT_FAIL(4006,"log out không thành công");
+    LOGOUT_FAIL(4006,"log out không thành công"),
+    READ_JSON_RESOURCE(4007,"Lỗi đọc dữ liệu json từ resource"),
+    READ_PATH_FILE(4008,"Lỗi truy cập đường UI lỗi");
+
 
     EResponseStatus(int code, String text) {
         this.code = code;
