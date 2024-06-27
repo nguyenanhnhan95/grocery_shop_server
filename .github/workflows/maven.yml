@@ -47,7 +47,7 @@ jobs:
     - name: Docker Push
       run: docker push ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
     - name: Docker Push mysql
-      run: docker push ${{ secrets.DOCKER_HUB_NAME_TAG }}:mysql
+      run: docker pull mysql
     - name: Deploy to EC2 instance
       uses: appleboy/ssh-action@master
       with:
