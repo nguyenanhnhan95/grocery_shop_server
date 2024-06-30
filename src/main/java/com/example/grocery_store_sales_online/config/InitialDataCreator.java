@@ -6,10 +6,10 @@ import com.example.grocery_store_sales_online.enums.EAccountStatus;
 import com.example.grocery_store_sales_online.model.person.Employee;
 import com.example.grocery_store_sales_online.model.product.ProductCategory;
 import com.example.grocery_store_sales_online.model.account.Role;
-import com.example.grocery_store_sales_online.service.employee.EmployeeService;
+import com.example.grocery_store_sales_online.service.employee.impl.EmployeeService;
 import com.example.grocery_store_sales_online.service.productCategory.IProductCategoryService;
 
-import com.example.grocery_store_sales_online.service.role.RoleService;
+import com.example.grocery_store_sales_online.service.role.impl.RoleService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

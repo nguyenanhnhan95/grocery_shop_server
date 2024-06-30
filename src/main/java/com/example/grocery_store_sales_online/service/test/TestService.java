@@ -2,11 +2,9 @@ package com.example.grocery_store_sales_online.service.test;
 
 import com.example.grocery_store_sales_online.model.TestEntity;
 import com.example.grocery_store_sales_online.repository.employee.TestRepository;
-import com.example.grocery_store_sales_online.service.base.BaseService;
+import com.example.grocery_store_sales_online.service.base.impl.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class TestService extends BaseService {

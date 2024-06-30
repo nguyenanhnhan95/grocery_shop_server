@@ -53,7 +53,8 @@ public class SecurityConfig {
 
 
     private final String[] PUBLIC_ENDPOINTS={"/", "/error", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg","/auth/refresh",
-            "/**/*.jpg", "/**/*.html", "/**/*.css", "/**/*.js", "/home/**", "/product/**","/auth/**", "/oauth2/**","/auth/login/**","/keep-login","/category/**"};
+            "/**/*.jpg", "/**/*.html", "/**/*.css", "/**/*.js", "/home/**", "/product/**","/auth/**", "/oauth2/**","/auth/login/**","/keep-login","/category/**","/test/**"};
+
 
     @Bean
     public TokenAuthenticationFilter tokenAuthenticationFilter() {

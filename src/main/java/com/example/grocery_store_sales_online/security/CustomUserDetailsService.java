@@ -5,8 +5,8 @@ import com.example.grocery_store_sales_online.exception.ResourceNotFoundExceptio
 import com.example.grocery_store_sales_online.model.person.Employee;
 import com.example.grocery_store_sales_online.model.person.User;
 
-import com.example.grocery_store_sales_online.service.employee.EmployeeService;
-import com.example.grocery_store_sales_online.service.user.UserService;
+import com.example.grocery_store_sales_online.service.employee.impl.EmployeeService;
+import com.example.grocery_store_sales_online.service.user.impl.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;

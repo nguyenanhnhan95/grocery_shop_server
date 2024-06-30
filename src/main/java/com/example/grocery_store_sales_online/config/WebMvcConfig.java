@@ -25,6 +25,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .allowedHeaders("*")
                 .allowCredentials(false)
                 .maxAge(MAX_AGE_SECS);
+        registry.addMapping("/test/**")
+                .allowedOrigins(allowedOrigins)
+                .allowedMethods("POST,GET,DELETE")
+                .allowedHeaders("*")
+                .allowCredentials(false)
+                .maxAge(MAX_AGE_SECS);
         registry.addMapping("/user/**")
                 .allowedOrigins(allowedOrigins)
                 .allowedMethods("GET")

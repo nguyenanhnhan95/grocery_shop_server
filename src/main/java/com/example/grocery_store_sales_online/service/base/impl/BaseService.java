@@ -1,4 +1,4 @@
-package com.example.grocery_store_sales_online.service.base;
+package com.example.grocery_store_sales_online.service.base.impl;
 
 import com.example.grocery_store_sales_online.enums.EResponseStatus;
 import com.example.grocery_store_sales_online.exception.ServiceBusinessExceptional;
@@ -6,11 +6,6 @@ import com.example.grocery_store_sales_online.model.common.Model;
 import com.example.grocery_store_sales_online.security.UserPrincipal;
 import com.example.grocery_store_sales_online.utils.QueryParameter;
 import com.google.gson.Gson;
-import com.querydsl.core.Fetchable;
-import com.querydsl.core.SimpleQuery;
-import com.querydsl.core.types.Expression;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.jpa.impl.JPAQuery;
 import jakarta.annotation.Nullable;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.*;
 @Slf4j
-public class BaseService {
+public class BaseService  {
     private static final int DEFAULT_SIZE = 10;
     private static final int DEFAULT_PAGE = 0;
     @Getter
@@ -107,17 +102,17 @@ public class BaseService {
             return null;
         }
     }
-    protected void setPersonCreate(Model model){
-        UserPrincipal userPrincipal =getCurrentUser();
-        if(userPrincipal!=null){
-            model.setPersonCreate(userPrincipal.getName());
-        }
 
-    }
-    protected void setPersonEdit(Model model){
+    protected void setPersonAction(Model model){
         UserPrincipal userPrincipal =getCurrentUser();
         if(userPrincipal!=null){
-            model.setPersonEdit(userPrincipal.getName());
+            if(model.getPersonCreate()!=null){
+                model.setPersonEdit(userPrincipal.getName());
+            }else{
+                model.setPersonCreate(userPrincipal.getName());
+            }
         }
     }
+
+
 }

@@ -13,8 +13,8 @@ public enum ErrorCode implements IEnumComboItem {
     INVALID_TOKEN(4005,"Invalid Token"),
     UNAUTHENTICATED(4006,"Tài khoản chưa được xác thực"),
     EXPIRED_TOKEN(4007,"Token đã hết hạn"),
-    REFRESH_TOKEN(4008,"Refresh token")
-    ;
+    REFRESH_TOKEN(4008,"Refresh token"),
+    Method_Argument_MVC(4009,"Lối truyền tham số ");
     private final int code;
     private final String message;
 

@@ -1,10 +1,11 @@
-package com.example.grocery_store_sales_online.service.productCategory;
+package com.example.grocery_store_sales_online.service.productCategory.impl;
 
 import com.example.grocery_store_sales_online.enums.EResponseStatus;
 import com.example.grocery_store_sales_online.exception.ServiceBusinessExceptional;
 import com.example.grocery_store_sales_online.model.product.ProductCategory;
 import com.example.grocery_store_sales_online.repository.productCategory.ProductCategoryRepository;
-import com.example.grocery_store_sales_online.service.base.BaseService;
+import com.example.grocery_store_sales_online.service.base.impl.BaseService;
+import com.example.grocery_store_sales_online.service.productCategory.IProductCategoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -25,7 +26,7 @@ public class ProductCategoryService extends BaseService implements IProductCateg
         try {
             log.info("ProductCategoryService:saveProductCategory execution started.");
             setMetaData(productCategory);
-            setPersonCreate(productCategory);
+            setPersonAction(productCategory);
             return Optional.of(productCategoryRepository.save(productCategory)).orElse(null);
         }catch (Exception ex){
             log.error("Exception occurred while persisting ProductCategoryService:saveProductCategory save to database , Exception message {}", ex.getMessage());

@@ -2,7 +2,7 @@ package com.example.grocery_store_sales_online.controller;
 
 import com.example.grocery_store_sales_online.model.Notification;
 import com.example.grocery_store_sales_online.model.product.Product;
-import com.example.grocery_store_sales_online.service.notification.NotificationService;
+import com.example.grocery_store_sales_online.service.notification.impl.NotificationService;
 import com.example.grocery_store_sales_online.service.product.ProductService;
 import com.example.grocery_store_sales_online.utils.QueryListResult;
 import lombok.RequiredArgsConstructor;

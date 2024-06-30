@@ -1,10 +1,11 @@
-package com.example.grocery_store_sales_online.service.role;
+package com.example.grocery_store_sales_online.service.role.impl;
 
 import com.example.grocery_store_sales_online.enums.EResponseStatus;
 import com.example.grocery_store_sales_online.exception.ServiceBusinessExceptional;
 import com.example.grocery_store_sales_online.model.account.Role;
 import com.example.grocery_store_sales_online.repository.role.RoleRepository;
-import com.example.grocery_store_sales_online.service.base.BaseService;
+import com.example.grocery_store_sales_online.service.base.impl.BaseService;
+import com.example.grocery_store_sales_online.service.role.IRoleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

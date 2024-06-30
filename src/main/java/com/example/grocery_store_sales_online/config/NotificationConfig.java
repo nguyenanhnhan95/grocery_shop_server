@@ -1,17 +1,13 @@
 package com.example.grocery_store_sales_online.config;
-import com.example.grocery_store_sales_online.model.Notification;
-import com.example.grocery_store_sales_online.service.notification.NotificationService;
+import com.example.grocery_store_sales_online.service.notification.impl.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 
 
 @Configuration

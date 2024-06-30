@@ -1,4 +1,4 @@
-package com.example.grocery_store_sales_online.service.variation;
+package com.example.grocery_store_sales_online.service.variation.impl;
 
 import com.example.grocery_store_sales_online.dto.product.VariationDto;
 import com.example.grocery_store_sales_online.enums.EResponseStatus;
@@ -9,17 +9,15 @@ import com.example.grocery_store_sales_online.model.product.Variation;
 import com.example.grocery_store_sales_online.repository.variation.IVariationJpaRepository;
 import com.example.grocery_store_sales_online.repository.variation.VariationRepository;
 import com.example.grocery_store_sales_online.security.UserPrincipal;
-import com.example.grocery_store_sales_online.service.base.BaseService;
+import com.example.grocery_store_sales_online.service.base.impl.BaseService;
+import com.example.grocery_store_sales_online.service.variation.IVariationService;
 import com.example.grocery_store_sales_online.utils.QueryListResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.List;
 import java.util.Optional;
@@ -76,10 +74,7 @@ public class VariationService extends BaseService implements IVariationService {
                 throw new CustomValidationException(bindingResult, EResponseStatus.EXISTING);
             }
             Variation variation = variationMapper.convertVariationDtoToVariation(variationDto);
-            UserPrincipal userPrincipal = getCurrentUser();
-            if (userPrincipal != null) {
-                variation.setPersonCreate(userPrincipal.getName());
-            }
+            setPersonAction(variation);
             setMetaData(variation);
             return variationRepository.saveModel(variation);
         } catch (CustomValidationException ex) {
@@ -113,10 +108,7 @@ public class VariationService extends BaseService implements IVariationService {
                 bindingResult.addError(new FieldError("variationDto", "name", "Tên tùy chọn sản phẩm đã tồn tại"));
                 throw new CustomValidationException(bindingResult, EResponseStatus.EXISTING);
             }
-            UserPrincipal userPrincipal = getCurrentUser();
-            if (userPrincipal != null) {
-                variation.setPersonEdit(userPrincipal.getName());
-            }
+            setPersonAction(variation);
             setMetaData(variation);
             variationMapper.updateVariationFromDto(variationDto, variation);
             return variationRepository.saveModel(variation);

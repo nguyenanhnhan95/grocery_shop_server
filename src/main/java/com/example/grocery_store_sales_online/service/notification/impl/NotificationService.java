@@ -1,10 +1,11 @@
-package com.example.grocery_store_sales_online.service.notification;
+package com.example.grocery_store_sales_online.service.notification.impl;
 
 import com.example.grocery_store_sales_online.enums.EResponseStatus;
 import com.example.grocery_store_sales_online.exception.ServiceBusinessExceptional;
 import com.example.grocery_store_sales_online.model.Notification;
 import com.example.grocery_store_sales_online.repository.notification.NotificationRepository;
-import com.example.grocery_store_sales_online.service.base.BaseService;
+import com.example.grocery_store_sales_online.service.base.impl.BaseService;
+import com.example.grocery_store_sales_online.service.notification.INotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,7 @@ public class NotificationService  extends BaseService implements INotificationSe
         try {
             log.info("NotificationService:saveNotification execution started.");
             setMetaData(notification);
-            setPersonCreate(notification);
+            setPersonAction(notification);
             notificationRepository.save(notification);
         }catch (Exception ex){
             log.error("Exception occurred while persisting NotificationService:saveNotification to database , Exception message {}", ex.getMessage());

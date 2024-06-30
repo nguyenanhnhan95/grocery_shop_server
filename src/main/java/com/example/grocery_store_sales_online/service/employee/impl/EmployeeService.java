@@ -1,15 +1,15 @@
-package com.example.grocery_store_sales_online.service.employee;
+package com.example.grocery_store_sales_online.service.employee.impl;
 
 import com.example.grocery_store_sales_online.enums.EResponseStatus;
 import com.example.grocery_store_sales_online.exception.ServiceBusinessExceptional;
 import com.example.grocery_store_sales_online.model.person.Employee;
 import com.example.grocery_store_sales_online.repository.employee.EmployeeRepository;
-import com.example.grocery_store_sales_online.service.base.BaseService;
+import com.example.grocery_store_sales_online.service.base.impl.BaseService;
+import com.example.grocery_store_sales_online.service.employee.IEmployeeService;
 import com.example.grocery_store_sales_online.utils.QueryListResult;
 import com.example.grocery_store_sales_online.utils.QueryParameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,7 +43,7 @@ public class EmployeeService extends BaseService implements IEmployeeService<Emp
         try {
             log.info("EmployeeService:saveEmployee execution started.");
             setMetaData(employee);
-            setPersonCreate(employee);
+            setPersonAction(employee);
             employeeRepository.saveModel(employee);
         } catch (Exception ex) {
             log.error("Exception occurred while persisting EmployeeService:saveEmployee save to database , Exception message {}", ex.getMessage());

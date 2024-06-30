@@ -1,21 +1,18 @@
-package com.example.grocery_store_sales_online.service.promotion;
+package com.example.grocery_store_sales_online.service.promotion.impl;
 
 import com.example.grocery_store_sales_online.dto.shop.PromotionDto;
 import com.example.grocery_store_sales_online.enums.EResponseStatus;
 import com.example.grocery_store_sales_online.exception.CustomValidationException;
 import com.example.grocery_store_sales_online.exception.ServiceBusinessExceptional;
 import com.example.grocery_store_sales_online.mapper.PromotionMapper;
-import com.example.grocery_store_sales_online.model.product.Variation;
 import com.example.grocery_store_sales_online.model.shop.Promotion;
 import com.example.grocery_store_sales_online.repository.Promotion.PromotionRepository;
-import com.example.grocery_store_sales_online.security.UserPrincipal;
-import com.example.grocery_store_sales_online.service.base.BaseService;
+import com.example.grocery_store_sales_online.service.base.impl.BaseService;
+import com.example.grocery_store_sales_online.service.promotion.IPromotionService;
 import com.example.grocery_store_sales_online.utils.QueryListResult;
-import com.example.grocery_store_sales_online.utils.QueryParameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -78,7 +75,7 @@ public class PromotionService extends BaseService implements IPromotionService {
                 bindingResult.addError(new FieldError("promotionDto", "code", "Mã code đã tồn tại"));
                 throw new CustomValidationException(bindingResult, EResponseStatus.EXISTING);
             }
-            setPersonCreate(promotion);
+            setPersonAction(promotion);
             setMetaData(promotion);
             return promotionRepository.saveModel(promotion);
         } catch (CustomValidationException ex) {
@@ -101,7 +98,7 @@ public class PromotionService extends BaseService implements IPromotionService {
                 throw new CustomValidationException(bindingResult, EResponseStatus.EXISTING);
             }
             promotionMapper.updateDtoToPromotion(promotionDto, promotion);
-            setPersonEdit(promotion);
+            setPersonAction(promotion);
             setMetaData(promotion);
             return promotionRepository.saveModel(promotion);
         } catch (CustomValidationException ex) {

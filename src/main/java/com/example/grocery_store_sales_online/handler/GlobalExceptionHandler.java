@@ -16,6 +16,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,24 +24,30 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(value = Exception.class)
-    ResponseEntity<ApiResponse> handleRunTimeException(RuntimeException exception) {
-        ApiResponse apiResponse = new ApiResponse();
+    ResponseEntity<ApiResponse<?>> handleRunTimeException(RuntimeException exception) {
+        ApiResponse<?> apiResponse = new ApiResponse<>();
         apiResponse.setCode(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode());
         apiResponse.setMessage(ErrorCode.UNCATEGORIZED_EXCEPTION.getLabel());
         return ResponseEntity.badRequest().body(apiResponse);
     }
-
+    @ExceptionHandler(value = MethodArgumentTypeMismatchException.class)
+    ResponseEntity<ApiResponse<?>> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException exception){
+        ApiResponse<?> apiResponse = new ApiResponse<>();
+        apiResponse.setCode(ErrorCode.Method_Argument_MVC.getCode());
+        apiResponse.setMessage(exception.getMessage());
+        return ResponseEntity.badRequest().body(apiResponse);
+    }
     @ExceptionHandler(value = ConstraintViolationException.class)
-    ResponseEntity<ApiResponse> handleConstrainViolationException(ConstraintViolationException exception) {
-        ApiResponse apiResponse = new ApiResponse();
+    ResponseEntity<ApiResponse<?>> handleConstrainViolationException(ConstraintViolationException exception) {
+        ApiResponse<?> apiResponse = new ApiResponse<>();
         apiResponse.setCode(ErrorCode.VIOLATION_CONSTRAIN.getCode());
         apiResponse.setMessage(ErrorCode.VIOLATION_CONSTRAIN.getLabel());
         return ResponseEntity.badRequest().body(apiResponse);
     }
 
     @ExceptionHandler(value = AppException.class)
-    ResponseEntity<ApiResponse> handleAppException(AppException exception) {
-        ApiResponse apiResponse = new ApiResponse();
+    ResponseEntity<ApiResponse<?>> handleAppException(AppException exception) {
+        ApiResponse<?> apiResponse = new ApiResponse<>();
         ErrorCode errorCode = exception.getErrorCode();
         apiResponse.setCode(errorCode.getCode());
         apiResponse.setMessage(errorCode.getLabel());
@@ -48,8 +55,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = ResourceNotFoundException.class)
-    ResponseEntity<ApiResponse> handleResourceNotFoundException(ResourceNotFoundException exception) {
-        ApiResponse apiResponse = new ApiResponse();
+    ResponseEntity<ApiResponse<?>> handleResourceNotFoundException(ResourceNotFoundException exception) {
+        ApiResponse<?> apiResponse = new ApiResponse<>();
         ErrorCode errorCode = exception.getErrorCode();
         apiResponse.setCode(errorCode.getCode());
         apiResponse.setMessage(errorCode.getLabel());
@@ -95,16 +102,16 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = AuthenticationException.class)
-    ResponseEntity<ApiResponse> handleActiveException(AuthenticationException exception) {
-        ApiResponse apiResponse = new ApiResponse();
+    ResponseEntity<ApiResponse<?>> handleActiveException(AuthenticationException exception) {
+        ApiResponse<?> apiResponse = new ApiResponse<>();
         apiResponse.setCode(4001);
         apiResponse.setMessage(exception.getMessage());
         return ResponseEntity.status(HttpStatus.LOCKED).body(apiResponse);
     }
 
     @ExceptionHandler(value = InvalidException.class)
-    ResponseEntity<ApiResponse> handleInvalidException(InvalidException exception) {
-        ApiResponse apiResponse = new ApiResponse();
+    ResponseEntity<ApiResponse<?>> handleInvalidException(InvalidException exception) {
+        ApiResponse<?> apiResponse = new ApiResponse<>();
         ErrorCode errorCode = ErrorCode.INVALID_TOKEN;
         apiResponse.setCode(errorCode.getCode());
         apiResponse.setMessage(exception.getMessage());
@@ -112,8 +119,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = ExpiredJwtException.class)
-    ResponseEntity<ApiResponse> handleAccessDeniedException(ExpiredJwtException exception) {
-        ApiResponse apiResponse = new ApiResponse();
+    ResponseEntity<ApiResponse<?>> handleAccessDeniedException(ExpiredJwtException exception) {
+        ApiResponse<?> apiResponse = new ApiResponse<>();
         apiResponse.setCode(100000000);
         apiResponse.setMessage(exception.getMessage());
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(apiResponse);
