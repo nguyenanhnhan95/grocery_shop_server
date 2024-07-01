@@ -64,7 +64,7 @@ jobs:
             sudo docker rmi ${image_name}
             fi
             }
-          
+        
             check_and_remove_image "${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server"
             sudo docker pull ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
             check_and_remove_image "${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-client"
