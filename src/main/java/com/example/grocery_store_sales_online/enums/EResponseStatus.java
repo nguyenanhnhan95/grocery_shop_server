@@ -27,7 +27,8 @@ public enum EResponseStatus implements IEnumComboItem {
     AWS_COPY_OBJECT(4011,"Lỗi copy file trên aws"),
     FILE_DIRECTORY_FAIL(4012,"Đường dẫn file lưu lỗi"),
     FILE_UP_TO_SERVER_FAIL(4013,"Tải file lên server lỗi"),
-    FILE_CREATE_FAIL(4014,"Tải file  lỗi");
+    AWS_FILE_LOAD_FAIL(4014,"Tải file  lỗi"),
+    AWS_FILE_UPLOAD_FAIL(4014,"Tải file  lỗi");
 
 
     EResponseStatus(int code, String text) {

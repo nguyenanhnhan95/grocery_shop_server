@@ -61,7 +61,7 @@ public class FileConfiguration {
             return file;
         }catch (Exception ex){
             log.error("Exception occurred while persisting FileEntryService:createFileEntry , Exception message {}", ex.getMessage());
-            throw new ServiceBusinessExceptional(EResponseStatus.FILE_CREATE_FAIL.getLabel(), EResponseStatus.FILE_CREATE_FAIL);
+            throw new ServiceBusinessExceptional(EResponseStatus.AWS_FILE_LOAD_FAIL.getLabel(), EResponseStatus.AWS_FILE_LOAD_FAIL);
         }
     }
     private String getFileExtension(String fileName) {

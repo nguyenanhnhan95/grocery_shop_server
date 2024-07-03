@@ -65,7 +65,7 @@ public class S3Service  {
             return res.readAllBytes();
         }catch (Exception ex){
             log.error("Exception occurred while config S3Client:getObject , Exception message {}", ex.getMessage());
-            throw new ServiceBusinessExceptional(EResponseStatus.CONFIG_AWS_FILE.getLabel(), EResponseStatus.CONFIG_AWS_FILE);
+            throw new ServiceBusinessExceptional(EResponseStatus.AWS_FILE_LOAD_FAIL.getLabel(), EResponseStatus.AWS_FILE_LOAD_FAIL);
         }
     }
 
@@ -98,4 +98,18 @@ public class S3Service  {
             throw new ServiceBusinessExceptional(EResponseStatus.AWS_COPY_OBJECT.getLabel(), EResponseStatus.AWS_COPY_OBJECT);
         }
     }
+//    public byte[] getObjects(String bucketName,String key)  {
+//        log.info("S3Service:getObjects execution started.");
+//        try{
+//            ListObjectsRequest listObjectsRequest = ListObjectsRequest.builder()
+//                    .bucket(bucketName)
+//                    .prefix()
+//                    .build();
+//            ResponseInputStream<ListObjectsRequest> res= s3Client.get(ListObjectsRequest);
+//            return res.readAllBytes();
+//        }catch (Exception ex){
+//            log.error("Exception occurred while config S3Client:getObject , Exception message {}", ex.getMessage());
+//            throw new ServiceBusinessExceptional(EResponseStatus.AWS_FILE_LOAD_FAIL.getLabel(), EResponseStatus.AWS_FILE_LOAD_FAIL);
+//        }
+//    }
 }
