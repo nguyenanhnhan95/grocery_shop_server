@@ -65,7 +65,7 @@ jobs:
             # fi
             # }
             # check_and_remove_image "${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server"
-            sudo docker system prune -a
+            sudo docker system prune -fa
             sudo docker pull ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
             # check_and_remove_image "${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-client"
             sudo docker pull ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-client
