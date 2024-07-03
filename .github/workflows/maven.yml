@@ -56,17 +56,18 @@ jobs:
           script: |
             echo "SSH connection successful"
             echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
-            check_and_remove_image() {
-            local image_name=$1
-            if [ "$(docker images -q ${image_name})" ]; 
-            then 
-            echo "${image_name} existing"
-            sudo docker rmi ${image_name}
-            fi
-            }
-            check_and_remove_image "${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server"
+            # check_and_remove_image() {
+            # local image_name=$1
+            # if [ "$(docker images -q ${image_name})" ]; 
+            # then 
+            # echo "${image_name} existing"
+            # sudo docker rmi ${image_name}
+            # fi
+            # }
+            # check_and_remove_image "${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server"
+            sudo docker system prune -a
             sudo docker pull ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
-            check_and_remove_image "${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-client"
+            # check_and_remove_image "${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-client"
             sudo docker pull ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-client
             sudo docker images
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
