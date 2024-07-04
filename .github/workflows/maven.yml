@@ -56,15 +56,6 @@ jobs:
           script: |
             echo "SSH connection successful"
             echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
-            # check_and_remove_image() {
-            # local image_name=$1
-            # if [ "$(docker images -q ${image_name})" ]; 
-            # then 
-            # echo "${image_name} existing"
-            # sudo docker rmi ${image_name}
-            # fi
-            # }
-            # check_and_remove_image "${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server"
             sudo sed -i 's#^DOMAIN_PORT_CLIENT=.*#DOMAIN_PORT_CLIENT=${{ secrets.DOMAIN_PORT_CLIENT }}#' .env
             sudo sed -i 's#^REACT_APP_DOMAIN_CLIENT=.*#REACT_APP_DOMAIN_CLIENT=${{ secrets.DOMAIN_CLIENT }}#' .env
             sudo cat .env
