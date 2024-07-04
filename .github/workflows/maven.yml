@@ -65,8 +65,9 @@ jobs:
             # fi
             # }
             # check_and_remove_image "${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server"
-            sudo sed -i 's#^DOMAIN_PORT_CLIENT=.*#DOMAIN_PORT_CLIENT=${secrets.DOMAIN_PORT_CLIENT}#' .env
-            sudo sed -i 's#^REACT_APP_DOMAIN_CLIENT=.*#REACT_APP_DOMAIN_CLIENT=${secrets.DOMAIN_CLIENT}#' .env
+            sudo sed -i 's#^DOMAIN_PORT_CLIENT=.*#DOMAIN_PORT_CLIENT=${{ secrets.DOMAIN_PORT_CLIENT }}#' .env
+            sudo sed -i 's#^REACT_APP_DOMAIN_CLIENT=.*#REACT_APP_DOMAIN_CLIENT=${{ secrets.DOMAIN_CLIENT }}#' .env
+            sudo cat .env
             sudo docker stop $(sudo docker ps -a -q)
             sudo docker-compose down
             sudo docker volume prune
