@@ -65,8 +65,12 @@ jobs:
             # fi
             # }
             # check_and_remove_image "${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server"
-            sudo docker system prune -fa
-            
+            sudo sed -i 's#^REACT_APP_DOMAIN_CLIENT=.*#REACT_APP_DOMAIN_CLIENT=${secrets.DOMAIN_CLIENT}#' .env
+            sudo docker stop $(sudo docker ps -a -q)
+            sudo docker-compose down
+            sudo docker volume prune
+            sudo docker volume rm ubuntu_db
+            sudo docker system prune -fa            
             sudo docker pull ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
             # check_and_remove_image "${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-client"
             sudo docker pull ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-client
