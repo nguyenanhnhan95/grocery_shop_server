@@ -26,7 +26,10 @@
       "title": "Nội dung",
       "href": "/admin/article",
       "resources": [
-        "/admin/article/view"
+        "/admin/article",
+        "/admin/article/view",
+        "/admin/article/add",
+        "/admin/article/edit"
       ],
       "iconClass": "fa-regular fa-file-lines",
       "requiredPermissions": [
@@ -53,7 +56,7 @@
           "resources": [
             "/admin/article-list",
             "/admin/article-list/add",
-            "/admin/article-list/detail",
+            "/admin/article-list/view",
             "/admin/article-list/edit"
           ],
           "iconClass": "fa-regular fa-circle",
@@ -67,7 +70,7 @@
           "resources": [
             "/admin/article-featured",
             "/admin/article-featured/add",
-            "/admin/article-featured/detail",
+            "/admin/article-featured/view",
             "/admin/article-featured/edit"
           ],
           "iconClass": "fa-regular fa-circle",
@@ -95,7 +98,7 @@
           "resources": [
             "/admin/shop-overview",
             "/admin/shop-overview/add",
-            "/admin/shop-overview/detail",
+            "/admin/shop-overview/view",
             "/admin/shop-overview/edit"
           ],
           "iconClass": "fa-regular fa-circle",
@@ -109,7 +112,7 @@
           "resources": [
             "/admin/shop-order",
             "/admin/shop-order/add",
-            "/admin/shop-order/detail",
+            "/admin/shop-order/view",
             "/admin/shop-order/edit"
           ],
           "iconClass": "fa-regular fa-circle",
@@ -123,7 +126,7 @@
           "resources": [
             "/admin/shop-passenger",
             "/admin/shop-passenger/add",
-            "/admin/shop-passenger/detail",
+            "/admin/shop-passenger/view",
             "/admin/shop-passenger/edit"
           ],
           "iconClass": "fa-regular fa-circle",
@@ -137,7 +140,7 @@
           "resources": [
             "/admin/shop-promotion",
             "/admin/shop-promotion/add",
-            "/admin/shop-promotion/detail",
+            "/admin/shop-promotion/view",
             "/admin/shop-promotion/edit"
           ],
           "iconClass": "fa-regular fa-circle",
@@ -274,7 +277,8 @@
       "resources": [
         "/admin/files",
         "/admin/files/add",
-        "/admin/files/detail"
+        "/admin/files/view",
+        "/admin/files/edit"
       ],
       "iconClass": "fa-solid fa-solid fa-folder-open",
       "requiredPermissions": [
@@ -292,9 +296,12 @@
     },
     {
       "title": "Website",
-      "href": "",
+      "href": "/admin/website",
       "resources": [
-        "website/view"
+        "/admin/website",
+        "/admin/website/view",
+        "/admin/website/edit",
+        "/admin/website/add"
       ],
       "iconClass": "fa-brands fa-edge-legacy",
       "requiredPermissions": [
@@ -357,7 +364,10 @@
           "title": "Cấu hình chung",
           "href": "/admin/web-setting",
           "resources": [
-            "/admin/web-setting"
+            "/admin/web-setting",
+            "/admin/web-setting/view",
+            "/admin/web-setting/edit",
+            "/admin/web-setting/add"
           ],
           "iconClass": "fa-regular fa-circle",
           "requiredPermissions": [
@@ -407,10 +417,10 @@
       "title": "Quản lý công việc",
       "href": "/admin/workflow-management",
       "resources": [
-        "workflow-management",
-        "workflow-management/add",
-        "workflow-management/detail",
-        "workflow-management/edit"
+        "/admin/workflow-management",
+        "/admin/workflow-management/add",
+        "/admin/workflow-management/detail",
+        "/admin/workflow-management/edit"
       ],
       "iconClass": "folder",
       "requiredPermissions": [
@@ -430,7 +440,10 @@
       "title": "Hệ thống",
       "href": "/admin/system-content",
       "resources": [
-        "/admin/system-content"
+        "/admin/system-content",
+        "/admin/system-content/view",
+        "/admin/system-content/edit",
+        "/admin/system-content/add"
       ],
       "iconClass": "book-open",
       "requiredPermissions": [
@@ -455,10 +468,10 @@
           "title": "Vai trò",
           "href": "/admin/role",
           "resources": [
-            "role",
-            "role/add",
-            "role/edit",
-            "role/detail"
+            "/admin/role",
+            "/admin/role/add",
+            "/admin/role/edit",
+            "/admin/role/detail"
           ],
           "iconClass": "fa-regular fa-circle",
           "requiredPermissions": [

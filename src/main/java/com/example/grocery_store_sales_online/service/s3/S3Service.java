@@ -14,7 +14,9 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
 
 import java.nio.ByteBuffer;
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +39,7 @@ public class S3Service  {
             return ByteBuffer.wrap(b);
         }catch (Exception ex){
             log.error("Exception occurred while config S3Client:getRandomByteBuffer , Exception message {}", ex.getMessage());
-            throw new ServiceBusinessExceptional(EResponseStatus.CONFIG_AWS_FILE.getLabel(), EResponseStatus.CONFIG_AWS_FILE);
+            throw new ServiceBusinessExceptional(EResponseStatus.CONFIG_AWS_FILE.getLabel(), EResponseStatus.CONFIG_AWS_FILE.getCode());
         }
     }
     public void putObject(String bucketName, String key, MultipartFile file){
@@ -50,7 +52,7 @@ public class S3Service  {
             s3Client.putObject(objectRequest, RequestBody.fromBytes(file.getBytes()));
         }catch (Exception ex){
             log.error("Exception occurred while config S3Client:s3Client , Exception message {}", ex.getMessage());
-            throw new ServiceBusinessExceptional(EResponseStatus.CONFIG_AWS_FILE.getLabel(), EResponseStatus.CONFIG_AWS_FILE);
+            throw new ServiceBusinessExceptional(EResponseStatus.CONFIG_AWS_FILE.getLabel(), EResponseStatus.CONFIG_AWS_FILE.getCode());
         }
     }
 
@@ -65,7 +67,7 @@ public class S3Service  {
             return res.readAllBytes();
         }catch (Exception ex){
             log.error("Exception occurred while config S3Client:getObject , Exception message {}", ex.getMessage());
-            throw new ServiceBusinessExceptional(EResponseStatus.AWS_FILE_LOAD_FAIL.getLabel(), EResponseStatus.AWS_FILE_LOAD_FAIL);
+            throw new ServiceBusinessExceptional(EResponseStatus.AWS_FILE_LOAD_FAIL.getLabel(), EResponseStatus.AWS_FILE_LOAD_FAIL.getCode());
         }
     }
 
@@ -79,7 +81,7 @@ public class S3Service  {
             s3Client.deleteObject(deleteObjectRequest);
         }catch (Exception ex){
             log.error("Exception occurred while config S3Client:getObject delete object , Exception message {}", ex.getMessage());
-            throw new ServiceBusinessExceptional(EResponseStatus.AWS_DELETE_OBJECT_FAIL.getLabel(), EResponseStatus.AWS_DELETE_OBJECT_FAIL);
+            throw new ServiceBusinessExceptional(EResponseStatus.AWS_DELETE_OBJECT_FAIL.getLabel(), EResponseStatus.AWS_DELETE_OBJECT_FAIL.getCode());
         }
     }
     public String copyObject(String fromBucket, String key, String toBucket){
@@ -95,21 +97,19 @@ public class S3Service  {
             return copyRes.copyObjectResult().toString();
         }catch (Exception ex){
             log.error("Exception occurred while config S3Client:copyObject delete object , Exception message {}", ex.getMessage());
-            throw new ServiceBusinessExceptional(EResponseStatus.AWS_COPY_OBJECT.getLabel(), EResponseStatus.AWS_COPY_OBJECT);
+            throw new ServiceBusinessExceptional(EResponseStatus.AWS_COPY_OBJECT.getLabel(), EResponseStatus.AWS_COPY_OBJECT.getCode());
         }
     }
-//    public byte[] getObjects(String bucketName,String key)  {
-//        log.info("S3Service:getObjects execution started.");
-//        try{
-//            ListObjectsRequest listObjectsRequest = ListObjectsRequest.builder()
-//                    .bucket(bucketName)
-//                    .prefix()
-//                    .build();
-//            ResponseInputStream<ListObjectsRequest> res= s3Client.get(ListObjectsRequest);
-//            return res.readAllBytes();
-//        }catch (Exception ex){
-//            log.error("Exception occurred while config S3Client:getObject , Exception message {}", ex.getMessage());
-//            throw new ServiceBusinessExceptional(EResponseStatus.AWS_FILE_LOAD_FAIL.getLabel(), EResponseStatus.AWS_FILE_LOAD_FAIL);
-//        }
-//    }
+    public List<String> getKeysByPrefix(String bucketName,String prefix) {
+        ListObjectsV2Request listObjectsV2Request = ListObjectsV2Request.builder()
+                .bucket(bucketName)
+                .prefix(prefix)
+                .build();
+
+        ListObjectsV2Response listObjectsV2Response = s3Client.listObjectsV2(listObjectsV2Request);
+
+        return listObjectsV2Response.contents().stream()
+                .map(S3Object::key)
+                .collect(Collectors.toList());
+    }
 }

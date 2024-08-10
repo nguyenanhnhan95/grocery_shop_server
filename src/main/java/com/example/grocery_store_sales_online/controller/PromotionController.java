@@ -28,20 +28,19 @@ public class PromotionController {
 
     @GetMapping("/search")
     public ResponseEntity<ApiResponse<QueryListResult<Promotion>>> getListResult(@RequestParam("query") String queryParameter) {
-        QueryListResult<Promotion> promotions = promotionService.getListResult(queryParameter);
-        ApiResponse<QueryListResult<Promotion>> result = new ApiResponse<>(EResponseStatus.FETCH_DATA_SUCCESS.getCode(), EResponseStatus.FETCH_DATA_SUCCESS.getLabel(), promotions);
+        ApiResponse<QueryListResult<Promotion>> result = new ApiResponse<>(EResponseStatus.FETCH_DATA_SUCCESS.getCode(),
+                EResponseStatus.FETCH_DATA_SUCCESS.getLabel(), promotionService.getListResult(queryParameter));
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @GetMapping("")
     public ResponseEntity<ApiResponse<List<Promotion>>> findAll() {
-        List<Promotion> promotions = promotionService.findAll();
-        ApiResponse<List<Promotion>> result = new ApiResponse<>(EResponseStatus.FETCH_DATA_SUCCESS.getCode(), EResponseStatus.FETCH_DATA_SUCCESS.getLabel(), promotions);
+        ApiResponse<List<Promotion>> result = new ApiResponse<>(EResponseStatus.FETCH_DATA_SUCCESS.getCode(), EResponseStatus.FETCH_DATA_SUCCESS.getLabel(),  promotionService.findAll());
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @PostMapping("")
-    public ResponseEntity<?> saveModel(@Valid @RequestBody PromotionDto promotionDto, BindingResult bindingResult) {
+    public ResponseEntity<?> saveModel(@Valid @RequestBody PromotionDto promotionDto) {
         promotionService.saveModelDto(promotionDto);
         ApiResponse<?> apiResponse = new ApiResponse<>(EResponseStatus.SAVE_SUCCESS.getCode(), EResponseStatus.SAVE_SUCCESS.getLabel());
         return ResponseEntity.ok().body(apiResponse);

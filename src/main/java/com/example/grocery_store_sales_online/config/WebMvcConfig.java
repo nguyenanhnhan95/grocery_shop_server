@@ -37,6 +37,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .allowedHeaders("*")
                 .allowCredentials(true)
                 .maxAge(MAX_AGE_SECS);
+        registry.addMapping("/profile/**")
+                .allowedOrigins(allowedOrigins)
+                .allowedMethods("GET","PATCH")
+                .allowedHeaders("*")
+                .allowCredentials(true)
+                .maxAge(MAX_AGE_SECS);
         registry.addMapping("/auth/**")
                 .allowedOrigins(allowedOrigins)
                 .allowedMethods("POST,GET")
@@ -44,6 +50,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .allowCredentials(false)
                 .maxAge(MAX_AGE_SECS);
         registry.addMapping("/products-variation/**")
+                .allowedOrigins(allowedOrigins)
+                .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .allowCredentials(true)
+                .maxAge(MAX_AGE_SECS);
+        registry.addMapping("/products/**")
                 .allowedOrigins(allowedOrigins)
                 .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
                 .allowedHeaders("*")

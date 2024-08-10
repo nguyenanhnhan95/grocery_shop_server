@@ -13,6 +13,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
+
+import static com.example.grocery_store_sales_online.utils.CommonConstants.SLASH;
+
 @Component
 @RequiredArgsConstructor
 public class LogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler {
@@ -28,7 +31,7 @@ public class LogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler {
         if(StringUtils.isNotBlank(token)){
             tokenProvider.logout(token);
         }
-        String targetUrl = UriComponentsBuilder.fromUriString(allowedOrigins[0]+"/home").toUriString();
+        String targetUrl = UriComponentsBuilder.fromUriString(allowedOrigins[0]+SLASH).toUriString();
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 

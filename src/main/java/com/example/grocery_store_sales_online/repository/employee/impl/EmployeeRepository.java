@@ -1,10 +1,10 @@
-package com.example.grocery_store_sales_online.repository.employee;
+package com.example.grocery_store_sales_online.repository.employee.impl;
 
+import com.example.grocery_store_sales_online.enums.EScreenTheme;
 import com.example.grocery_store_sales_online.model.person.Employee;
 import com.example.grocery_store_sales_online.model.person.QEmployee;
 import com.example.grocery_store_sales_online.repository.base.BaseRepository;
-import com.example.grocery_store_sales_online.utils.QueryListResult;
-import com.example.grocery_store_sales_online.utils.QueryParameter;
+import com.example.grocery_store_sales_online.repository.employee.IEmployeeRepository;
 import com.querydsl.jpa.impl.JPAQuery;
 
 import io.micrometer.common.util.StringUtils;
@@ -13,12 +13,11 @@ import org.apache.commons.collections4.MapUtils;
 import org.springframework.stereotype.Repository;
 
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 @Repository
-public class EmployeeRepository extends BaseRepository<Employee,Long>  {
+public class EmployeeRepository extends BaseRepository<Employee,Long> implements IEmployeeRepository {
     protected final QEmployee employee = QEmployee.employee;
 
     public EmployeeRepository( EntityManager em) {
@@ -31,7 +30,8 @@ public class EmployeeRepository extends BaseRepository<Employee,Long>  {
 //        long total = query.fetchCount();
 //        return QueryListResult.<Employee>builder().result(result).total(total).build();
 //    }
-    public Optional<Employee> findByUserName(String name){
+    @Override
+    public Optional<Employee> findByName(String name){
         JPAQuery<Employee> jpaQuery = new JPAQuery<>(em);
         return Optional.ofNullable(jpaQuery.select(employee).from(employee)
                 .where(employee.name.eq(name)).fetchFirst());
@@ -49,6 +49,5 @@ public class EmployeeRepository extends BaseRepository<Employee,Long>  {
             return jpaQuery.select(employee).from(employee);
         }
     }
-
 
 }

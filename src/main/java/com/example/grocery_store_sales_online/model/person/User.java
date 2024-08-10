@@ -30,7 +30,6 @@ public class User extends Person implements Serializable {
     @Enumerated(EnumType.STRING)
     private AuthProvider provider;
 
-
     private boolean enable;
     @ManyToMany(cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",joinColumns = {@JoinColumn(name="user_id")

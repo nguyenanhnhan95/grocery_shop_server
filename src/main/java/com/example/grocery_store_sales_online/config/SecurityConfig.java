@@ -51,9 +51,8 @@ public class SecurityConfig {
     private  final LogoutSuccessHandler logoutSuccessHandler;
     private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
-
     private final String[] PUBLIC_ENDPOINTS={"/", "/error", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg","/auth/refresh",
-            "/**/*.jpg", "/**/*.html", "/**/*.css", "/**/*.js", "/home/**", "/product/**","/auth/**", "/oauth2/**","/auth/login/**","/keep-login","/category/**","/test/**"};
+            "/**/*.jpg", "/**/*.html", "/**/*.css", "/**/*.js", "/home/**","/auth/**", "/oauth2/**","/auth/login/**","/keep-login","/product-category/**","/test/**"};
 
 
     @Bean
@@ -91,14 +90,14 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(new RestAuthenticationEntryPoint()))
+                .exceptionHandling(exception -> exception.authenticationEntryPoint( new RestAuthenticationEntryPoint()))
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers(PUBLIC_ENDPOINTS)
                         .permitAll()
                         .requestMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN","ROLE_EMPLOYEE")
-                        .requestMatchers("/products-variation/**","/products-variation-option/**","/shop-promotion/**")
+                        .requestMatchers("/products-variation/**","/products-variation-option/**","/shop-promotion/**","/products/**")
                         .authenticated()
-                        .requestMatchers("/user/**","/menu/admin-side/**")
+                        .requestMatchers("/user/**","/menu/admin-side/**","/profile/**")
                         .authenticated()
                 )
                 .logout((logout)->logout.logoutUrl("/logout")

@@ -3,6 +3,7 @@ package com.example.grocery_store_sales_online.config;
 
 import com.example.grocery_store_sales_online.enums.AuthProvider;
 import com.example.grocery_store_sales_online.enums.EAccountStatus;
+import com.example.grocery_store_sales_online.enums.ERole;
 import com.example.grocery_store_sales_online.model.person.Employee;
 import com.example.grocery_store_sales_online.model.product.ProductCategory;
 import com.example.grocery_store_sales_online.model.account.Role;
@@ -69,8 +70,8 @@ public class InitialDataCreator implements ApplicationListener<ApplicationReadyE
             employee.setAccountStatus(EAccountStatus.ACTIVATED);
             admin.setProvider(AuthProvider.local);
             employee.setProvider(AuthProvider.local);
-            Optional<Role> roleAdmin = roleService.findByAlias("ROLE_ADMIN");
-            Optional<Role> roleEmployee = roleService.findByAlias("ROLE_EMPLOYEE");
+            Optional<Role> roleAdmin = roleService.findByAlias(ERole.ADMIN.getLabel());
+            Optional<Role> roleEmployee = roleService.findByAlias(ERole.EMPLOYEE.getLabel());
             if (roleAdmin.isPresent() ) {
                 Set<Role> roles = new HashSet<Role>();
                 roles.add(roleAdmin.get());
@@ -81,8 +82,8 @@ public class InitialDataCreator implements ApplicationListener<ApplicationReadyE
                 roles.add(roleEmployee.get());
                 employee.setRoles(roles);
             }
-            employeeService.saveEmployee(admin);
-            employeeService.saveEmployee(employee);
+            employeeService.saveModel(admin);
+            employeeService.saveModel(employee);
         }
     }
 
@@ -114,16 +115,16 @@ public class InitialDataCreator implements ApplicationListener<ApplicationReadyE
                 }
                 ;
             }
-            productCategoryService.saveProductCategory(current);
+            productCategoryService.saveModel(current);
         } else {
             if (productCategory.getChildren() != null && productCategory.getChildren().isEmpty()) {
-                productCategoryService.saveProductCategory(productCategory);
+                productCategoryService.saveModel(productCategory);
             } else {
-                ProductCategory parent = productCategoryService.saveProductCategory(productCategory);
+                ProductCategory parent = productCategoryService.saveModel(productCategory);
                 if (parent != null) {
                     for (ProductCategory each : productCategory.getChildren()) {
                         each.setParentCategory(parent);
-                        productCategoryService.saveProductCategory(each);
+                        productCategoryService.saveModel(each);
                     }
                 }
             }

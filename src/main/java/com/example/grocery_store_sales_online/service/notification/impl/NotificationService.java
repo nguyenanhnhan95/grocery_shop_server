@@ -26,7 +26,7 @@ public class NotificationService  extends BaseService implements INotificationSe
             notificationRepository.save(notification);
         }catch (Exception ex){
             log.error("Exception occurred while persisting NotificationService:saveNotification to database , Exception message {}", ex.getMessage());
-            throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL);
+            throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());
         }
     }
 
@@ -37,7 +37,7 @@ public class NotificationService  extends BaseService implements INotificationSe
             return notificationRepository.findAll();
         } catch (Exception ex) {
             log.error("Exception occurred while persisting NNotificationService:findAll to database , Exception message {}", ex.getMessage());
-            throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL);
+            throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());
         }
     }
 }

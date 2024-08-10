@@ -1,9 +1,9 @@
 package com.example.grocery_store_sales_online.security.oauth2;
 
 import com.example.grocery_store_sales_online.enums.AuthProvider;
+import com.example.grocery_store_sales_online.enums.EResponseStatus;
 import com.example.grocery_store_sales_online.enums.ETypeCustomer;
 import com.example.grocery_store_sales_online.enums.EAccountStatus;
-import com.example.grocery_store_sales_online.enums.ErrorCode;
 import com.example.grocery_store_sales_online.exception.ActiveException;
 import com.example.grocery_store_sales_online.exception.OAuth2AuthenticationProcessingException;
 import com.example.grocery_store_sales_online.model.account.Role;
@@ -65,7 +65,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                         " account to login.");
             }
             if(!user.isActive()){
-                throw  new ActiveException(ErrorCode.ACCOUNT_NOT_ACTIVE);
+                throw  new ActiveException(EResponseStatus.ACCOUNT_NOT_ACTIVE);
             }
             user = updateExistingUser(user, oAuth2UserInfo);
         } else {

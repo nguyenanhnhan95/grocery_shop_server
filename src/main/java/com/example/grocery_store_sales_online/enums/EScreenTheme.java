@@ -2,11 +2,11 @@ package com.example.grocery_store_sales_online.enums;
 
 import com.example.grocery_store_sales_online.components.IEnumComboItem;
 
-public enum EModeTheme implements IEnumComboItem {
-    Dark("Chế độ tối"),
-    LIGHT("Chế độ sáng");
+public enum EScreenTheme implements IEnumComboItem {
+    DARK("DARK"),
+    LIGHT("LIGHT");
 
-    EModeTheme(String text) {
+    EScreenTheme(String text) {
         this.text = text;
     }
 

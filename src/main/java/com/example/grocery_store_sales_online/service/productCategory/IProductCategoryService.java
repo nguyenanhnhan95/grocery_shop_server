@@ -1,12 +1,13 @@
 package com.example.grocery_store_sales_online.service.productCategory;
 
 import com.example.grocery_store_sales_online.model.product.ProductCategory;
+import com.example.grocery_store_sales_online.service.common.*;
 
 import java.util.List;
 
-public interface IProductCategoryService{
-    ProductCategory saveProductCategory(ProductCategory productCategory);
-    ProductCategory findByHref(String href);
+public interface IProductCategoryService extends ISaveModelAble<ProductCategory> , IFindByHrefAble<ProductCategory,String>
+        ,IFindAllByParent<ProductCategory>, IFindAllChildrenAble<ProductCategory>, IFindByIdAble<ProductCategory,Long> {
+
     List<ProductCategory> listProductCategoryChildren(ProductCategory productCategory);
-    List<ProductCategory> findAllProductCategories();
+    List<ProductCategory> findAllMenu();
 }

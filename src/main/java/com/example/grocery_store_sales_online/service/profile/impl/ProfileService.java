@@ -1,13 +1,13 @@
-package com.example.grocery_store_sales_online.service.authencation.impl;
+package com.example.grocery_store_sales_online.service.profile.impl;
 
 import com.example.grocery_store_sales_online.enums.EResponseStatus;
 import com.example.grocery_store_sales_online.enums.ERole;
+import com.example.grocery_store_sales_online.enums.EScreenTheme;
 import com.example.grocery_store_sales_online.exception.ServiceBusinessExceptional;
 import com.example.grocery_store_sales_online.model.account.Role;
 import com.example.grocery_store_sales_online.payload.Profile;
-import com.example.grocery_store_sales_online.repository.user.UserRepository;
 import com.example.grocery_store_sales_online.security.UserPrincipal;
-import com.example.grocery_store_sales_online.service.authencation.IAuthService;
+import com.example.grocery_store_sales_online.service.profile.IProfileService;
 import com.example.grocery_store_sales_online.service.employee.IEmployeeService;
 import com.example.grocery_store_sales_online.service.role.impl.RoleService;
 import com.example.grocery_store_sales_online.service.user.IUserService;
@@ -21,12 +21,12 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class AuthService implements IAuthService {
+public class ProfileService implements IProfileService {
     private final RoleService roleService;
     private final IUserService userService;
     private final IEmployeeService employeeService;
     @Override
-    public Optional<Profile> getCurrentProfile(UserPrincipal userPrincipal) {
+    public Profile getCurrentProfile(UserPrincipal userPrincipal) {
         try {
             log.info("AuthService:getCurrentProfile execution started.");
             Profile userResponse = null;
@@ -46,31 +46,31 @@ public class AuthService implements IAuthService {
                         .screenTheme(userPrincipal.getScreenTheme()).build();
 
             }
-            return Optional.ofNullable(userResponse);
+            if(userPrincipal==null){
+                throw new ServiceBusinessExceptional(EResponseStatus.NOT_FOUND_USER.getLabel(), EResponseStatus.NOT_FOUND_USER.getCode());
+            }
+            return userResponse;
         }catch (Exception ex){
             log.error("Exception occurred while persisting AuthService:getCurrentProfile to database , Exception message {}", ex.getMessage());
-            throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL);
+            throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());
         }
     }
 
     @Override
     public void changeScreenMode(Profile profile) {
         try {
-            System.out.println(profile.getScreenTheme());
-            boolean flagRole=true;
-            for (String role: profile.getRoles()) {
-                if(role.equals(ERole.USER.getLabel())){
-                    flagRole=false;
-                    break;
-                }
-            }
-            if(flagRole){
-//                User
-            }
             log.info("AuthService:changeScreenMode execution started.");
+            boolean isUserRole = profile.getRoles().stream()
+                    .anyMatch(role -> role.equals(ERole.USER.getLabel()));
+
+            if (isUserRole) {
+                userService.ChangeScreenMode(profile.getId(), profile.getScreenTheme());
+            } else {
+                employeeService.ChangeScreenMode(profile.getId(), profile.getScreenTheme());
+            }
         }catch (Exception ex){
             log.error("Exception occurred while persisting AuthService:changeScreenMode to database , Exception message {}", ex.getMessage());
-            throw new ServiceBusinessExceptional(EResponseStatus.EDIT_FAIL.getLabel(), EResponseStatus.EDIT_FAIL);
+            throw new ServiceBusinessExceptional(EResponseStatus.EDIT_FAIL.getLabel(), EResponseStatus.EDIT_FAIL.getCode());
         }
 
     }

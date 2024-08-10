@@ -1,7 +1,6 @@
 package com.example.grocery_store_sales_online.repository.variation;
 import com.example.grocery_store_sales_online.model.product.QVariation;
 import com.example.grocery_store_sales_online.model.product.Variation;
-import com.example.grocery_store_sales_online.projection.product.variation.VariationGetListResultProjection;
 import com.example.grocery_store_sales_online.repository.base.BaseRepository;
 import com.example.grocery_store_sales_online.utils.QueryListResult;
 import com.example.grocery_store_sales_online.utils.QueryParameter;

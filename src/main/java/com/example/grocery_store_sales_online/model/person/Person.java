@@ -1,6 +1,7 @@
 package com.example.grocery_store_sales_online.model.person;
 
 import com.example.grocery_store_sales_online.enums.EAccountStatus;
+import com.example.grocery_store_sales_online.enums.EScreenTheme;
 import com.example.grocery_store_sales_online.model.common.Model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -20,6 +21,9 @@ public abstract class Person extends Model {
     private String providerId;
     private Date birthOfDate;
     private Date lastLogin;
+    @Column
+    @Enumerated(EnumType.STRING)
+    private EScreenTheme screenTheme;
     @JsonIgnore
     private String password;
     @Enumerated(EnumType.STRING)
@@ -27,5 +31,11 @@ public abstract class Person extends Model {
     @Transient
     public boolean isActive(){
         return  EAccountStatus.ACTIVATED.equals(this.getAccountStatus());
+    }
+    @PrePersist
+    void preInsert() {
+        if (this.screenTheme == null) {
+            this.screenTheme = EScreenTheme.LIGHT;
+        }
     }
 }

@@ -27,7 +27,7 @@ public class ResourceJsonLoader {
             return objectMapper.readValue(inputStream, type);
         } catch (Exception ex) {
             log.error("Exception occurred while persisting ResourceJsonLoader:readValue read resources , Exception message {}", ex.getMessage());
-            throw new ServiceBusinessExceptional(EResponseStatus.READ_PATH_FILE.getLabel(), EResponseStatus.READ_PATH_FILE);
+            throw new ServiceBusinessExceptional(EResponseStatus.READ_PATH_FILE.getLabel(), EResponseStatus.READ_PATH_FILE.getCode());
         }
     }
 

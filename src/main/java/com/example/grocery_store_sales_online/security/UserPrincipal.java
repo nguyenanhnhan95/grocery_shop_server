@@ -1,6 +1,7 @@
 package com.example.grocery_store_sales_online.security;
 
 import com.example.grocery_store_sales_online.enums.AuthProvider;
+import com.example.grocery_store_sales_online.enums.EScreenTheme;
 import com.example.grocery_store_sales_online.model.person.Employee;
 import com.example.grocery_store_sales_online.model.account.Role;
 import com.example.grocery_store_sales_online.model.person.User;
@@ -19,10 +20,11 @@ public class UserPrincipal implements OAuth2User, UserDetails {
     private  String avatar;
     private String password;
     private AuthProvider provider;
+    private EScreenTheme screenTheme;
     private Collection<? extends GrantedAuthority> authorities;
     private Map<String, Object> attributes;
 
-    public UserPrincipal(Long id,String name, String email,String avatar,String password, AuthProvider provider, Collection<? extends GrantedAuthority> authorities) {
+    public UserPrincipal(Long id,String name, String email,String avatar,String password, AuthProvider provider,EScreenTheme screenTheme, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.name=name;
         this.email = email;
@@ -30,6 +32,7 @@ public class UserPrincipal implements OAuth2User, UserDetails {
         this.password=password;
         this.provider = provider;
         this.authorities = authorities;
+        this.screenTheme=screenTheme;
     }
 
     public static UserPrincipal createUser(User  user,String role) {
@@ -43,6 +46,7 @@ public class UserPrincipal implements OAuth2User, UserDetails {
                 user.getImageUrl(),
                 user.getPassword(),
                 user.getProvider(),
+                user.getScreenTheme(),
                 authorities
         );
     }
@@ -57,6 +61,7 @@ public class UserPrincipal implements OAuth2User, UserDetails {
                 employee.getAvatar(),
                 employee.getPassword(),
                 employee.getProvider(),
+                employee.getScreenTheme(),
                 authorities
         );
     }
@@ -136,5 +141,9 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 
     public String getAvatar() {
         return avatar;
+    }
+
+    public EScreenTheme getScreenTheme() {
+        return screenTheme;
     }
 }

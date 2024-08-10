@@ -25,7 +25,7 @@ public class RoleService extends BaseService implements IRoleService<Role> {
             return Optional.ofNullable(roleRepository.findByAlias(alias));
         } catch (Exception ex) {
             log.error("Exception occurred while persisting RoleService:findByAlias to database , Exception message {}", ex.getMessage());
-            throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL);
+            throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());
         }
     }
 
@@ -37,7 +37,7 @@ public class RoleService extends BaseService implements IRoleService<Role> {
             return roleRepository.save(model);
         } catch (Exception ex) {
             log.error("Exception occurred while persisting RoleService:saveModel save to database , Exception message {}", ex.getMessage());
-            throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL);
+            throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());
         }
     }
 
@@ -48,7 +48,7 @@ public class RoleService extends BaseService implements IRoleService<Role> {
             return roleRepository.findById(id);
         }catch (Exception ex){
             log.error("Exception occurred while persisting RoleService:findById  to database , Exception message {}", ex.getMessage());
-            throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL);
+            throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());
         }
     }
 

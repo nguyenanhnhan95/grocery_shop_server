@@ -7,9 +7,9 @@ import lombok.Setter;
 @Setter
 @Getter
 public class ServiceBusinessExceptional extends RuntimeException{
-    private EResponseStatus responseStatus;
-    public ServiceBusinessExceptional(String message, EResponseStatus responseStatus) {
+    private int code;
+    public ServiceBusinessExceptional(String message, int code) {
         super(message);
-        this.responseStatus=responseStatus;
+        this.code=code;
     }
 }

@@ -38,7 +38,7 @@ public class FileConfiguration {
                     + applicationContext.getEnvironment().getProperty("filestore.folder");
         }catch (Exception ex){
             log.error("Exception occurred while CoreObject:defaultDirectory not directory   , Exception message {}", ex.getMessage());
-            throw new ServiceBusinessExceptional(EResponseStatus.FILE_DIRECTORY_FAIL.getLabel(),EResponseStatus.FILE_DIRECTORY_FAIL);
+            throw new ServiceBusinessExceptional(EResponseStatus.FILE_DIRECTORY_FAIL.getLabel(),EResponseStatus.FILE_DIRECTORY_FAIL.getCode());
         }
     }
 
@@ -48,7 +48,7 @@ public class FileConfiguration {
             return applicationContext.getEnvironment().getProperty("filestore.folder");
         }catch (Exception ex){
             log.error("Exception occurred while CoreObject:defaultUrl not directory folder   , Exception message {}", ex.getMessage());
-            throw new ServiceBusinessExceptional(EResponseStatus.FILE_DIRECTORY_FAIL.getLabel(),EResponseStatus.FILE_DIRECTORY_FAIL);
+            throw new ServiceBusinessExceptional(EResponseStatus.FILE_DIRECTORY_FAIL.getLabel(),EResponseStatus.FILE_DIRECTORY_FAIL.getCode());
         }
     }
     public FileEntry createFileEntry(MultipartFile media) {
@@ -61,7 +61,7 @@ public class FileConfiguration {
             return file;
         }catch (Exception ex){
             log.error("Exception occurred while persisting FileEntryService:createFileEntry , Exception message {}", ex.getMessage());
-            throw new ServiceBusinessExceptional(EResponseStatus.AWS_FILE_LOAD_FAIL.getLabel(), EResponseStatus.AWS_FILE_LOAD_FAIL);
+            throw new ServiceBusinessExceptional(EResponseStatus.AWS_FILE_LOAD_FAIL.getLabel(), EResponseStatus.AWS_FILE_LOAD_FAIL.getCode());
         }
     }
     private String getFileExtension(String fileName) {
@@ -98,7 +98,7 @@ public class FileConfiguration {
             uploadToServer(file, defaultDirectory());
         } catch (Exception ex) {
             log.error("Exception occurred while FileEntryService:uploadToServer(file) not directory   , Exception message {}", ex.getMessage());
-            throw new ServiceBusinessExceptional(EResponseStatus.FILE_UP_TO_SERVER_FAIL.getLabel(), EResponseStatus.FILE_UP_TO_SERVER_FAIL);
+            throw new ServiceBusinessExceptional(EResponseStatus.FILE_UP_TO_SERVER_FAIL.getLabel(), EResponseStatus.FILE_UP_TO_SERVER_FAIL.getCode());
         }
     }
 
@@ -121,7 +121,7 @@ public class FileConfiguration {
             }
         } catch (Exception ex) {
             log.error("Exception occurred while FileEntryService:uploadToServer(file) not directory   , Exception message {}", ex.getMessage());
-            throw new ServiceBusinessExceptional(EResponseStatus.FILE_UP_TO_SERVER_FAIL.getLabel(), EResponseStatus.FILE_UP_TO_SERVER_FAIL);
+            throw new ServiceBusinessExceptional(EResponseStatus.FILE_UP_TO_SERVER_FAIL.getLabel(), EResponseStatus.FILE_UP_TO_SERVER_FAIL.getCode());
         }
     }
     public void deleteToServer(FileEntry file){
@@ -129,7 +129,8 @@ public class FileConfiguration {
         try {
             s3Service.deleteObject(s3BucketsCustomer,file.getFileUrl());
         }catch (Exception ex){
-            throw new ServiceBusinessExceptional(EResponseStatus.AWS_DELETE_OBJECT_FAIL.getLabel(),EResponseStatus.AWS_DELETE_OBJECT_FAIL);
+            throw new ServiceBusinessExceptional(EResponseStatus.AWS_DELETE_OBJECT_FAIL.getLabel(),EResponseStatus.AWS_DELETE_OBJECT_FAIL.getCode());
         }
     }
+
 }

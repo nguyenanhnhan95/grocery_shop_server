@@ -2,8 +2,6 @@ package com.example.grocery_store_sales_online.service.file.impl;
 
 import com.example.grocery_store_sales_online.config.FileConfiguration;
 import com.example.grocery_store_sales_online.enums.EResponseStatus;
-import com.example.grocery_store_sales_online.enums.ErrorCode;
-import com.example.grocery_store_sales_online.exception.ResourceNotFoundException;
 import com.example.grocery_store_sales_online.exception.ServiceBusinessExceptional;
 import com.example.grocery_store_sales_online.model.File.FileEntry;
 import com.example.grocery_store_sales_online.repository.file.FileEntryRepository;
@@ -41,7 +39,7 @@ public class FileEntryService extends BaseService implements IFileEntryService {
             return fileEntryRepository.saveModel(file);
         }catch (Exception ex){
             log.error("Exception occurred while persisting FileEntryService:saveModel(file) to database and server , Exception message {}", ex.getMessage());
-            throw new ServiceBusinessExceptional(EResponseStatus.SAVE_FAIL.getLabel(), EResponseStatus.SAVE_FAIL);
+            throw new ServiceBusinessExceptional(EResponseStatus.SAVE_FAIL.getLabel(), EResponseStatus.SAVE_FAIL.getCode());
         }
     }
 
@@ -58,7 +56,7 @@ public class FileEntryService extends BaseService implements IFileEntryService {
             return fileEntryRepository.saveModel(file);
         }catch (Exception ex){
             log.error("Exception occurred while persisting FileEntryService:saveModel(file,directory) to database and server , Exception message {}", ex.getMessage());
-            throw new ServiceBusinessExceptional(EResponseStatus.SAVE_FAIL.getLabel(), EResponseStatus.SAVE_FAIL);
+            throw new ServiceBusinessExceptional(EResponseStatus.SAVE_FAIL.getLabel(), EResponseStatus.SAVE_FAIL.getCode());
         }
     }
 
@@ -71,7 +69,7 @@ public class FileEntryService extends BaseService implements IFileEntryService {
             fileConfiguration.deleteToServer(fileEntry);
         } catch (Exception ex) {
             log.error("Exception occurred while persisting FileEntryService:deleteModel to database , Exception message {}", ex.getMessage());
-            throw new ServiceBusinessExceptional(EResponseStatus.DELETE_FAIL.getLabel(), EResponseStatus.DELETE_FAIL);
+            throw new ServiceBusinessExceptional(EResponseStatus.DELETE_FAIL.getLabel(), EResponseStatus.DELETE_FAIL.getCode());
         }
     }
 
@@ -82,7 +80,7 @@ public class FileEntryService extends BaseService implements IFileEntryService {
             return fileEntryRepository.findById(id);
         } catch (Exception ex) {
             log.error("Exception occurred while persisting FileEntryService:findById to database , Exception message {}", ex.getMessage());
-            throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL);
+            throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());
         }
     }
 }

@@ -16,6 +16,9 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.example.grocery_store_sales_online.utils.CommonConstants.PATH_ADMIN;
+import static com.example.grocery_store_sales_online.utils.CommonConstants.PATH_DASH_BOARD;
+
 
 @Component
 public class MenuAdminProperties {
@@ -55,7 +58,69 @@ public class MenuAdminProperties {
             return result;
         }catch (Exception ex){
             logger.error("Exception occurred while persisting MenuAdminProperties:getMainMenus to database , Exception message {}", ex.getMessage());
-            throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL);
+            throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());
+        }
+    }
+    public MainMenu getMainMenuPath(UserPrincipal userPrincipal,String path){
+        try{
+            logger.info("MenuAdminProperties:getMainMenuPath(path) execution started.");
+            List<MainMenu> mainMenus = getMainMenus(userPrincipal);
+            if(mainMenus.isEmpty()){
+                throw new ServiceBusinessExceptional(EResponseStatus.NOT_PERMISSION_PAGE.getLabel(),EResponseStatus.NOT_PERMISSION_PAGE.getCode());
+            }
+            if(path.equals(PATH_DASH_BOARD) || path.equals(PATH_ADMIN)){
+                return mainMenus.get(0);
+            }
+            for (MainMenu parent: mainMenus) {
+                if(!parent.getSubMenus().isEmpty()){
+                    for (MainMenu children: parent.getSubMenus()) {
+                        for (String resource:children.getResources()) {
+
+                            if (path.length() >= resource.length() && resource.equals(handleSubPath(path))){
+                                return children;
+                            }
+                        }
+                    }
+                }
+            }
+            throw new ServiceBusinessExceptional(EResponseStatus.NOT_FOUND_PAGE.getLabel(),EResponseStatus.NOT_FOUND_PAGE.getCode());
+        }catch (ServiceBusinessExceptional ex){
+            logger.error("Exception occurred while MenuAdminProperties:getMainMenuPath(path) to get Menu , Exception message {}", ex.getMessage());
+            throw ex;
+        } catch (Exception ex){
+            logger.error("Exception occurred while MenuAdminProperties:getMainMenuPath(path) to get Menu , Exception message {}", ex.getMessage());
+            throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());
+        }
+    }
+    public MainMenu getMenuParentByPathChildren(UserPrincipal userPrincipal,String pathChildren){
+        try{
+            logger.info("MenuAdminProperties:getMenuParentByPathChildren(path) execution started.");
+            List<MainMenu> mainMenus = getMainMenus(userPrincipal);
+            this.getMainMenuPath(userPrincipal,pathChildren);
+            for (MainMenu parent: mainMenus) {
+                if(!parent.getSubMenus().isEmpty()){
+                    for (MainMenu children: parent.getSubMenus()) {
+                        if(children.getHref().equals(pathChildren)){
+                            return parent;
+                        }
+                    }
+                }
+            }
+            return  null;
+        } catch (Exception ex){
+            logger.error("Exception occurred while MenuAdminProperties:getMainMenuPath(path) to get Menu , Exception message {}", ex.getMessage());
+            throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());
+        }
+    }
+    private String handleSubPath(String href){
+        try {
+            if (href.contains("?")|| href.contains("edit")) {
+                return href.substring(0, href.lastIndexOf('/'));
+            }
+            return href;
+        }catch (Exception ex){
+            logger.error(ex.getMessage());
+            return null;
         }
     }
 }

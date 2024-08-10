@@ -17,7 +17,7 @@ public class Promotion extends Model {
     private String name;
     private String code;
     private String description;
-    private double discountRate;
+    private Double discountRate;
     private Date startDate;
     private Date endDate;
     public Promotion() {

@@ -19,8 +19,6 @@ public class MainMenu {
     private List<MainMenu> subMenus = new ArrayList<>();
     private Set<String> resources = new HashSet<>();
     private String iconClass;
-    private boolean visible;
-    private boolean open;
     private boolean header;
     private Set<String> requiredPermissions = new HashSet<>();
 }

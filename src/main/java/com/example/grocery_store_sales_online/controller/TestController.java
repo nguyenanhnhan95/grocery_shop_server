@@ -1,8 +1,7 @@
 package com.example.grocery_store_sales_online.controller;
 
-import com.example.grocery_store_sales_online.enums.ErrorCode;
+import com.example.grocery_store_sales_online.enums.EResponseStatus;
 import com.example.grocery_store_sales_online.exception.ActiveException;
-import com.example.grocery_store_sales_online.model.File.FileEntry;
 import com.example.grocery_store_sales_online.model.TestEntity;
 import com.example.grocery_store_sales_online.service.file.IFileEntryService;
 import com.example.grocery_store_sales_online.service.test.TestService;
@@ -39,6 +38,6 @@ public class TestController {
     }
     @GetMapping
     public ResponseEntity<?> test(){
-        throw new ActiveException(ErrorCode.ACCOUNT_NOT_ACTIVE);
+        throw new ActiveException(EResponseStatus.ACCOUNT_NOT_ACTIVE);
     }
 }

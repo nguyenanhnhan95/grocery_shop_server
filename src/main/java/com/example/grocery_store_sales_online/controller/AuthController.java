@@ -1,16 +1,13 @@
 package com.example.grocery_store_sales_online.controller;
 
 import com.example.grocery_store_sales_online.enums.AuthProvider;
-import com.example.grocery_store_sales_online.enums.ErrorCode;
+import com.example.grocery_store_sales_online.enums.EResponseStatus;
 import com.example.grocery_store_sales_online.exception.AppException;
 import com.example.grocery_store_sales_online.model.person.User;
 import com.example.grocery_store_sales_online.payload.ApiResponse;
-import com.example.grocery_store_sales_online.payload.AuthResponse;
 import com.example.grocery_store_sales_online.payload.LoginRequest;
 import com.example.grocery_store_sales_online.payload.SignUpRequest;
-import com.example.grocery_store_sales_online.security.CustomUserDetailsService;
-import com.example.grocery_store_sales_online.security.TokenProvider;
-import com.example.grocery_store_sales_online.security.UserPrincipal;
+import com.example.grocery_store_sales_online.service.authenticate.IAuthenticateService;
 import com.example.grocery_store_sales_online.service.user.impl.UserService;
 import jakarta.validation.Valid;
 import jakarta.websocket.server.PathParam;
@@ -21,8 +18,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -34,42 +29,25 @@ import java.net.URI;
 @CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
 public class AuthController {
+    private final IAuthenticateService authenticateService;
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
-    private final TokenProvider tokenProvider;
-    private final CustomUserDetailsService customUserDetailsService;
-    @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) throws Exception {
-        Authentication authentication;
-        UserPrincipal userPrincipal;
-        try {
-            userPrincipal = (UserPrincipal) customUserDetailsService.loadUserByUsername(loginRequest.getName());
-            authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getName(), loginRequest.getPassword(),userPrincipal.getAuthorities()));
-        } catch (DisabledException e) {
-            throw new DisabledException("USER_DISABLED", e);
-        } catch (BadCredentialsException e) {
-            throw new BadCredentialsException("Tài khoản hoặc mật khẩu không tồn tại");
-        }
-        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String token = tokenProvider.createToken(authentication,AuthProvider.local,loginRequest.isFlagKeep());
-        return ResponseEntity.ok(new AuthResponse(token));
+    @PostMapping("/login")
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+        ApiResponse<?> apiResponse = new ApiResponse<>(EResponseStatus.LOGIN_SUCCESS.getCode(),EResponseStatus.LOGIN_SUCCESS.getLabel(),authenticateService.login(loginRequest));
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
     @GetMapping("/refresh-token")
     public ResponseEntity<?> refreshToken(@PathParam("token") String token){
-        String newToken = tokenProvider.refreshToken(token);
-        if(newToken!=null){
-            return ResponseEntity.ok(new AuthResponse(newToken));
-        }else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-
+        ApiResponse<?> apiResponse = new ApiResponse<>(EResponseStatus.REFRESH_TOKEN_SUCCESS.getCode(),EResponseStatus.REFRESH_TOKEN_SUCCESS.getLabel(),authenticateService.refreshToken(token));
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
         if(userService.existsByEmail(signUpRequest.getEmail())) {
-            throw new AppException(ErrorCode.USER_EXISTED);
+            throw new AppException(EResponseStatus.USER_EXISTED);
         }
 
         // Creating user's account
@@ -97,10 +75,5 @@ public class AuthController {
         } catch (BadCredentialsException e) {
             throw new Exception("INVALID_CREDENTIALS", e);
         }
-    }
-    @GetMapping("/refresh")
-    public void refreshToken(){
-        Authentication authentication =SecurityContextHolder.getContext().getAuthentication();
-
     }
 }

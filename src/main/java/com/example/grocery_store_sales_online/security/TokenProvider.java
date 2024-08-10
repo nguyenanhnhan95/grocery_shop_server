@@ -3,31 +3,22 @@ package com.example.grocery_store_sales_online.security;
 import com.example.grocery_store_sales_online.config.AppProperties;
 import com.example.grocery_store_sales_online.enums.AuthProvider;
 import com.example.grocery_store_sales_online.enums.EResponseStatus;
-import com.example.grocery_store_sales_online.enums.ErrorCode;
 import com.example.grocery_store_sales_online.exception.InvalidException;
 import com.example.grocery_store_sales_online.exception.ServiceBusinessExceptional;
 import com.example.grocery_store_sales_online.model.InvalidatedToken;
-import com.example.grocery_store_sales_online.payload.AuthResponse;
 import com.example.grocery_store_sales_online.repository.token.InvalidatedTokenRepository;
-import com.example.grocery_store_sales_online.utils.CookieUtils;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.DecodingException;
-import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.Date;
-import java.util.Optional;
 import java.util.StringJoiner;
 import java.util.UUID;
 
@@ -43,9 +34,9 @@ public class TokenProvider {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Date expiryDate = new Date();
         if(keepLogin){
-            expiryDate=new Date(expiryDate.getTime() +24*60*60*1000);
-        }else{
             expiryDate=new Date(expiryDate.getTime() + appProperties.getAuth().getTokenExpirationMsec());
+        }else{
+            expiryDate = new Date(expiryDate.getTime() +60*60*   1000);
         }
         return Jwts.builder()
                 .setSubject(Long.toString(userPrincipal.getId()))
@@ -72,7 +63,7 @@ public class TokenProvider {
             }
         }catch (Exception ex){
             log.error("Exception occurred while persisting TokenProvider:logout to database , Exception message {}", ex.getMessage());
-            throw new ServiceBusinessExceptional(EResponseStatus.LOGOUT_FAIL.getLabel(), EResponseStatus.LOGOUT_FAIL);
+            throw new ServiceBusinessExceptional(EResponseStatus.LOGOUT_FAIL.getLabel(), EResponseStatus.LOGOUT_FAIL.getCode());
         }
     }
     public Claims getClaims(String token){
@@ -97,49 +88,17 @@ public class TokenProvider {
                 .getBody();
         return (String) claims.get("provider");
     }
-    public String refreshToken(String token){
-        try {
-            Claims claims=Jwts.parser().setSigningKey(appProperties.getAuth().getTokenSecret()).parseClaimsJws(token).getBody();
-            if(invalidatedTokenRepository.findByIdToken((String) claims.get("idToken")).isPresent()){
-                throw new InvalidException(ErrorCode.UNAUTHENTICATED.getLabel(),ErrorCode.UNAUTHENTICATED);
-            }
-            Date now = new Date();
-            String userId = claims.getSubject();
-            String provider = (String) claims.get("provider");
-            return Jwts.builder()
-                    .setSubject(userId)
-                    .setIssuedAt(new Date())
-                    .setExpiration(new Date(now.getTime()+60*60*3*1000))
-                    .claim("provider",provider)
-                    .claim("idToken",UUID.randomUUID().toString())
-                    .signWith(SignatureAlgorithm.HS512, appProperties.getAuth().getTokenSecret())
-                    .compact();
-        } catch (SignatureException ex) {
-            logger.error("Invalid JWT signature");
-        } catch (MalformedJwtException ex) {
-            logger.error("Invalid JWT token");
-            throw new InvalidException(ErrorCode.UNAUTHENTICATED.getLabel(),ErrorCode.UNAUTHENTICATED);
-        } catch (ExpiredJwtException ex) {
-            logger.error("Expired JWT token");
-            throw new InvalidException(ErrorCode.EXPIRED_TOKEN.getLabel(),ErrorCode.EXPIRED_TOKEN);
-        } catch (UnsupportedJwtException ex) {
-            logger.error("Unsupported JWT token");
-        } catch (IllegalArgumentException ex) {
-            logger.error("JWT claims string is empty.");
-        } catch (DecodingException e){
-            logger.error("Decoding error");
-        }
-        return null;
-    }
+
     public Claims validateToken(String authToken)  {
         try {
             Claims claims=Jwts.parser().setSigningKey(appProperties.getAuth().getTokenSecret()).parseClaimsJws(authToken).getBody();
             if(invalidatedTokenRepository.findByIdToken((String) claims.get("idToken")).isPresent()){
-                throw new InvalidException(ErrorCode.UNAUTHENTICATED.getLabel(),ErrorCode.UNAUTHENTICATED);
-            }else {
+                throw new InvalidException(EResponseStatus.UNAUTHENTICATED.getLabel(),EResponseStatus.UNAUTHENTICATED.getCode());
+            }
+            else {
                 Date dateExpire = claims.getExpiration();
-                if(dateExpire.getTime()-new Date().getTime()<(60*60*1000)){
-                    throw new InvalidException(ErrorCode.REFRESH_TOKEN.getLabel(),ErrorCode.REFRESH_TOKEN);
+                if(dateExpire.getTime()-new Date().getTime()<(10*60*1000)){
+                    throw new InvalidException(EResponseStatus.REFRESH_TOKEN.getLabel(),EResponseStatus.REFRESH_TOKEN.getCode());
                 }
             }
             return claims;
@@ -147,10 +106,10 @@ public class TokenProvider {
             logger.error("Invalid JWT signature");
         } catch (MalformedJwtException ex) {
             logger.error("Invalid JWT token");
-            throw new InvalidException(ErrorCode.UNAUTHENTICATED.getLabel(),ErrorCode.UNAUTHENTICATED);
+            throw new InvalidException(EResponseStatus.UNAUTHENTICATED.getLabel(),EResponseStatus.UNAUTHENTICATED.getCode());
         } catch (ExpiredJwtException ex) {
             logger.error("Expired JWT token");
-            throw new InvalidException(ErrorCode.EXPIRED_TOKEN.getLabel(),ErrorCode.EXPIRED_TOKEN);
+            throw new InvalidException(EResponseStatus.EXPIRED_TOKEN.getLabel(),EResponseStatus.EXPIRED_TOKEN.getCode());
         } catch (UnsupportedJwtException ex) {
             logger.error("Unsupported JWT token");
         } catch (IllegalArgumentException ex) {

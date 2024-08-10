@@ -26,7 +26,7 @@ public class S3Config {
                     .build();
         }catch (Exception ex){
             log.error("Exception occurred while config S3Client:s3Client , Exception message {}", ex.getMessage());
-            throw new ServiceBusinessExceptional(EResponseStatus.CONFIG_AWS_FILE.getLabel(), EResponseStatus.CONFIG_AWS_FILE);
+            throw new ServiceBusinessExceptional(EResponseStatus.CONFIG_AWS_FILE.getLabel(), EResponseStatus.CONFIG_AWS_FILE.getCode());
         }
     }
 

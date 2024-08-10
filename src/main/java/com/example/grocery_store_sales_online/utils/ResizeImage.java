@@ -19,35 +19,6 @@ public class ResizeImage {
     private static final int MEDIUM_WIDTH = 600;
     private static final int SMALL_WIDTH = 300;
 
-    public static void saveMediumAndSmall(MultipartFile image, String strFolderStore)  {
-        log.info("ResizeImage:ResizeImage execution started.");
-        try {
-            String fileUrl = strFolderStore + image.getName();
-            File file = new File(fileUrl);
-            if (file.exists()){
-                BufferedImage originalImage = ImageIO.read(file);
-                List<Pair<Integer, Integer>> listSize = getHeightSmallAndMedium2();
-                String extension = image.getName().substring(image.getName().lastIndexOf(CommonConstants.DOT) + 1);
-                if (!listSize.isEmpty()) {
-                    String outFileStr = strFolderStore + "m_" + image.getName();
-                    File outFile = new File(outFileStr);
-                    int type = originalImage.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
-                    BufferedImage resizeImagePng = resizeImage(originalImage, type, listSize.get(0).getFirst(), listSize.get(0).getSecond());
-                    ImageIO.write(resizeImagePng, extension, outFile);
-                }
-                if (listSize.size() == 2) {
-                    String outFileStr = strFolderStore + "s_" + image.getName();
-                    File outFile = new File(outFileStr);
-                    int type = originalImage.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
-                    BufferedImage resizeImagePng = resizeImage(originalImage, type, listSize.get(1).getFirst(), listSize.get(1).getSecond());
-                    ImageIO.write(resizeImagePng, extension, outFile);
-                }
-            }
-        }catch (Exception ex){
-            log.error("Exception occurred while persisting ResizeImage:ResizeImage to database and server , Exception message {}", ex.getMessage());
-        }
-    }
-
 
     private static List<Pair<Integer, Integer>> getHeightSmallAndMedium2() {
         int heightMedium = 0;

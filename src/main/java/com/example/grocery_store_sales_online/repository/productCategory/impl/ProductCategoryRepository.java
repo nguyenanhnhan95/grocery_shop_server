@@ -1,10 +1,10 @@
-package com.example.grocery_store_sales_online.repository.productCategory;
+package com.example.grocery_store_sales_online.repository.productCategory.impl;
 
 import com.example.grocery_store_sales_online.model.product.ProductCategory;
 import com.example.grocery_store_sales_online.model.product.QProductCategory;
 import com.example.grocery_store_sales_online.repository.base.BaseRepository;
-import com.example.grocery_store_sales_online.repository.common.IFindAllByParent;
-import com.example.grocery_store_sales_online.repository.common.IFindAllChildren;
+
+import com.example.grocery_store_sales_online.repository.productCategory.IProductCategoryRepository;
 import com.querydsl.jpa.impl.JPAQuery;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class ProductCategoryRepository extends BaseRepository<ProductCategory,Long> implements IFindAllByParent<ProductCategory> , IFindAllChildren<ProductCategory> {
+public class ProductCategoryRepository extends BaseRepository<ProductCategory,Long> implements IProductCategoryRepository {
     protected QProductCategory productCategory= QProductCategory.productCategory;
     public ProductCategoryRepository(EntityManager em) {
         super(ProductCategory.class, em);

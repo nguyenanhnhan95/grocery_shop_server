@@ -1,6 +1,6 @@
 package com.example.grocery_store_sales_online.controller;
 
-import com.example.grocery_store_sales_online.enums.ErrorCode;
+import com.example.grocery_store_sales_online.enums.EResponseStatus;
 import com.example.grocery_store_sales_online.exception.ResourceNotFoundException;
 import com.example.grocery_store_sales_online.model.person.Employee;
 import com.example.grocery_store_sales_online.security.CurrentUser;
@@ -22,7 +22,7 @@ public class EmployeeController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Employee getCurrentEmployee(@CurrentUser UserPrincipal userPrincipal){
         return employeeService.findById(userPrincipal.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId(), ErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId(), EResponseStatus.USER_NOT_FOUND));
     }
 
 }

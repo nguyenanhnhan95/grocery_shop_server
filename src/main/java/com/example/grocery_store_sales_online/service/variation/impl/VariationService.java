@@ -12,6 +12,7 @@ import com.example.grocery_store_sales_online.security.UserPrincipal;
 import com.example.grocery_store_sales_online.service.base.impl.BaseService;
 import com.example.grocery_store_sales_online.service.variation.IVariationService;
 import com.example.grocery_store_sales_online.utils.QueryListResult;
+import com.example.grocery_store_sales_online.utils.QueryParameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,8 @@ import org.springframework.validation.FieldError;
 
 import java.util.List;
 import java.util.Optional;
+
+import static com.example.grocery_store_sales_online.utils.CommonConstants.THIS_FIELD_ALREADY_EXIST;
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +40,7 @@ public class VariationService extends BaseService implements IVariationService {
             return variationRepository.findById(id);
         } catch (Exception ex) {
             log.error("Exception occurred while persisting VariationService:findById to database , Exception message {}", ex.getMessage());
-            throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL);
+            throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());
         }
     }
 
@@ -48,7 +51,7 @@ public class VariationService extends BaseService implements IVariationService {
             return variationRepository.findByName(name);
         } catch (Exception ex) {
             log.error("Exception occurred while persisting VariationService:findByName to database , Exception message {}", ex.getMessage());
-            throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL);
+            throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());
         }
     }
 
@@ -56,10 +59,10 @@ public class VariationService extends BaseService implements IVariationService {
     public QueryListResult<Variation> getListResult(String queryParameter) {
         try {
             log.info("VariationService:getListResult execution started.");
-            return variationRepository.getListResult(readJsonQuery(queryParameter));
+            return variationRepository.getListResult(readJsonQuery(queryParameter, QueryParameter.class));
         } catch (Exception ex) {
             log.error("Exception occurred while persisting VariationService:getListResult to database , Exception message {}", ex.getMessage());
-            throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL);
+            throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());
         }
 
     }
@@ -69,9 +72,7 @@ public class VariationService extends BaseService implements IVariationService {
         try {
             log.info("VariationService:saveModelDto execution started.");
             if (findByName(variationDto.getName().trim()).isPresent()) {
-                BindingResult bindingResult = new BeanPropertyBindingResult(variationDto, "variationDto");
-                bindingResult.addError(new FieldError("variationDto", "name", "Tên tùy chọn sản phẩm đã tồn tại"));
-                throw new CustomValidationException(bindingResult, EResponseStatus.EXISTING);
+                throw createValidationException("variationDto", "name", THIS_FIELD_ALREADY_EXIST);
             }
             Variation variation = variationMapper.convertVariationDtoToVariation(variationDto);
             setPersonAction(variation);
@@ -82,7 +83,7 @@ public class VariationService extends BaseService implements IVariationService {
             throw ex;
         } catch (Exception ex) {
             log.error("Exception occurred while persisting VariationService:saveModelDto to database , Exception message {}", ex.getMessage());
-            throw new ServiceBusinessExceptional(EResponseStatus.SAVE_FAIL.getLabel(), EResponseStatus.SAVE_FAIL);
+            throw new ServiceBusinessExceptional(EResponseStatus.SAVE_FAIL.getLabel(), EResponseStatus.SAVE_FAIL.getCode());
         }
     }
 
@@ -94,7 +95,7 @@ public class VariationService extends BaseService implements IVariationService {
             variationRepository.deleteById(id);
         } catch (Exception ex) {
             log.error("Exception occurred while persisting VariationService:deleteModel to database , Exception message {}", ex.getMessage());
-            throw new ServiceBusinessExceptional(EResponseStatus.DELETE_FAIL.getLabel(), EResponseStatus.DELETE_FAIL);
+            throw new ServiceBusinessExceptional(EResponseStatus.DELETE_FAIL.getLabel(), EResponseStatus.DELETE_FAIL.getCode());
         }
     }
 
@@ -104,9 +105,7 @@ public class VariationService extends BaseService implements IVariationService {
             log.info("VariationService:updateModelDto execution started.");
             Variation variation = findById(id).get();
             if (findByName(variationDto.getName().trim()).isPresent() && !variationDto.getName().equals(variation.getName())) {
-                BindingResult bindingResult = new BeanPropertyBindingResult(variationDto, "variationDto");
-                bindingResult.addError(new FieldError("variationDto", "name", "Tên tùy chọn sản phẩm đã tồn tại"));
-                throw new CustomValidationException(bindingResult, EResponseStatus.EXISTING);
+                throw createValidationException("variationDto", "name", THIS_FIELD_ALREADY_EXIST);
             }
             setPersonAction(variation);
             setMetaData(variation);
@@ -117,7 +116,7 @@ public class VariationService extends BaseService implements IVariationService {
             throw ex;
         } catch (Exception ex) {
             log.error("Exception occurred while persisting VariationService:updateModelDto to database , Exception message {}", ex.getMessage());
-            throw new ServiceBusinessExceptional(EResponseStatus.EDIT_FAIL.getLabel(), EResponseStatus.EDIT_FAIL);
+            throw new ServiceBusinessExceptional(EResponseStatus.EDIT_FAIL.getLabel(), EResponseStatus.EDIT_FAIL.getCode());
         }
     }
 
@@ -128,7 +127,7 @@ public class VariationService extends BaseService implements IVariationService {
             return variationRepository.findAll();
         } catch (Exception ex) {
             log.error("Exception occurred while persisting VariationService:findAll to database , Exception message {}", ex.getMessage());
-            throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL);
+            throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());
         }
     }
 

@@ -1,8 +1,8 @@
-package com.example.grocery_store_sales_online.repository.Promotion;
+package com.example.grocery_store_sales_online.repository.Promotion.impl;
 
-import com.example.grocery_store_sales_online.model.product.Variation;
 import com.example.grocery_store_sales_online.model.shop.Promotion;
 import com.example.grocery_store_sales_online.model.shop.QPromotion;
+import com.example.grocery_store_sales_online.repository.Promotion.IPromotionRepository;
 import com.example.grocery_store_sales_online.repository.base.BaseRepository;
 import com.example.grocery_store_sales_online.utils.QueryListResult;
 import com.example.grocery_store_sales_online.utils.QueryParameter;

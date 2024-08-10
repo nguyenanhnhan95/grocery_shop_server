@@ -1,2 +1,7 @@
-package com.example.grocery_store_sales_online.service.common;public interface IFindAllByParent {
+package com.example.grocery_store_sales_online.service.common;
+
+import java.util.List;
+
+public interface IFindAllByParent <T>{
+    List<T> findAllByParent(T t);
 }
