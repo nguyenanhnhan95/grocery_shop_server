@@ -1,7 +1,7 @@
 package com.example.grocery_store_sales_online.repository.image.impl;
 
 import com.example.grocery_store_sales_online.model.File.Image;
-import com.example.grocery_store_sales_online.model.QImage;
+import com.example.grocery_store_sales_online.model.File.QImage;
 import com.example.grocery_store_sales_online.model.person.Employee;
 import com.example.grocery_store_sales_online.model.person.QEmployee;
 import com.example.grocery_store_sales_online.repository.base.BaseRepository;

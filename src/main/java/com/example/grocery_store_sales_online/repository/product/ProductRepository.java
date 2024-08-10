@@ -1,6 +1,6 @@
 package com.example.grocery_store_sales_online.repository.product;
 
-import com.example.grocery_store_sales_online.model.QImage;
+import com.example.grocery_store_sales_online.model.File.QImage;
 import com.example.grocery_store_sales_online.model.product.Product;
 import com.example.grocery_store_sales_online.model.product.QProduct;
 import com.example.grocery_store_sales_online.model.product.QProductCategory;
