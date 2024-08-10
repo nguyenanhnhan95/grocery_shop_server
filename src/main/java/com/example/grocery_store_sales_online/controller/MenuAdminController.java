@@ -2,8 +2,10 @@ package com.example.grocery_store_sales_online.controller;
 
 import com.example.grocery_store_sales_online.components.MainMenu;
 import com.example.grocery_store_sales_online.config.MenuAdminProperties;
+import com.example.grocery_store_sales_online.enums.EResponseStatus;
 import com.example.grocery_store_sales_online.enums.ErrorCode;
 import com.example.grocery_store_sales_online.exception.ResourceNotFoundException;
+import com.example.grocery_store_sales_online.payload.ApiResponse;
 import com.example.grocery_store_sales_online.security.CurrentUser;
 import com.example.grocery_store_sales_online.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +24,9 @@ import java.util.List;
 public class MenuCategory {
     private final MenuAdminProperties menuAdminProperties;
     @GetMapping("/admin-side")
-    public ResponseEntity<List<MainMenu>> getListMainMenus(@CurrentUser UserPrincipal userPrincipal){
+    public ResponseEntity<?> getListMainMenus(@CurrentUser UserPrincipal userPrincipal){
         List<MainMenu> mainMenus = menuAdminProperties.getMainMenus(userPrincipal);
-            return new ResponseEntity<>(mainMenus, HttpStatus.OK);
+        ApiResponse<?> apiResponse = new ApiResponse<>(EResponseStatus.FETCH_DATA_SUCCESS.getCode(), EResponseStatus.FETCH_DATA_SUCCESS.getLabel(),mainMenus);
+            return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 }

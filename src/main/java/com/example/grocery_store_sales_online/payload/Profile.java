@@ -1,6 +1,7 @@
 package com.example.grocery_store_sales_online.payload;
 
 import com.example.grocery_store_sales_online.enums.AuthProvider;
+import com.example.grocery_store_sales_online.enums.EScreenTheme;
 import com.example.grocery_store_sales_online.model.account.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,4 +24,5 @@ public class UserResponse {
     private AuthProvider authProvider;
     private List<String> roles;
     private List<String> permission;
+    private EScreenTheme screenTheme;
 }

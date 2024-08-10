@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class EmployeeRepository extends BaseRepository<Employee,Long>  {
@@ -30,10 +31,10 @@ public class EmployeeRepository extends BaseRepository<Employee,Long>  {
 //        long total = query.fetchCount();
 //        return QueryListResult.<Employee>builder().result(result).total(total).build();
 //    }
-    public Employee findByUserName(String name){
+    public Optional<Employee> findByUserName(String name){
         JPAQuery<Employee> jpaQuery = new JPAQuery<>(em);
-        return jpaQuery.select(employee).from(employee)
-                .where(employee.name.eq(name)).fetchFirst();
+        return Optional.ofNullable(jpaQuery.select(employee).from(employee)
+                .where(employee.name.eq(name)).fetchFirst());
     }
 
     public JPAQuery<Employee> search(Map<String, Object> params) {
