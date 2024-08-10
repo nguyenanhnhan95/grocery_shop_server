@@ -1,7 +1,6 @@
 package com.example.grocery_store_sales_online.projection;
 
-import com.example.grocery_store_sales_online.model.File.Image;
-import com.example.grocery_store_sales_online.model.QImage;
+
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.Setter;
