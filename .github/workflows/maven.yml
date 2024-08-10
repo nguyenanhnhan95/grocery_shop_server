@@ -68,7 +68,7 @@ jobs:
             sudo docker volume prune
             sudo docker volume rm ubuntu_db
             sudo docker system prune -fa
-            - name: Build and deploy Docker images
+            - name: Build and deploy Docker images 
             run: |
             sudo docker pull ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
             # check_and_remove_image "${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-client"
