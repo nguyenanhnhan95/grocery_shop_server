@@ -54,7 +54,7 @@ jobs:
           username: ${{secrets.EC2_USER_NAME}}
           key: ${{secrets.EC2_PRIVATE_KEY}}
           script: |
-            echo "SSH connection successful" 
+            echo "SSH connection successful"  
             echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
             - name: Replace environment variables in .env file
             run: |
