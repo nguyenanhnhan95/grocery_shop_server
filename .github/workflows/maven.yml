@@ -64,7 +64,7 @@ jobs:
             sudo sed -i 's#^DOMAIN_CLIENT=.*#DOMAIN_CLIENT=${{ secrets.DOMAIN_CLIENT }}#' variables.env
             sudo sed -i 's#^DOMAIN_SERVER=.*#DOMAIN_SERVER=${{ secrets.DOMAIN_SERVER }}#' variables.env
             sudo cat .env
-            - name: Stop and remove Docker containers 
+            - name: Stop and remove Docker containers  
             run: |
             sudo docker stop $(sudo docker ps -a -q)
             sudo docker-compose down
