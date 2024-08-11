@@ -51,7 +51,7 @@ public class SecurityConfig {
     private  final LogoutSuccessHandler logoutSuccessHandler;
     private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
-    private final String[] PUBLIC_ENDPOINTS={"/", "/error", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg","/auth/refresh",
+    private final String[] PUBLIC_ENDPOINTS={"/", "/error", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg","/auth/refresh","/auth/login",
             "/**/*.jpg", "/**/*.html", "/**/*.css", "/**/*.js", "/home/**","/auth/**", "/oauth2/**","/auth/login/**","/keep-login","/product-category/**","/test/**"};
 
 
