@@ -44,6 +44,7 @@ public class S3Service  {
     }
     public void putObject(String bucketName, String key, MultipartFile file){
         log.info("S3Service:putObject execution started.");
+        log.info("buketname"+bucketName);
         try {
             PutObjectRequest objectRequest = PutObjectRequest.builder()
                     .bucket(bucketName)

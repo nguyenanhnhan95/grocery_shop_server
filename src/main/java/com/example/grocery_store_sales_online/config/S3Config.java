@@ -17,7 +17,7 @@ public class S3Config {
     private  String awsRegion;
     @Bean
     public S3Client s3Client(){
-        log.info("S3Config:s3Client() execution started.");
+        log.info("S3Config:s3Client() execution started. region:"+awsRegion);
         try {
             ProfileCredentialsProvider credentialsProvider = ProfileCredentialsProvider.create();
             return S3Client.builder()
