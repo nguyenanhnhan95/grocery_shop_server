@@ -97,6 +97,9 @@ public class imagesService extends BaseService implements IImageService {
         log.info("ResizeImage:ResizeImage execution started.");
         try {
             if (!image.isEmpty()) {
+                log.info(folderStoreImage);
+                log.info(s3BucketsDomain);
+                log.info(s3BucketsCustomer);
                 BufferedImage originalImage = ImageIO.read(image.getInputStream());
                 List<Pair<Integer, Integer>> listSize = getHeightSmallAndMedium2();
                 String extension = image.getName().substring(image.getName().lastIndexOf(CommonConstants.DOT) + 1);
