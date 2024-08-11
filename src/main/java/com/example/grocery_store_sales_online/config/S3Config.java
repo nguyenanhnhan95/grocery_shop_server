@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -17,12 +18,11 @@ public class S3Config {
     private  String awsRegion;
     @Bean
     public S3Client s3Client(){
-        log.info("S3Config:s3Client() execution started. region:"+awsRegion);
         try {
-            ProfileCredentialsProvider credentialsProvider = ProfileCredentialsProvider.create();
+//            ProfileCredentialsProvider credentialsProvider = ProfileCredentialsProvider.create();
             return S3Client.builder()
                     .region(Region.of(awsRegion))
-                    .credentialsProvider(credentialsProvider)
+                    .credentialsProvider(DefaultCredentialsProvider.create())
                     .build();
         }catch (Exception ex){
             log.error("Exception occurred while config S3Client:s3Client , Exception message {}", ex.getMessage());
