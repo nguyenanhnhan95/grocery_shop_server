@@ -1,6 +1,7 @@
 package com.example.grocery_store_sales_online.config;
 
 
+import com.example.grocery_store_sales_online.enums.ERole;
 import com.example.grocery_store_sales_online.security.CustomUserDetailsService;
 import com.example.grocery_store_sales_online.security.LogoutSuccessHandler;
 import com.example.grocery_store_sales_online.security.RestAuthenticationEntryPoint;
@@ -94,7 +95,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers(PUBLIC_ENDPOINTS)
                         .permitAll()
-                        .requestMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN","ROLE_EMPLOYEE")
+                        .requestMatchers("/admin/**").hasAnyAuthority(ERole.ADMIN.getLabel(),ERole.EMPLOYEE.getLabel())
+                        .requestMatchers("/role/**").hasAnyAuthority(ERole.ADMIN.getLabel())
                         .requestMatchers("/products-variation/**","/products-variation-option/**","/shop-promotion/**","/products/**")
                         .authenticated()
                         .requestMatchers("/user/**","/menu/admin-side/**","/profile/**")

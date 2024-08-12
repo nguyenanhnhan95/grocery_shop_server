@@ -130,7 +130,8 @@ public class ProductService extends BaseService implements IProductService{
                 log.error("Exception occurred validation data input , Exception message {}", ex.getMessage());
                 throw ex;
         }catch (Exception ex){
-            log.error(ex.getMessage());
+            log.error("Exception occurred while persisting ProductService:saveModel database and server , Exception message {}", ex.getMessage());
+            throw new ServiceBusinessExceptional(EResponseStatus.SAVE_FAIL.getLabel(), EResponseStatus.SAVE_FAIL.getCode());
         }
 
     }

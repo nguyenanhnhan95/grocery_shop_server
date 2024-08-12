@@ -1,130 +1,425 @@
 {
-	"roles": [
-		{
-			"name": "Admin",
-			"alias": "ROLE_ADMIN",
-			"description": "Quản lý hệ thống ",
-            "permissions": [
-				"dashboard:view",
-				"manage:view",
-				"article:view",
-				"article-post:view",
-				"article-list:view",
-				"article-featured:view",
-				"shop:view",
-				"shop-overview:view",
-				"shop-order:view",
-				"shop-passenger:view",
-				"shop-promotion:view",
-				"product:view",
-				"product-manage:view",
-				"products:view",
-				"products-sold:view",
-				"products-import/view",
-				"products-inventory:view",
-				"products-variation:view",
-				"products-variation-option:view",
-				"album:view",
-				"files:view",
-				"web-content:view",
-				"website:view",
-				"post:view",
-				"topic:view",
-				"featured-post:view",
-				"setting:view",
-				"web-setting:view",
-				"home-page:view",
-				"news:view",
-				"workflow-management:view",
-				"system:view",
-				"system-content:view",
-				"user:view",
-				"role:view",
-				"support:view"
-			]
-		},
-		{
-			"name": "Manager",
-			"alias": "ROLE_MANAGER",
-			"description": "Quản lý",
-			"permissions": [
-				"dashboard:view",
-				"manage:view",
-				"article:view",
-				"article-post:view",
-				"article-list:view",
-				"article-featured:view",
-				"shop:view",
-				"shop-overview:view",
-				"shop-order:view",
-				"shop-passenger:view",
-				"shop-promotion:view",
-				"product:view",
-				"product-manage:view",
-				"products:view",
-				"products-sold:view",
-				"products-import/view",
-				"products-inventory:view",
-				"products-variation:view",
-				"products-variation-option:view",
-				"album:view",
-				"files:view",
-				"web-content:view",
-				"website:view",
-				"post:view",
-				"topic:view",
-				"featured-post:view",
-				"setting:view",
-				"web-setting:view",
-				"home-page:view",
-				"news:view",
-				"workflow-management:view",
-				"support:view"
-			]
-		},
-		{
-			"name": "Employee",
-			"alias": "ROLE_EMPLOYEE",
-			"description": "Nhân viên",
-			"permissions": [
-				"dashboard:view",
-				"manage:view",
-				"article:view",
-				"article-post:view",
-				"article-list:view",
-				"article-featured:view",
-				"shop:view",
-				"shop-overview:view",
-				"shop-order:view",
-				"shop-passenger:view",
-				"shop-promotion:view",
-				"product:view",
-				"product-manage:view",
-				"products:view",
-				"products-sold:view",
-				"products-import/view",
-				"products-inventory:view",
-				"products-variation:view",
-				"products-variation-option:view",
-				"album:view",
-				"files:view",
-				"web-content:view",
-				"website:view",
-				"post:view",
-				"topic:view",
-				"featured-post:view",
-				"news:view",
-				"workflow-management:view"
-			]
-		},
+  "roles": [
+    {
+      "name": "Admin",
+      "alias": "ROLE_ADMIN",
+      "description": "Quản lý hệ thống ",
+      "permissions": [
+        "dashboard:view",
+        "manage:view",
+        "article:view",
+        "article-post:view",
+        "article-list:view",
+        "article-featured:view",
+        "shop:view",
+        "shop-overview:view",
+        "shop-order:view",
+        "shop-passenger:view",
+        "shop-promotion:view",
+        "product:view",
+        "product-manage:view",
+        "products:view",
+        "products-sold:view",
+        "products-import/view",
+        "products-inventory:view",
+        "products-variation:view",
+        "products-variation-option:view",
+        "album:view",
+        "files:view",
+        "web-content:view",
+        "website:view",
+        "post:view",
+        "topic:view",
+        "featured-post:view",
+        "setting:view",
+        "web-setting:view",
+        "home-page:view",
+        "news:view",
+        "workflow-management:view",
+        "system:view",
+        "system-content:view",
+        "user:view",
+        "role:view",
+        "support:view"
+      ]
+    },
+    {
+      "name": "Manager",
+      "alias": "ROLE_MANAGER",
+      "description": "Quản lý",
+      "permissions": [
+        "dashboard:view",
+        "manage:view",
+        "article:view",
+        "article-post:view",
+        "article-list:view",
+        "article-featured:view",
+        "shop:view",
+        "shop-overview:view",
+        "shop-order:view",
+        "shop-passenger:view",
+        "shop-promotion:view",
+        "product:view",
+        "product-manage:view",
+        "products:view",
+        "products-sold:view",
+        "products-import/view",
+        "products-inventory:view",
+        "products-variation:view",
+        "products-variation-option:view",
+        "album:view",
+        "files:view",
+        "web-content:view",
+        "website:view",
+        "post:view",
+        "topic:view",
+        "featured-post:view",
+        "setting:view",
+        "web-setting:view",
+        "home-page:view",
+        "news:view",
+        "workflow-management:view",
+        "support:view"
+      ]
+    },
+    {
+      "name": "Employee",
+      "alias": "ROLE_EMPLOYEE",
+      "description": "Nhân viên",
+      "permissions": [
+        "dashboard:view",
+        "manage:view",
+        "article:view",
+        "article-post:view",
+        "article-list:view",
+        "article-featured:view",
+        "shop:view",
+        "shop-overview:view",
+        "shop-order:view",
+        "shop-passenger:view",
+        "shop-promotion:view",
+        "product:view",
+        "product-manage:view",
+        "products:view",
+        "products-sold:view",
+        "products-import/view",
+        "products-inventory:view",
+        "products-variation:view",
+        "products-variation-option:view",
+        "album:view",
+        "files:view",
+        "web-content:view",
+        "website:view",
+        "post:view",
+        "topic:view",
+        "featured-post:view",
+        "news:view",
+        "workflow-management:view"
+      ]
+    },
+    {
+      "name": "User",
+      "alias": "ROLE_USER",
+      "description": "Khách hàng",
+      "permissions": []
+    }
+  ],
+  "permissions": [
+    {
+      "id": "dashboard",
+      "name": "Dashboard",
+      "scopes": [
         {
-            "name": "User",
-            "alias": "ROLE_USER",
-			"description": "Khách hàng",
-            "permissions": []
+          "id": "dashboard:view",
+          "name": "Xem"
         }
-	],
-	"permissions": [
-
-	]
+      ]
+    },
+    {
+      "id": "article-post",
+      "name": "Quản lý bài viết",
+      "scopes": [
+        {
+          "id": "article-post:view",
+          "name": "Xem"
+        },
+        {
+          "id": "article-post:add",
+          "name": "Thêm mới"
+        },
+        {
+          "id": "article-post:delete",
+          "name": "Xóa"
+        },
+        {
+          "id": "article-post:edit",
+          "name": "Sửa"
+        }
+      ]
+    },
+    {
+      "id": "article-list",
+      "name": "Danh sách bài viết",
+      "scopes": [
+        {
+          "id": "article-list:view",
+          "name": "Xem"
+        },
+        {
+          "id": "article-list:add",
+          "name": "Thêm mới"
+        },
+        {
+          "id": "article-list:delete",
+          "name": "Xóa"
+        },
+        {
+          "id": "article-list:edit",
+          "name": "Sửa"
+        }
+      ]
+    },
+    {
+      "id": "article-featured",
+      "name": "Bài viết nổi bật",
+      "scopes": [
+        {
+          "id": "article-featured:view",
+          "name": "Xem"
+        },
+        {
+          "id": "article-featured:add",
+          "name": "Thêm mới"
+        },
+        {
+          "id": "article-featured:delete",
+          "name": "Xóa"
+        },
+        {
+          "id": "article-featured:edit",
+          "name": "Sửa"
+        }
+      ]
+    },
+    {
+      "id": "shop-overview",
+      "name": "Thông kê bán hàng ",
+      "scopes": [
+        {
+          "id": "shop-overview:view",
+          "name": "Xem"
+        },
+        {
+          "id": "shop-overview:add",
+          "name": "Thêm mới"
+        },
+        {
+          "id": "shop-overview:delete",
+          "name": "Xóa"
+        },
+        {
+          "id": "shop-overview:edit",
+          "name": "Sửa"
+        }
+      ]
+    },
+    {
+      "id": "shop-order",
+      "name": "Đơn hàng ",
+      "scopes": [
+        {
+          "id": "shop-order:view",
+          "name": "Xem"
+        },
+        {
+          "id": "shop-order:add",
+          "name": "Thêm mới"
+        },
+        {
+          "id": "shop-order:delete",
+          "name": "Xóa"
+        },
+        {
+          "id": "shop-order:edit",
+          "name": "Sửa"
+        }
+      ]
+    },
+    {
+      "id": "shop-passenger",
+      "name": "Quản lý khách hàng",
+      "scopes": [
+        {
+          "id": "shop-passenger:view",
+          "name": "Xem"
+        },
+        {
+          "id": "shop-passenger:add",
+          "name": "Thêm mới"
+        },
+        {
+          "id": "shop-passenger:delete",
+          "name": "Xóa"
+        },
+        {
+          "id": "shop-passenger:edit",
+          "name": "Sửa"
+        }
+      ]
+    },
+    {
+      "id": "shop-promotion",
+      "name": "Quản lý khuyến mãi",
+      "scopes": [
+        {
+          "id": "shop-promotion:view",
+          "name": "Xem"
+        },
+        {
+          "id": "shop-promotion:add",
+          "name": "Thêm mới"
+        },
+        {
+          "id": "shop-promotion:delete",
+          "name": "Xóa"
+        },
+        {
+          "id": "shop-promotion:edit",
+          "name": "Sửa"
+        }
+      ]
+    },
+    {
+      "id": "products",
+      "name": "Quản lý sản phẩm",
+      "scopes": [
+        {
+          "id": "products:view",
+          "name": "Xem"
+        },
+        {
+          "id": "products:add",
+          "name": "Thêm mới"
+        },
+        {
+          "id": "products:delete",
+          "name": "Xóa"
+        },
+        {
+          "id": "products:edit",
+          "name": "Sửa"
+        }
+      ]
+    },
+    {
+      "id": "products-import",
+      "name": "Quản lý nhập sản phẩm",
+      "scopes": [
+        {
+          "id": "products-import:view",
+          "name": "Xem"
+        },
+        {
+          "id": "products-import:add",
+          "name": "Thêm mới"
+        },
+        {
+          "id": "products-import:delete",
+          "name": "Xóa"
+        },
+        {
+          "id": "products-import:edit",
+          "name": "Sửa"
+        }
+      ]
+    },
+    {
+      "id": "products-variation",
+      "name": "Tùy chọn sản phẩm",
+      "scopes": [
+        {
+          "id": "products-variation:view",
+          "name": "Xem"
+        },
+        {
+          "id": "products-variation:add",
+          "name": "Thêm mới"
+        },
+        {
+          "id": "products-variation:delete",
+          "name": "Xóa"
+        },
+        {
+          "id": "products-import:edit",
+          "name": "Sửa"
+        }
+      ]
+    },
+    {
+      "id": "products-variation-option",
+      "name": "Giá trị tùy chọn sản phẩm",
+      "scopes": [
+        {
+          "id": "products-variation-option:view",
+          "name": "Xem"
+        },
+        {
+          "id": "products-variation-option:add",
+          "name": "Thêm mới"
+        },
+        {
+          "id": "products-variation-option:delete",
+          "name": "Xóa"
+        },
+        {
+          "id": "products-import:edit",
+          "name": "Sửa"
+        }
+      ]
+    },
+    {
+      "id": "user",
+      "name": "Giá trị tùy chọn sản phẩm",
+      "scopes": [
+        {
+          "id": "user:view",
+          "name": "Xem"
+        },
+        {
+          "id": "user:add",
+          "name": "Thêm mới"
+        },
+        {
+          "id": "user:delete",
+          "name": "Xóa"
+        },
+        {
+          "id": "user:edit",
+          "name": "Sửa"
+        }
+      ]
+    },
+    {
+      "id": "role",
+      "name": "Quản lý vai trò",
+      "scopes": [
+        {
+          "id": "role:view",
+          "name": "Xem"
+        },
+        {
+          "id": "role:add",
+          "name": "Thêm mới"
+        },
+        {
+          "id": "role:delete",
+          "name": "Xóa"
+        },
+        {
+          "id": "role:edit",
+          "name": "Sửa"
+        }
+      ]
+    }
+  ]
 }

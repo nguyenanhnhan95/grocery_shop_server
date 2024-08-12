@@ -2,7 +2,7 @@ package com.example.grocery_store_sales_online.service.notification.impl;
 
 import com.example.grocery_store_sales_online.enums.EResponseStatus;
 import com.example.grocery_store_sales_online.exception.ServiceBusinessExceptional;
-import com.example.grocery_store_sales_online.model.Notification;
+import com.example.grocery_store_sales_online.components.Notification;
 import com.example.grocery_store_sales_online.repository.notification.NotificationRepository;
 import com.example.grocery_store_sales_online.service.base.impl.BaseService;
 import com.example.grocery_store_sales_online.service.notification.INotificationService;

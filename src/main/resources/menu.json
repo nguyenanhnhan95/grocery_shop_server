@@ -1,17 +1,18 @@
 {
-  "mainMenus": [	{
-    "title": "Tổng quan",
-    "href": "/admin/dash-board",
-    "resources": [
-      "/admin/dash-board",
-      "/admin"
-    ],
-    "iconClass": "home",
-    "subMenus": [],
-    "requiredPermissions": [
-      "dashboard:view"
-    ]
-  },
+  "mainMenus": [
+    {
+      "title": "Tổng quan",
+      "href": "/admin/dash-board",
+      "resources": [
+        "/admin/dash-board",
+        "/admin"
+      ],
+      "iconClass": "home",
+      "subMenus": [],
+      "requiredPermissions": [
+        "dashboard:view"
+      ]
+    },
     {
       "title": "QUẢN LÝ CHUNG",
       "href": "",
@@ -80,7 +81,6 @@
         }
       ]
     },
-
     {
       "title": "Quản lý shop",
       "href": "/admin/shop",
@@ -185,20 +185,6 @@
           ]
         },
         {
-          "title": "Sản phẩm đã bán",
-          "href": "/admin/products-sold",
-          "resources": [
-            "/admin/products-sold",
-            "/admin/products-sold/view",
-            "/admin/products-sold/edit",
-            "/admin/products-sold/add"
-          ],
-          "iconClass": "fa-regular fa-circle",
-          "requiredPermissions": [
-            "products-sold:view"
-          ]
-        },
-        {
           "title": "Sản phẩm nhập hàng",
           "href": "/admin/products-import",
           "resources": [
@@ -210,20 +196,6 @@
           "iconClass": "fa-regular fa-circle",
           "requiredPermissions": [
             "products-import/view"
-          ]
-        },
-        {
-          "title": "Sản phẩm tồn kho",
-          "href": "/admin/products-inventory",
-          "resources": [
-            "/admin/products-inventory",
-            "/admin/products-inventory/view",
-            "/admin/products-inventory/edit",
-            "/admin/products-inventory/add"
-          ],
-          "iconClass": "fa-regular fa-circle",
-          "requiredPermissions": [
-            "products-inventory:view"
           ]
         },
         {
@@ -239,8 +211,7 @@
           "requiredPermissions": [
             "products-variation:view"
           ]
-        }
-      ,
+        },
         {
           "title": "Giá Trị Tùy Chọn",
           "href": "/admin/products-variation-option",

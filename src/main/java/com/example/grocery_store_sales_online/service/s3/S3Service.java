@@ -56,7 +56,15 @@ public class S3Service  {
             throw new ServiceBusinessExceptional(EResponseStatus.CONFIG_AWS_FILE.getLabel(), EResponseStatus.CONFIG_AWS_FILE.getCode());
         }
     }
-
+    public boolean checkKeyFileExisting(String keyFile){
+        log.info("imagesService:checkKeyFileExisting execution started.");
+        try {
+            byte[] image=this.getObject(s3BucketsCustomer,keyFile);
+            return image != null;
+        }catch (Exception ex){
+            return false;
+        }
+    }
     public byte[] getObject(String bucketName,String key)  {
         log.info("S3Service:getObject execution started.");
         try{

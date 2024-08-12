@@ -44,9 +44,12 @@ public class VariationRepository extends BaseRepository<Variation,Long> implemen
         String keyword = MapUtils.getString(params, "name");
         JPAQuery<Variation> variationJPAQuery = new JPAQuery<>(em);
         variationJPAQuery.select(Projections.constructor(Variation.class,variation.id, variation.name, variation.description)).from(variation);
-        if (StringUtils.isNotBlank(keyword)) {
-            keyword = "%" + keyword + "%";
-            variationJPAQuery.where(variation.name.like(keyword));
+        if (params != null && !params.isEmpty()) {
+            if (StringUtils.isNotBlank(keyword)) {
+                keyword = "%" + keyword + "%";
+                variationJPAQuery.where(variation.name.like(keyword));
+            }
+
         }
         return variationJPAQuery;
     }

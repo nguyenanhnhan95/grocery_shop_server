@@ -1,5 +1,5 @@
 package com.example.grocery_store_sales_online.config;
-import com.example.grocery_store_sales_online.model.Permission;
+import com.example.grocery_store_sales_online.components.Permission;
 import com.example.grocery_store_sales_online.model.account.Role;
 import com.example.grocery_store_sales_online.utils.ResourceJsonLoader;
 import lombok.Getter;
@@ -31,7 +31,7 @@ public class AuthorizationProperties {
             }
             logger.info("Initial authorization");
         } catch (Exception e) {
-            logger.error("Loading authorization propeties with error: {}", e.getMessage());
+            logger.error("Loading authorization properties with error: {}", e.getMessage());
         }
     }
 }

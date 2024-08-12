@@ -108,7 +108,11 @@ public class imagesService extends BaseService implements IImageService {
                 BufferedImage originalImage = ImageIO.read(image.getInputStream());
                 List<Pair<Integer, Integer>> listSize = getHeightSmallAndMedium2();
                 String extension = image.getName().substring(image.getName().lastIndexOf(CommonConstants.DOT) + 1);
-                s3Service.putObject(s3BucketsCustomer, folderStoreImage + keyFileStore + image.getOriginalFilename(), image);
+                String absolutePath = folderStoreImage + keyFileStore + image.getOriginalFilename();
+                if(s3Service.checkKeyFileExisting(absolutePath)){
+                    return;
+                }
+                s3Service.putObject(s3BucketsCustomer, absolutePath, image);
                 if (!listSize.isEmpty()) {
                     String outFileStr = keyFileStore + "m_" + image.getOriginalFilename();
                     ByteArrayOutputStream outFile = new ByteArrayOutputStream();
@@ -131,6 +135,7 @@ public class imagesService extends BaseService implements IImageService {
             throw new ServiceBusinessExceptional(EResponseStatus.AWS_UPLOAD_IMAGE_FAIL.getLabel(), EResponseStatus.AWS_LOAD_IMAGE_FAIL.getCode());
         }
     }
+
 
     private String folderUrl() {
         return folderStoreImage + SLASH

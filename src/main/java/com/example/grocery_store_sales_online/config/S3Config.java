@@ -19,7 +19,7 @@ public class S3Config {
     @Bean
     public S3Client s3Client(){
         try {
-//            ProfileCredentialsProvider credentialsProvider = ProfileCredentialsProvider.create();
+
             return S3Client.builder()
                     .region(Region.of(awsRegion))
                     .credentialsProvider(DefaultCredentialsProvider.create())
