@@ -38,7 +38,7 @@ jobs:
             echo "${image_name} existing"
             docker rmi ${image_name}
           else
-            echo "${image_name} not found"
+            echo "${image_name} not found" 
           fi
           }
           check_image_docker_hub "${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server"
