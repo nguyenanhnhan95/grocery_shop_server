@@ -64,8 +64,8 @@ public class InitialDataCreator implements ApplicationListener<ApplicationReadyE
         boolean noUserCreated = employeeService.findAll().isEmpty();
         if (noUserCreated) {
             Employee admin = new Employee();
-            Employee employee = new Employee();
             admin.setNameLogin("Admin");
+            admin.setName("Nhàn");
             admin.setEmail("nguyenanhnhan95@gmail.com");
             admin.setPassword(passwordEncoder.encode("123123"));
             admin.setAccountStatus(EAccountStatus.ACTIVATED);
