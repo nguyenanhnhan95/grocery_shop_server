@@ -1,21 +1,26 @@
 package com.example.grocery_store_sales_online.security.oauth2;
 
 import com.example.grocery_store_sales_online.enums.AuthProvider;
-import com.example.grocery_store_sales_online.enums.EResponseStatus;
 import com.example.grocery_store_sales_online.enums.ETypeCustomer;
 import com.example.grocery_store_sales_online.enums.EAccountStatus;
-import com.example.grocery_store_sales_online.exception.ActiveException;
 import com.example.grocery_store_sales_online.exception.OAuth2AuthenticationProcessingException;
-import com.example.grocery_store_sales_online.model.account.Role;
+import com.example.grocery_store_sales_online.model.person.Employee;
+import com.example.grocery_store_sales_online.model.person.Role;
+import com.example.grocery_store_sales_online.model.person.SocialProvider;
 import com.example.grocery_store_sales_online.model.person.User;
 import com.example.grocery_store_sales_online.security.UserPrincipal;
 import com.example.grocery_store_sales_online.security.oauth2.user.OAuth2UserInfo;
 import com.example.grocery_store_sales_online.security.oauth2.user.OAuth2UserInfoFactory;
 import com.example.grocery_store_sales_online.service.email.EmailSenderService;
+import com.example.grocery_store_sales_online.service.employee.IEmployeeService;
+import com.example.grocery_store_sales_online.service.image.IImageService;
 import com.example.grocery_store_sales_online.service.role.impl.RoleService;
+import com.example.grocery_store_sales_online.service.socialProvider.ISocialProviderService;
 import com.example.grocery_store_sales_online.service.user.impl.UserService;
+import com.example.grocery_store_sales_online.utils.CommonConstants;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -26,24 +31,26 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private final UserService userService;
     private final RoleService roleService;
-
+    private final ISocialProviderService socialProviderService;
     private final EmailSenderService emailSenderService;
+    private final IEmployeeService employeeService;
+    private final IImageService imageService;
+    @Value("${filestore.folder.image.avatar}")
+    private String folderImage;
+
     @Override
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(oAuth2UserRequest);
 
         try {
-            return processOAuth2User(oAuth2UserRequest, oAuth2User);
+            return processOAuth2(oAuth2UserRequest, oAuth2User);
         } catch (AuthenticationException ex) {
             throw ex;
         } catch (Exception ex) {
@@ -51,55 +58,100 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             throw new InternalAuthenticationServiceException(ex.getMessage(), ex.getCause());
         }
     }
-    private OAuth2User processOAuth2User(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User) throws MessagingException, IOException {
+
+    private OAuth2User processOAuth2(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User) throws MessagingException, IOException {
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(oAuth2UserRequest.getClientRegistration().getRegistrationId(), oAuth2User.getAttributes());
-        if(StringUtils.isEmpty(oAuth2UserInfo.getEmail())) {
+        if (StringUtils.isEmpty(oAuth2UserInfo.getEmail())) {
             throw new OAuth2AuthenticationProcessingException("Email not found from OAuth2 provider");
         }
-
-        User user = userService.findByEmail(oAuth2UserInfo.getEmail());
-        if(user!=null) {
-            if(!user.getProvider().equals(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()))) {
-                throw new OAuth2AuthenticationProcessingException("Looks like you're signed up with " +
-                        user.getProvider() + " account. Please use your " + user.getProvider() +
-                        " account to login.");
+        SocialProvider socialProvider = new SocialProvider();
+        socialProvider.setProvider(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()));
+        socialProvider.setProviderId(oAuth2UserInfo.getId());
+        Optional<SocialProvider> findSocialProvider = socialProviderService.findByProviderAndIdProvider(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()), oAuth2UserInfo.getId());
+        if (findSocialProvider.isPresent()) {
+            if (findSocialProvider.get().getEmployee() != null) {
+                Employee employee = this.updateExistingEmployee(findSocialProvider.get().getEmployee(), oAuth2UserInfo);
+                return UserPrincipal.createEmployee(employee,oAuth2UserInfo.getId(), employee.getRoles());
             }
-            if(!user.isActive()){
-                throw  new ActiveException(EResponseStatus.ACCOUNT_NOT_ACTIVE);
+            if (findSocialProvider.get().getUser() != null) {
+                User user = updateExistingUser(findSocialProvider.get().getUser(), oAuth2UserInfo);
+                return UserPrincipal.create(user,oAuth2UserInfo.getId(),oAuth2User.getAttributes());
             }
-            user = updateExistingUser(user, oAuth2UserInfo);
-        } else {
-            user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
+            socialProviderService.deleteModel(findSocialProvider.get().getId());
+        }
+        Optional<Employee> employeeOptional = employeeService.findByEmail(oAuth2UserInfo.getEmail());
+        if (employeeOptional.isPresent()) {
+            Employee employee = this.updateSocialProviderEmployee(oAuth2UserInfo,employeeOptional.get(), socialProvider);
+            return UserPrincipal.createEmployee(employee,oAuth2UserInfo.getId(), employee.getRoles());
+        }
+        Optional<User> userOptional = userService.findByEmail(oAuth2UserInfo.getEmail());
+        if (userOptional.isPresent()) {
+            User user = this.updateSocialProviderUser(userOptional.get(), socialProvider);
+            return UserPrincipal.create(user, oAuth2UserInfo.getId(),oAuth2User.getAttributes());
         }
 
-        return UserPrincipal.create(user, oAuth2User.getAttributes());
+        User user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo, socialProvider);
+        return UserPrincipal.create(user, oAuth2UserInfo.getId(),oAuth2User.getAttributes());
     }
-    private User registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) throws MessagingException, IOException {
+
+    private User registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo, SocialProvider socialProvider) throws MessagingException, IOException {
         User user = new User();
-        user.setProvider(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()));
-        user.setProviderId(oAuth2UserInfo.getId());
         user.setName(oAuth2UserInfo.getName());
         user.setEmail(oAuth2UserInfo.getEmail());
         user.setAccountStatus(EAccountStatus.ACTIVATED);
-        user.setImageUrl(oAuth2UserInfo.getImageUrl());
+        user.setAvatar(oAuth2UserInfo.getImageUrl());
         user.setTypeCustomer(ETypeCustomer.Normal);
         user.setLastLogin(new Date());
         Set<Role> setRole = new HashSet<>();
         Optional<Role> roleUser = roleService.findByAlias("ROLE_USER");
-        if(roleUser.isPresent()){
+        if (roleUser.isPresent()) {
             setRole.add(roleUser.get());
             user.setRoles(setRole);
         }
-        if(AuthProvider.google.toString().equals(AuthProvider.google.toString())){
+        User saveUser = userService.saveModel(user);
+        socialProvider.setUser(saveUser);
+        socialProviderService.saveModel(socialProvider);
+        if (AuthProvider.google.toString().equals(AuthProvider.google.toString())) {
             emailSenderService.sendEmail(user.getEmail(), user.getName(), "Bạn đã đăng ký thành công tài khoản ");
         }
-        return userService.saveModel(user);
+        return saveUser;
     }
 
     private User updateExistingUser(User existingUser, OAuth2UserInfo oAuth2UserInfo) {
-        existingUser.setName(oAuth2UserInfo.getName());
-        existingUser.setImageUrl(oAuth2UserInfo.getImageUrl());
         existingUser.setLastLogin(new Date());
+        if (existingUser.getEmail() == null || !existingUser.getEmail().equals(oAuth2UserInfo.getEmail())) {
+            existingUser.setEmail(oAuth2UserInfo.getEmail());
+        }
         return userService.saveModel(existingUser);
+    }
+
+    private Employee updateSocialProviderEmployee(OAuth2UserInfo oAuth2UserInfo, Employee employee, SocialProvider socialProvider) {
+        employee.setLastLogin(new Date());
+        if(employee.getName()==null){
+            employee.setName(oAuth2UserInfo.getName());
+        }
+        if(employee.getAvatar()==null ){
+//            String extension = employee.getImageUrl().substring(employee.getImageUrl().lastIndexOf('.') + 1);
+            String pathImage = folderImage+CommonConstants.SLASH+oAuth2UserInfo.getName().replace(" ", "")+CommonConstants.UNDER_SCOPE+oAuth2UserInfo.getId();
+            employee.setAvatar(imageService.handleImageToServerByUrl(oAuth2UserInfo.getImageUrl(),pathImage));
+        }
+        socialProvider.setEmployee(employee);
+        socialProviderService.saveModel(socialProvider);
+        return employeeService.saveModel(employee);
+    }
+
+    private User updateSocialProviderUser(User user, SocialProvider socialProvider) {
+        user.setLastLogin(new Date());
+        socialProvider.setUser(user);
+        socialProviderService.saveModel(socialProvider);
+        return userService.saveModel(user);
+    }
+
+    private Employee updateExistingEmployee(Employee employee, OAuth2UserInfo oAuth2UserInfo) {
+        employee.setLastLogin(new Date());
+        if (employee.getEmail() == null || !employee.getEmail().equals(oAuth2UserInfo.getEmail())) {
+            employee.setEmail(oAuth2UserInfo.getEmail());
+        }
+        return employeeService.saveModel(employee);
     }
 }

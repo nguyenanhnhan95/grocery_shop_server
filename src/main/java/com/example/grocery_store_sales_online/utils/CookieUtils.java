@@ -40,6 +40,17 @@ public class CookieUtils {
             }
         }
     }
+    public static String getJwtFromCookieRequest(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (CommonConstants.COOKIE_AUTH_TOKEN.equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
+    }
     public static String serialize(Object object) {
         return Base64.getUrlEncoder()
                 .encodeToString(SerializationUtils.serialize(object));

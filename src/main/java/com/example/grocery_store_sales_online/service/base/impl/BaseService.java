@@ -17,7 +17,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 @Slf4j
@@ -125,23 +124,6 @@ public class BaseService  {
         bindingResult.addError(new FieldError(objectName, field, message));
         return new CustomValidationException(bindingResult, EResponseStatus.EXISTING.getCode());
     }
-    protected boolean checkResourceImage( MultipartFile file){
-        if (file == null || file.isEmpty()) {
-            return false;
-        }
 
-        try {
-            String nameResource = file.getOriginalFilename();
-            if (nameResource == null) {
-                return false;
-            }
-
-            String extension = nameResource.substring(nameResource.lastIndexOf(CommonConstants.DOT) + 1).toLowerCase();
-            return extension.equals("png") || extension.equals("jpeg") || extension.equals("jpg");
-        } catch (Exception ex) {
-            log.error("Exception occurred while checking if file is an image. Exception message: {}", ex.getMessage());
-            return false;
-        }
-    }
 
 }

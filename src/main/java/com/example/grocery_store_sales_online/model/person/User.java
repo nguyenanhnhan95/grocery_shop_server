@@ -1,17 +1,15 @@
 package com.example.grocery_store_sales_online.model.person;
 
-import com.example.grocery_store_sales_online.enums.AuthProvider;
 import com.example.grocery_store_sales_online.enums.ETypeCustomer;
-import com.example.grocery_store_sales_online.enums.EAccountStatus;
-import com.example.grocery_store_sales_online.model.account.Role;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -26,9 +24,8 @@ public class User extends Person implements Serializable {
     @Enumerated(EnumType.STRING)
     private ETypeCustomer typeCustomer;
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    private AuthProvider provider;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SocialProvider> authenticationProviders = new ArrayList<>();
 
     private boolean enable;
     @ManyToMany(cascade = CascadeType.MERGE,fetch = FetchType.EAGER)

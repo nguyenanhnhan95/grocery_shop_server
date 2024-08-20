@@ -7,8 +7,13 @@ import com.example.grocery_store_sales_online.model.person.User;
 import com.example.grocery_store_sales_online.payload.ApiResponse;
 import com.example.grocery_store_sales_online.payload.LoginRequest;
 import com.example.grocery_store_sales_online.payload.SignUpRequest;
+import com.example.grocery_store_sales_online.security.CurrentUser;
+import com.example.grocery_store_sales_online.security.TokenProvider;
+import com.example.grocery_store_sales_online.security.UserPrincipal;
 import com.example.grocery_store_sales_online.service.authenticate.IAuthenticateService;
 import com.example.grocery_store_sales_online.service.user.impl.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
@@ -33,14 +38,28 @@ public class AuthController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
 
+
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-        ApiResponse<?> apiResponse = new ApiResponse<>(EResponseStatus.LOGIN_SUCCESS.getCode(),EResponseStatus.LOGIN_SUCCESS.getLabel(),authenticateService.login(loginRequest));
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
+        authenticateService.login(loginRequest,response);
+        ApiResponse<?> apiResponse = new ApiResponse<>(EResponseStatus.LOGIN_SUCCESS.getCode(),EResponseStatus.LOGIN_SUCCESS.getLabel());
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+    }
+    @GetMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
+        authenticateService.logout(request,response);
+        ApiResponse<?> apiResponse = new ApiResponse<>(EResponseStatus.LOGOUT_SUCCESS.getCode(),EResponseStatus.LOGOUT_SUCCESS.getLabel());
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
     @GetMapping("/refresh-token")
-    public ResponseEntity<?> refreshToken(@PathParam("token") String token){
-        ApiResponse<?> apiResponse = new ApiResponse<>(EResponseStatus.REFRESH_TOKEN_SUCCESS.getCode(),EResponseStatus.REFRESH_TOKEN_SUCCESS.getLabel(),authenticateService.refreshToken(token));
+    public ResponseEntity<?> refreshToken(HttpServletRequest request,HttpServletResponse response){
+        authenticateService.refreshToken(request,response);
+        ApiResponse<?> apiResponse = new ApiResponse<>(EResponseStatus.REFRESH_TOKEN_SUCCESS.getCode(),EResponseStatus.REFRESH_TOKEN_SUCCESS.getLabel());
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+    }
+    @GetMapping("/role")
+    public ResponseEntity<?> getRolesUser(@CurrentUser UserPrincipal userPrincipal){
+        ApiResponse<?> apiResponse = new ApiResponse<>(EResponseStatus.FETCH_DATA_SUCCESS.getCode(),EResponseStatus.FETCH_DATA_SUCCESS.getLabel(),authenticateService.getRoleAuthorize(userPrincipal));
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
     @PostMapping("/signup")
@@ -54,7 +73,6 @@ public class AuthController {
         user.setName(signUpRequest.getName());
         user.setEmail(signUpRequest.getEmail());
         user.setPassword(signUpRequest.getPassword());
-        user.setProvider(AuthProvider.local);
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         User result = userService.saveModel(user);

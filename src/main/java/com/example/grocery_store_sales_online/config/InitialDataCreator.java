@@ -5,12 +5,14 @@ import com.example.grocery_store_sales_online.enums.AuthProvider;
 import com.example.grocery_store_sales_online.enums.EAccountStatus;
 import com.example.grocery_store_sales_online.enums.ERole;
 import com.example.grocery_store_sales_online.model.person.Employee;
+import com.example.grocery_store_sales_online.model.person.SocialProvider;
 import com.example.grocery_store_sales_online.model.product.ProductCategory;
-import com.example.grocery_store_sales_online.model.account.Role;
+import com.example.grocery_store_sales_online.model.person.Role;
 import com.example.grocery_store_sales_online.service.employee.impl.EmployeeService;
 import com.example.grocery_store_sales_online.service.productCategory.IProductCategoryService;
 
 import com.example.grocery_store_sales_online.service.role.impl.RoleService;
+import com.example.grocery_store_sales_online.service.socialProvider.ISocialProviderService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 
 @Component
@@ -34,7 +37,7 @@ public class InitialDataCreator implements ApplicationListener<ApplicationReadyE
     private final IProductCategoryService productCategoryService;
     private final PasswordEncoder passwordEncoder;
     private final CategoryProductProperties categoryProductProperties;
-
+    private final ISocialProviderService socialProviderService;
     Logger logger = LoggerFactory.getLogger(InitialDataCreator.class);
 
     @Override
@@ -62,28 +65,22 @@ public class InitialDataCreator implements ApplicationListener<ApplicationReadyE
         if (noUserCreated) {
             Employee admin = new Employee();
             Employee employee = new Employee();
-            admin.setName("Admin");
-            employee.setName("employee");
+            admin.setNameLogin("Admin");
+            admin.setEmail("nguyenanhnhan95@gmail.com");
             admin.setPassword(passwordEncoder.encode("123123"));
-            employee.setPassword(passwordEncoder.encode("123123"));
             admin.setAccountStatus(EAccountStatus.ACTIVATED);
-            employee.setAccountStatus(EAccountStatus.ACTIVATED);
-            admin.setProvider(AuthProvider.local);
-            employee.setProvider(AuthProvider.local);
             Optional<Role> roleAdmin = roleService.findByAlias(ERole.ADMIN.getLabel());
-            Optional<Role> roleEmployee = roleService.findByAlias(ERole.EMPLOYEE.getLabel());
             if (roleAdmin.isPresent() ) {
                 Set<Role> roles = new HashSet<Role>();
                 roles.add(roleAdmin.get());
                 admin.setRoles(roles);
             }
-            if (roleEmployee.isPresent() ) {
-                Set<Role> roles = new HashSet<Role>();
-                roles.add(roleEmployee.get());
-                employee.setRoles(roles);
-            }
-            employeeService.saveModel(admin);
-            employeeService.saveModel(employee);
+            Employee saveEmployee =employeeService.saveModel(admin);
+            SocialProvider socialProvider = new SocialProvider();
+            socialProvider.setProviderId(UUID.randomUUID().toString());
+            socialProvider.setProvider(AuthProvider.local);
+            socialProvider.setEmployee(saveEmployee);
+            socialProviderService.saveModel(socialProvider);
         }
     }
 

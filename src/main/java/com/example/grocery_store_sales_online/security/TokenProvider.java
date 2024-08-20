@@ -7,6 +7,8 @@ import com.example.grocery_store_sales_online.exception.InvalidException;
 import com.example.grocery_store_sales_online.exception.ServiceBusinessExceptional;
 import com.example.grocery_store_sales_online.model.InvalidatedToken;
 import com.example.grocery_store_sales_online.repository.token.InvalidatedTokenRepository;
+import com.example.grocery_store_sales_online.service.socialProvider.ISocialProviderService;
+import com.example.grocery_store_sales_online.utils.CommonConstants;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.DecodingException;
 import lombok.RequiredArgsConstructor;
@@ -28,32 +30,35 @@ import java.util.UUID;
 @Slf4j
 public class TokenProvider {
     private static final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
-    private final   AppProperties appProperties;
+    private final AppProperties appProperties;
+    private final ISocialProviderService socialProviderService;
     private final InvalidatedTokenRepository invalidatedTokenRepository;
-    public String createToken(Authentication authentication, AuthProvider authProvider,boolean keepLogin) {
+
+    public String createToken(Authentication authentication,boolean keepLogin) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Date expiryDate = new Date();
-        if(keepLogin){
-            expiryDate=new Date(expiryDate.getTime() + appProperties.getAuth().getTokenExpirationMsec());
-        }else{
-            expiryDate = new Date(expiryDate.getTime() +60*60*   1000);
+        if (keepLogin) {
+            expiryDate = new Date(expiryDate.getTime() + appProperties.getAuth().getTokenExpirationMsec());
+        } else {
+            expiryDate = new Date(expiryDate.getTime() + CommonConstants.EXPIRE_TOKEN_TIME);
         }
         return Jwts.builder()
-                .setSubject(Long.toString(userPrincipal.getId()))
+                .setSubject(userPrincipal.getIdProvider())
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
 //                .claim("scope",buildScope(userPrincipal))
-                .claim("provider",authProvider.toString())
-                .claim("idToken",UUID.randomUUID().toString())
+                .claim("idToken", UUID.randomUUID().toString())
                 .signWith(SignatureAlgorithm.HS512, appProperties.getAuth().getTokenSecret())
                 .compact();
+
     }
+
     public void logout(String token) {
         try {
             log.info("TokenProvider:logout execution started.");
             if (StringUtils.hasText(token)) {
                 Claims claims = validateToken(token);
-                String idToken =(String) claims.get("idToken");
+                String idToken = (String) claims.get("idToken");
                 Date expireDate = claims.getExpiration();
                 InvalidatedToken invalidatedToken = InvalidatedToken.builder()
                         .idToken(idToken)
@@ -61,13 +66,14 @@ public class TokenProvider {
                         .build();
                 invalidatedTokenRepository.save(invalidatedToken);
             }
-        }catch (Exception ex){
+        } catch (Exception ex) {
             log.error("Exception occurred while persisting TokenProvider:logout to database , Exception message {}", ex.getMessage());
             throw new ServiceBusinessExceptional(EResponseStatus.LOGOUT_FAIL.getLabel(), EResponseStatus.LOGOUT_FAIL.getCode());
         }
     }
-    public Claims getClaims(String token){
-       return Jwts.parser()
+
+    public Claims getClaims(String token) {
+        return Jwts.parser()
                 .setSigningKey(appProperties.getAuth().getTokenSecret())
                 .parseClaimsJws(token)
                 .getBody();
@@ -81,48 +87,61 @@ public class TokenProvider {
 
         return Long.parseLong(claims.getSubject());
     }
-    public String getUserProviderFromToken(String token){
-        Claims claims =Jwts.parser()
+
+    public String getUserProviderFromToken(String token) {
+        Claims claims = Jwts.parser()
                 .setSigningKey(appProperties.getAuth().getTokenSecret())
                 .parseClaimsJws(token)
                 .getBody();
         return (String) claims.get("provider");
     }
 
-    public Claims validateToken(String authToken)  {
+    public Claims validateToken(String authToken) {
         try {
-            Claims claims=Jwts.parser().setSigningKey(appProperties.getAuth().getTokenSecret()).parseClaimsJws(authToken).getBody();
-            if(invalidatedTokenRepository.findByIdToken((String) claims.get("idToken")).isPresent()){
-                throw new InvalidException(EResponseStatus.UNAUTHENTICATED.getLabel(),EResponseStatus.UNAUTHENTICATED.getCode());
-            }
-            else {
+            Claims claims = Jwts.parser().setSigningKey(appProperties.getAuth().getTokenSecret()).parseClaimsJws(authToken).getBody();
+            if (invalidatedTokenRepository.findByIdToken((String) claims.get("idToken")).isPresent()) {
+                throw new InvalidException(EResponseStatus.UNAUTHENTICATED.getLabel(), EResponseStatus.UNAUTHENTICATED.getCode());
+            } else {
                 Date dateExpire = claims.getExpiration();
-                if(dateExpire.getTime()-new Date().getTime()<(10*60*1000)){
-                    throw new InvalidException(EResponseStatus.REFRESH_TOKEN.getLabel(),EResponseStatus.REFRESH_TOKEN.getCode());
+                if (dateExpire.getTime() - new Date().getTime() < CommonConstants.EXPIRE_REFRESH_TOKEN_TIME) {
+                    throw new InvalidException(EResponseStatus.REFRESH_TOKEN.getLabel(), EResponseStatus.REFRESH_TOKEN.getCode());
                 }
             }
+            if (socialProviderService.findByProviderId(claims.getSubject()).isEmpty()) {
+                return null;
+            }
             return claims;
+        }catch (InvalidException ex){
+            logger.error("Exception service token message {}", ex.getMessage());
+            throw ex;
         } catch (SignatureException ex) {
-            logger.error("Invalid JWT signature");
+            logger.error("Invalid JWT signature Exception message {}", ex.getMessage());
+            throw new InvalidException(EResponseStatus.UNAUTHENTICATED.getLabel(), EResponseStatus.UNAUTHENTICATED.getCode());
         } catch (MalformedJwtException ex) {
-            logger.error("Invalid JWT token");
-            throw new InvalidException(EResponseStatus.UNAUTHENTICATED.getLabel(),EResponseStatus.UNAUTHENTICATED.getCode());
+            logger.error("Invalid JWT token Exception message {}", ex.getMessage());
+            throw new InvalidException(EResponseStatus.UNAUTHENTICATED.getLabel(), EResponseStatus.UNAUTHENTICATED.getCode());
         } catch (ExpiredJwtException ex) {
-            logger.error("Expired JWT token");
-            throw new InvalidException(EResponseStatus.EXPIRED_TOKEN.getLabel(),EResponseStatus.EXPIRED_TOKEN.getCode());
+            logger.error("Expired JWT token Exception message {}", ex.getMessage() );
+            throw new InvalidException(EResponseStatus.EXPIRED_TOKEN.getLabel(), EResponseStatus.EXPIRED_TOKEN.getCode());
         } catch (UnsupportedJwtException ex) {
-            logger.error("Unsupported JWT token");
+            logger.error("Unsupported JWT token Exception message {}", ex.getMessage() );
+            throw new InvalidException(EResponseStatus.UNAUTHENTICATED.getLabel(), EResponseStatus.UNAUTHENTICATED.getCode());
         } catch (IllegalArgumentException ex) {
-            logger.error("JWT claims string is empty.");
-        } catch (DecodingException e){
-            logger.error("Decoding error");
+            logger.error("JWT claims string is empty.Exception message {}", ex.getMessage() );
+            throw new InvalidException(EResponseStatus.UNAUTHENTICATED.getLabel(), EResponseStatus.UNAUTHENTICATED.getCode());
+        } catch (DecodingException ex) {
+            logger.error("Decoding error Exception message {}", ex.getMessage() );
+            throw new InvalidException(EResponseStatus.UNAUTHENTICATED.getLabel(), EResponseStatus.UNAUTHENTICATED.getCode());
+        } catch (Exception ex){
+            logger.error("Exception message {}", ex.getMessage() );
+            throw new InvalidException(EResponseStatus.UNAUTHENTICATED.getLabel(), EResponseStatus.UNAUTHENTICATED.getCode());
         }
-        return null;
     }
-    private String buildScope(UserPrincipal userPrincipal){
+
+    private String buildScope(UserPrincipal userPrincipal) {
         StringJoiner stringJoiner = new StringJoiner(" ");
-        if(!CollectionUtils.isEmpty(userPrincipal.getAuthorities())){
-            userPrincipal.getAuthorities().forEach(s->stringJoiner.add(s.getAuthority()));
+        if (!CollectionUtils.isEmpty(userPrincipal.getAuthorities())) {
+            userPrincipal.getAuthorities().forEach(s -> stringJoiner.add(s.getAuthority()));
         }
         return stringJoiner.toString();
     }

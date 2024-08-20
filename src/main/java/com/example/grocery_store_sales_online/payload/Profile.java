@@ -17,7 +17,7 @@ public class Profile {
     private Long id;
     private String name;
     private String avatar;
-    private AuthProvider authProvider;
+    private String idProvider;
     private List<String> roles;
     private List<String> permission;
     private EScreenTheme screenTheme;

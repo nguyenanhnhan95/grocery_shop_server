@@ -2,12 +2,15 @@ package com.example.grocery_store_sales_online.controller;
 
 import com.example.grocery_store_sales_online.components.Permission;
 import com.example.grocery_store_sales_online.config.AuthorizationProperties;
+import com.example.grocery_store_sales_online.dto.person.RoleDto;
 import com.example.grocery_store_sales_online.enums.EResponseStatus;
 import com.example.grocery_store_sales_online.exception.ServiceBusinessExceptional;
-import com.example.grocery_store_sales_online.model.account.Role;
+import com.example.grocery_store_sales_online.model.person.Role;
 import com.example.grocery_store_sales_online.payload.ApiResponse;
 import com.example.grocery_store_sales_online.service.role.IRoleService;
 import com.example.grocery_store_sales_online.utils.QueryListResult;
+import jakarta.validation.Valid;
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,5 +51,17 @@ public class RoleController {
         }
         ApiResponse<?> apiResponse = new ApiResponse<>(EResponseStatus.FETCH_DATA_SUCCESS.getCode(), EResponseStatus.FETCH_DATA_SUCCESS.getLabel(),role.get() );
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+    }
+    @PostMapping("")
+    public ResponseEntity<?> saveModel(@Valid @RequestBody RoleDto roleDto) {
+        roleService.saveModelDto(roleDto);
+        ApiResponse<?> apiResponse = new ApiResponse<>(EResponseStatus.SAVE_SUCCESS.getCode(), EResponseStatus.SAVE_SUCCESS.getLabel());
+        return ResponseEntity.ok().body(apiResponse);
+    }
+    @PatchMapping("/")
+    public ResponseEntity<?> editModel(@PathParam("id") Long id, @Valid @RequestBody RoleDto roleDto) {
+        roleService.updateModelDto(id, roleDto);
+        ApiResponse<?> apiResponse = new ApiResponse<>(EResponseStatus.EDIT_SUCCESS.getCode(), EResponseStatus.EDIT_SUCCESS.getLabel());
+        return ResponseEntity.ok().body(apiResponse);
     }
 }

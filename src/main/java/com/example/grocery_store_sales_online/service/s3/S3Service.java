@@ -13,6 +13,11 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.Random;
@@ -51,6 +56,20 @@ public class S3Service  {
                     .key(key)
                     .build();
             s3Client.putObject(objectRequest, RequestBody.fromBytes(file.getBytes()));
+        }catch (Exception ex){
+            log.error("Exception occurred while config S3Client:s3Client , Exception message {}", ex.getMessage());
+            throw new ServiceBusinessExceptional(EResponseStatus.CONFIG_AWS_FILE.getLabel(), EResponseStatus.CONFIG_AWS_FILE.getCode());
+        }
+    }
+    public void putImage(String bucketName, String key, byte[] file){
+        log.info("S3Service:putObject execution started.");
+
+        try {
+            PutObjectRequest objectRequest = PutObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(key)
+                    .build();
+            s3Client.putObject(objectRequest, RequestBody.fromBytes(file));
         }catch (Exception ex){
             log.error("Exception occurred while config S3Client:s3Client , Exception message {}", ex.getMessage());
             throw new ServiceBusinessExceptional(EResponseStatus.CONFIG_AWS_FILE.getLabel(), EResponseStatus.CONFIG_AWS_FILE.getCode());

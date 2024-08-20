@@ -92,4 +92,26 @@ public class EmployeeService extends BaseService implements IEmployeeService {
             throw new ServiceBusinessExceptional(EResponseStatus.CHANGE_SCREEN_LIGHT_FAIL.getLabel(), EResponseStatus.CHANGE_SCREEN_LIGHT_FAIL.getCode());
         }
     }
+
+    @Override
+    public Optional<Employee> findByNameLogin(String nameLogin) {
+        try {
+            log.info("EmployeeService:findByNameLogin execution started.");
+            return employeeRepository.findByNameLogin(nameLogin);
+        }catch (Exception ex){
+            log.error("Exception occurred while persisting EmployeeService:findByNameLogin to database , Exception message {}", ex.getMessage());
+            throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());
+        }
+    }
+
+    @Override
+    public Optional<Employee> findByEmail(String email) {
+        try {
+            log.info("EmployeeService:findByNameLogin execution started.");
+            return employeeRepository.findByEmail(email);
+        }catch (Exception ex){
+            log.error("Exception occurred while persisting EmployeeService:findByNameLogin to database , Exception message {}", ex.getMessage());
+            throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());
+        }
+    }
 }

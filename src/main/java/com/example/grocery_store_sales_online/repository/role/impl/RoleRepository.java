@@ -1,7 +1,9 @@
-package com.example.grocery_store_sales_online.repository.role;
-import com.example.grocery_store_sales_online.model.account.QRole;
-import com.example.grocery_store_sales_online.model.account.Role;
+package com.example.grocery_store_sales_online.repository.role.impl;
+
+import com.example.grocery_store_sales_online.model.person.QRole;
+import com.example.grocery_store_sales_online.model.person.Role;
 import com.example.grocery_store_sales_online.repository.base.BaseRepository;
+import com.example.grocery_store_sales_online.repository.role.IRoleRepository;
 import com.example.grocery_store_sales_online.utils.QueryListResult;
 import com.example.grocery_store_sales_online.utils.QueryParameter;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -15,20 +17,20 @@ import java.util.Map;
 import java.util.Optional;
 
 @Repository
-public class RoleRepository extends BaseRepository<Role,Long> implements IRoleRepository{
+public class RoleRepository extends BaseRepository<Role,Long> implements IRoleRepository {
     protected   final QRole role=QRole.role;
 
     public RoleRepository(EntityManager em) {
         super(Role.class, em);
     }
-    public Role findByAlias(String alias){
+    public Optional<Role> findByAlias(String alias){
         JPAQuery<Role> jpaQuery = new JPAQuery<>(em);
-        return jpaQuery.select(role).from(role).where(role.alias.eq(alias)).fetchOne();
+        return Optional.ofNullable(jpaQuery.select(role).from(role).where(role.alias.eq(alias)).fetchOne());
     }
     @Override
     public Optional<Role> findByName(String name){
         JPAQuery<Role> jpaQuery = new JPAQuery<>(em);
-        return  Optional.ofNullable(jpaQuery.select(role).from(role).where(role.alias.eq(name)).fetchOne());
+        return  Optional.ofNullable(jpaQuery.select(role).from(role).where(role.name.eq(name)).fetchOne());
     }
 
     @Override

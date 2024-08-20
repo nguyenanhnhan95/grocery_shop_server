@@ -1,4 +1,4 @@
-package com.example.grocery_store_sales_online.mapper;
+package com.example.grocery_store_sales_online.mapper.product;
 import com.example.grocery_store_sales_online.dto.product.ProductDto;
 import com.example.grocery_store_sales_online.model.product.Product;
 import org.mapstruct.Mapper;

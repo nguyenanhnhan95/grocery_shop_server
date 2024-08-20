@@ -1,4 +1,4 @@
-package com.example.grocery_store_sales_online.model.account;
+package com.example.grocery_store_sales_online.model.person;
 
 import com.example.grocery_store_sales_online.model.common.Model;
 import jakarta.persistence.*;

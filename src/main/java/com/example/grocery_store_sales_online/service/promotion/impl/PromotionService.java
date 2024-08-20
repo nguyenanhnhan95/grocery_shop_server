@@ -4,7 +4,7 @@ import com.example.grocery_store_sales_online.dto.shop.PromotionDto;
 import com.example.grocery_store_sales_online.enums.EResponseStatus;
 import com.example.grocery_store_sales_online.exception.CustomValidationException;
 import com.example.grocery_store_sales_online.exception.ServiceBusinessExceptional;
-import com.example.grocery_store_sales_online.mapper.PromotionMapper;
+import com.example.grocery_store_sales_online.mapper.product.PromotionMapper;
 import com.example.grocery_store_sales_online.model.shop.Promotion;
 import com.example.grocery_store_sales_online.repository.Promotion.impl.PromotionRepository;
 import com.example.grocery_store_sales_online.service.base.impl.BaseService;
@@ -107,7 +107,7 @@ public class PromotionService extends BaseService implements IPromotionService {
         try {
             log.info("PromotionService:updateModelDto execution started.");
             Optional<Promotion> promotion = findById(id);
-            promotion.orElseThrow(()-> createValidationException("promotionDto", "promotion", THIS_FILED_DATA_NOT_EXIST));
+            promotion.orElseThrow(()-> createValidationException("promotionDto", "notification", THIS_FILED_DATA_NOT_EXIST));
             if (findByCode(promotionDto.getCode().trim()).isPresent() && !promotionDto.getCode().equals(promotion.get().getCode())) {
                 throw createValidationException("promotionDto", "code", THIS_FIELD_ALREADY_EXIST);
             }

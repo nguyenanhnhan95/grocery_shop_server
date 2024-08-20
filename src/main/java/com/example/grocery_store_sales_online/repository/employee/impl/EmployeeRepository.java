@@ -36,7 +36,18 @@ public class EmployeeRepository extends BaseRepository<Employee,Long> implements
         return Optional.ofNullable(jpaQuery.select(employee).from(employee)
                 .where(employee.name.eq(name)).fetchFirst());
     }
-
+    @Override
+    public Optional<Employee> findByNameLogin(String nameLogin) {
+        JPAQuery<Employee> jpaQuery = new JPAQuery<>(em);
+        return Optional.ofNullable(jpaQuery.select(employee).from(employee)
+                .where(employee.nameLogin.eq(nameLogin)).fetchFirst());
+    }
+    @Override
+    public Optional<Employee> findByEmail(String email) {
+        JPAQuery<Employee> jpaQuery = new JPAQuery<>(em);
+        return Optional.ofNullable(jpaQuery.select(employee).from(employee)
+                .where(employee.email.eq(email)).fetchFirst());
+    }
     public JPAQuery<Employee> search(Map<String, Object> params) {
         String keyword = MapUtils.getString(params, "keyword");
         JPAQuery<Employee> jpaQuery = new JPAQuery<>(em);
@@ -49,5 +60,7 @@ public class EmployeeRepository extends BaseRepository<Employee,Long> implements
             return jpaQuery.select(employee).from(employee);
         }
     }
+
+
 
 }

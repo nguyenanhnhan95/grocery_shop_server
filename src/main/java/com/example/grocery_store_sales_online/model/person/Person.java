@@ -15,10 +15,10 @@ import java.util.Date;
 @MappedSuperclass
 public abstract class Person extends Model {
     private String name;
+    private String nameLogin;
     private String phone;
     private String email;
-    private String imageUrl;
-    private String providerId;
+    private String avatar;
     private Date birthOfDate;
     private Date lastLogin;
     @Column

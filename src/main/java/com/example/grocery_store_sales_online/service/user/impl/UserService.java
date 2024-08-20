@@ -3,9 +3,8 @@ package com.example.grocery_store_sales_online.service.user.impl;
 import com.example.grocery_store_sales_online.enums.EResponseStatus;
 import com.example.grocery_store_sales_online.enums.EScreenTheme;
 import com.example.grocery_store_sales_online.exception.ServiceBusinessExceptional;
-import com.example.grocery_store_sales_online.model.person.Employee;
 import com.example.grocery_store_sales_online.model.person.User;
-import com.example.grocery_store_sales_online.repository.user.UserRepository;
+import com.example.grocery_store_sales_online.repository.user.impl.UserRepository;
 import com.example.grocery_store_sales_online.service.base.impl.BaseService;
 import com.example.grocery_store_sales_online.service.user.IUserService;
 import lombok.RequiredArgsConstructor;
@@ -19,10 +18,10 @@ import java.util.Optional;
 public class UserService extends BaseService implements IUserService {
     private final UserRepository userRepository;
     @Override
-    public User findByEmail(String email) {
+    public Optional<User> findByEmail(String email) {
         try {
             log.info("UserService:findByEmail execution started.");
-            return userRepository.finByEmail(email);
+            return userRepository.findByEmail(email);
         }catch (Exception ex){
             log.error("Exception occurred while persisting UserService:findByEmail to database , Exception message {}", ex.getMessage());
             throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());

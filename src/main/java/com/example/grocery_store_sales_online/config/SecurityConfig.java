@@ -52,8 +52,8 @@ public class SecurityConfig {
     private  final LogoutSuccessHandler logoutSuccessHandler;
     private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
-    private final String[] PUBLIC_ENDPOINTS={"/", "/error", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg","/auth/refresh","/auth/login",
-            "/**/*.jpg", "/**/*.html", "/**/*.css", "/**/*.js", "/home/**","/auth/**", "/oauth2/**","/auth/login/**","/keep-login","/product-category/**","/test/**"};
+    private final String[] PUBLIC_ENDPOINTS={"/", "/error", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg","/auth/refresh-token","/auth/login","/auth/signup","/auth/logout",
+            "/**/*.jpg", "/**/*.html", "/**/*.css", "/**/*.js", "/home/**", "/oauth2/**","/auth/login/**","/keep-login","/product-category/**","/test/**"};
 
 
     @Bean
@@ -97,14 +97,14 @@ public class SecurityConfig {
                         .permitAll()
                         .requestMatchers("/admin/**").hasAnyAuthority(ERole.ADMIN.getLabel(),ERole.EMPLOYEE.getLabel())
                         .requestMatchers("/role/**").hasAnyAuthority(ERole.ADMIN.getLabel())
-                        .requestMatchers("/products-variation/**","/products-variation-option/**","/shop-promotion/**","/products/**")
+                        .requestMatchers("/products-variation/**","/products-variation-option/**","/shop-promotion/**","/products/**","/auth/role/**")
                         .authenticated()
                         .requestMatchers("/user/**","/menu/admin-side/**","/profile/**")
                         .authenticated()
                 )
-                .logout((logout)->logout.logoutUrl("/logout")
-                        .logoutSuccessHandler(logoutSuccessHandler)
-                        .permitAll())
+//                .logout((logout)->logout.logoutUrl("/logout")
+//                        .logoutSuccessHandler(logoutSuccessHandler)
+//                        .permitAll())
                 .oauth2Login((oauth2Login) -> oauth2Login
                         .authorizationEndpoint((authorizationEndpoint) ->
                                 authorizationEndpoint.baseUri("/oauth2/authorize")

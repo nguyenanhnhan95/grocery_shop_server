@@ -1,20 +1,23 @@
-package com.example.grocery_store_sales_online.repository.user;
+package com.example.grocery_store_sales_online.repository.user.impl;
 import com.example.grocery_store_sales_online.model.person.QUser;
 import com.example.grocery_store_sales_online.model.person.User;
 import com.example.grocery_store_sales_online.repository.base.BaseRepository;
+import com.example.grocery_store_sales_online.repository.user.IUserRepository;
 import com.querydsl.jpa.impl.JPAQuery;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
-public class UserRepository extends BaseRepository<User,Long> {
+public class UserRepository extends BaseRepository<User,Long> implements IUserRepository {
     protected final QUser user = QUser.user;
     public UserRepository( EntityManager em) {
         super(User.class, em);
     }
-    public User finByEmail(String email){
+    public Optional<User> findByEmail(String email){
         JPAQuery<User> jpaQuery = new JPAQuery<>(em);
-        return jpaQuery.select(user).from(user).where(user.email.eq(email)).fetchOne();
+        return Optional.ofNullable(jpaQuery.select(user).from(user).where(user.email.eq(email)).fetchOne());
     }
 
 }

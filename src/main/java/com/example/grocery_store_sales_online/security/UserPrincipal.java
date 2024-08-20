@@ -3,7 +3,7 @@ package com.example.grocery_store_sales_online.security;
 import com.example.grocery_store_sales_online.enums.AuthProvider;
 import com.example.grocery_store_sales_online.enums.EScreenTheme;
 import com.example.grocery_store_sales_online.model.person.Employee;
-import com.example.grocery_store_sales_online.model.account.Role;
+import com.example.grocery_store_sales_online.model.person.Role;
 import com.example.grocery_store_sales_online.model.person.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,23 +19,23 @@ public class UserPrincipal implements OAuth2User, UserDetails {
     private String name;
     private  String avatar;
     private String password;
-    private AuthProvider provider;
+    private String idProvider;
     private EScreenTheme screenTheme;
     private Collection<? extends GrantedAuthority> authorities;
     private Map<String, Object> attributes;
 
-    public UserPrincipal(Long id,String name, String email,String avatar,String password, AuthProvider provider,EScreenTheme screenTheme, Collection<? extends GrantedAuthority> authorities) {
+    public UserPrincipal(Long id,String name, String email,String avatar,String password,String idProvider,EScreenTheme screenTheme, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.name=name;
         this.email = email;
         this.avatar=avatar;
         this.password=password;
-        this.provider = provider;
+        this.idProvider=idProvider;
         this.authorities = authorities;
         this.screenTheme=screenTheme;
     }
 
-    public static UserPrincipal createUser(User  user,String role) {
+    public static UserPrincipal createUser(User  user,String idProvider,String role) {
         List<GrantedAuthority> authorities = Collections.
                 singletonList(new SimpleGrantedAuthority(role));
 
@@ -43,14 +43,14 @@ public class UserPrincipal implements OAuth2User, UserDetails {
                 user.getId(),
                 user.getName(),
                 user.getEmail(),
-                user.getImageUrl(),
+                user.getAvatar(),
                 user.getPassword(),
-                user.getProvider(),
+                idProvider,
                 user.getScreenTheme(),
                 authorities
         );
     }
-    public static UserPrincipal createEmployee(Employee  employee,Set<Role> roles) {
+    public static UserPrincipal createEmployee(Employee  employee,String idProvider,Set<Role> roles) {
         List<GrantedAuthority> authorities = new ArrayList<>();
 //                Collections.singletonList(new SimpleGrantedAuthority(role));
         roles.forEach(role->authorities.add(new SimpleGrantedAuthority(role.getAlias())));
@@ -60,14 +60,14 @@ public class UserPrincipal implements OAuth2User, UserDetails {
                 employee.getEmail(),
                 employee.getAvatar(),
                 employee.getPassword(),
-                employee.getProvider(),
+                idProvider,
                 employee.getScreenTheme(),
                 authorities
         );
     }
 
-    public static UserPrincipal create(User user, Map<String, Object> attributes) {
-        UserPrincipal userPrincipal = UserPrincipal.createUser(user, "ROLE_USER");
+    public static UserPrincipal create(User user,String idProvider, Map<String, Object> attributes) {
+        UserPrincipal userPrincipal = UserPrincipal.createUser(user,idProvider, "ROLE_USER");
         userPrincipal.setAttributes(attributes);
         return userPrincipal;
     }
@@ -116,9 +116,6 @@ public class UserPrincipal implements OAuth2User, UserDetails {
         return this.password;
     }
 
-    public AuthProvider getProvider() {
-        return provider;
-    }
 
     @Override
     public <A> A getAttribute(String name) {
@@ -145,5 +142,9 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 
     public EScreenTheme getScreenTheme() {
         return screenTheme;
+    }
+
+    public String getIdProvider() {
+        return idProvider;
     }
 }

@@ -5,8 +5,8 @@ import com.example.grocery_store_sales_online.enums.EResponseStatus;
 
 import com.example.grocery_store_sales_online.exception.CustomValidationException;
 import com.example.grocery_store_sales_online.exception.ServiceBusinessExceptional;
-import com.example.grocery_store_sales_online.mapper.ProductItemMapper;
-import com.example.grocery_store_sales_online.mapper.ProductMapper;
+import com.example.grocery_store_sales_online.mapper.product.ProductItemMapper;
+import com.example.grocery_store_sales_online.mapper.product.ProductMapper;
 import com.example.grocery_store_sales_online.model.File.Image;
 import com.example.grocery_store_sales_online.model.product.*;
 import com.example.grocery_store_sales_online.model.shop.Promotion;
@@ -21,6 +21,7 @@ import com.example.grocery_store_sales_online.service.promotion.IPromotionServic
 import com.example.grocery_store_sales_online.service.variation.IVariationService;
 import com.example.grocery_store_sales_online.service.variationOption.IVariationOptionService;
 import com.example.grocery_store_sales_online.utils.CommonConstants;
+import com.example.grocery_store_sales_online.utils.ProcessImage;
 import com.example.grocery_store_sales_online.utils.QueryListResult;
 import com.example.grocery_store_sales_online.utils.QueryParameter;
 
@@ -76,19 +77,19 @@ public class ProductService extends BaseService implements IProductService{
             product.setVariation(variation);
             List<Image> images = new ArrayList<>();
             imagesProduct.forEach(file->{
-                if(!checkResourceImage(file)){
+                if(file==null || !ProcessImage.checkExtensionImage(file.getOriginalFilename())){
                     throw createValidationException("ProductDto","images",THIS_FIELD_NOT_CORRECT_FORMAT);
                 }
                 if(file.getSize()>MAX_FILE_SIZE){
                     throw createValidationException("ProductDto","images",CommonConstants.THIS_FILE_SIZE_TOO_LARGE);
                 }
-                Image image = imageService.hanldeToImage(file,folderUrl());
+                Image image = imageService.handleToImage(file,folderUrl());
                 images.add(image);
             });
             product.setImages(images);
             Product productSaved=this.saveModel(product);
             for (int i = 0; i < imageProductItems.size(); i++) {
-                if(!checkResourceImage(imageProductItems.get(i))){
+                if(imageProductItems.get(i) == null || !ProcessImage.checkExtensionImage(imageProductItems.get(i).getOriginalFilename())){
                     throw createValidationException("ProductDto","productItem["+i+"].images",CommonConstants.THIS_FIELD_NOT_CORRECT_FORMAT);
                 }
                 if(imageProductItems.get(i).getSize()>MAX_FILE_SIZE){
@@ -121,7 +122,7 @@ public class ProductService extends BaseService implements IProductService{
                 }
                 productItem.setVariationOptions(variationOptions);
                 List<Image> imageItem = new ArrayList<>();
-                imageItem.add(imageService.hanldeToImage(productDto.getProductItem().get(i).getMultipart(), "productitem/"));
+                imageItem.add(imageService.handleToImage(productDto.getProductItem().get(i).getMultipart(), "productitem/"));
                 productItem.setImages(imageItem);
                 productItem.setProduct(productSaved);
                 productItemService.saveModel(productItem);

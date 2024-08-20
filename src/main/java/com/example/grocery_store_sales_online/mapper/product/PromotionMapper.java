@@ -1,4 +1,4 @@
-package com.example.grocery_store_sales_online.mapper;
+package com.example.grocery_store_sales_online.mapper.product;
 
 import com.example.grocery_store_sales_online.dto.shop.PromotionDto;
 import com.example.grocery_store_sales_online.model.shop.Promotion;

@@ -11,7 +11,7 @@ public class CommonUtils {
     public static String convertToAlias(String s) {
         if (s != null) {
             try {
-                String temp = Normalizer.normalize(s.toLowerCase(),
+                String temp = Normalizer.normalize(s.toUpperCase(),
                         Normalizer.Form.NFD);
                 Pattern pattern = Pattern
                         .compile("\\p{InCombiningDiacriticalMarks}+");
@@ -23,8 +23,19 @@ public class CommonUtils {
                 log.error("Exception occurred while convert CommonUtils.convertToAlias to alias , Exception message {}", ex.getMessage());
                 return s;
             }
-
         }
         return null;
+    }
+    public static String getFileExtension(String fileName) {
+        if (fileName == null || fileName.lastIndexOf('.') == -1) {
+            return ""; // Nếu không có phần mở rộng
+        }
+        return fileName.substring(fileName.lastIndexOf('.') + 1);
+    }
+    public static String getFileExtensionFromTypeContent(String fileName) {
+        if (fileName == null || fileName.lastIndexOf(CommonConstants.SLASH) == -1) {
+            return ""; // Nếu không có phần mở rộng
+        }
+        return fileName.substring(fileName.lastIndexOf(CommonConstants.SLASH) + 1);
     }
 }

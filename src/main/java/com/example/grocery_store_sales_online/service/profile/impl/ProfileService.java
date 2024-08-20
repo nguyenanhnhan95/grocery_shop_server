@@ -2,9 +2,8 @@ package com.example.grocery_store_sales_online.service.profile.impl;
 
 import com.example.grocery_store_sales_online.enums.EResponseStatus;
 import com.example.grocery_store_sales_online.enums.ERole;
-import com.example.grocery_store_sales_online.enums.EScreenTheme;
 import com.example.grocery_store_sales_online.exception.ServiceBusinessExceptional;
-import com.example.grocery_store_sales_online.model.account.Role;
+import com.example.grocery_store_sales_online.model.person.Role;
 import com.example.grocery_store_sales_online.payload.Profile;
 import com.example.grocery_store_sales_online.security.UserPrincipal;
 import com.example.grocery_store_sales_online.service.profile.IProfileService;
@@ -41,7 +40,7 @@ public class ProfileService implements IProfileService {
                 userResponse = Profile.builder().id(userPrincipal.getId())
                         .name(userPrincipal.getName())
                         .avatar(userPrincipal.getAvatar())
-                        .authProvider(userPrincipal.getProvider())
+                        .idProvider(userPrincipal.getIdProvider())
                         .roles(roles).permission(permissions)
                         .screenTheme(userPrincipal.getScreenTheme()).build();
 

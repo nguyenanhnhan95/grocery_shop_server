@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 public class LoginRequest {
     @Size(min = 5,message = "Tài khoản có độ dài ít năm ký tự")
-    private String name;
+    private String nameLogin;
     @NotBlank(message = "Vui lòng nhập mật khẩu")
     @Size(min = 6, message = "Password phải từ 6 kí tự trở lên")
     private String password;

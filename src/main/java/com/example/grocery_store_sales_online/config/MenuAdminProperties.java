@@ -3,7 +3,7 @@ package com.example.grocery_store_sales_online.config;
 import com.example.grocery_store_sales_online.components.MainMenu;
 import com.example.grocery_store_sales_online.enums.EResponseStatus;
 import com.example.grocery_store_sales_online.exception.ServiceBusinessExceptional;
-import com.example.grocery_store_sales_online.model.account.Role;
+import com.example.grocery_store_sales_online.model.person.Role;
 import com.example.grocery_store_sales_online.security.UserPrincipal;
 import com.example.grocery_store_sales_online.service.role.IRoleService;
 import com.example.grocery_store_sales_online.utils.ResourceJsonLoader;

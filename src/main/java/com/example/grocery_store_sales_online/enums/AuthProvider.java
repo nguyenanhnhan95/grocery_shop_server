@@ -5,5 +5,6 @@ public enum AuthProvider {
     social,
     facebook,
     google,
+    twitter,
     phone,
 }

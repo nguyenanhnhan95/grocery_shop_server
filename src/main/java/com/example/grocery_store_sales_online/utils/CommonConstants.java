@@ -249,9 +249,10 @@ public class CommonConstants {
     public static final String THIS_FILE_ENTER_FAIL="Trường này nhập dữ liệu bị lỗi . ";
     public static final String THIS_COMBOBOX_ITEM_CANNOT_EMPTY = "Vui lòng lựa chọn thông tin.";
     public static final String THIS_FILED_DATA_NOT_EXIST ="Dữ liệu không tồn tại";
+    public static final String THIS_DATA_EDIT_FAIL ="Dữ liệu chỉnh sửa bị lỗi .";
     public static final String THIS_UPLOAD_FILE_ITEM_CANNOT_EMPTY="Vui lòng tải dữ liệu .";
     public static final String THIS_FILE_SIZE_TOO_LARGE="File quá lớn .";
-
+    public static final String THIS_FILE_ERROR_EXTENSION="File extension không phù hợp .";
     /**
      * SEO meta tag
      */
@@ -272,5 +273,16 @@ public class CommonConstants {
      * FILE
      */
     public static  final  long MAX_FILE_SIZE=10 * 1024 * 1024;
+    /**
+     * COOKIE
+     */
+    public static  final  String COOKIE_AUTH_TOKEN="auth-token";
+    /**
+     * TIME TOKEN
+     */
+    public static final int EXPIRE_TOKEN_TIME=60 * 60 * 1000;
+    public static final int EXPIRE_REFRESH_TOKEN_TIME=15 * 60 * 1000;
+    public static final int REFRESH_TOKEN_TIME=30 * 60 *1000;
+    public static final int EXPIRE_TOKEN_COOKIE=7 * 24 * 60 * 60;
 }
 
