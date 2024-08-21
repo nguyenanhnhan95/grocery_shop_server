@@ -15,14 +15,10 @@ import com.example.grocery_store_sales_online.service.user.impl.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -34,7 +30,6 @@ import java.net.URI;
 @RequiredArgsConstructor
 public class AuthController {
     private final IAuthenticateService authenticateService;
-    private final AuthenticationManager authenticationManager;
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
 
@@ -49,6 +44,12 @@ public class AuthController {
     public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
         authenticateService.logout(request,response);
         ApiResponse<?> apiResponse = new ApiResponse<>(EResponseStatus.LOGOUT_SUCCESS.getCode(),EResponseStatus.LOGOUT_SUCCESS.getLabel());
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+    }
+    @GetMapping("/check-auth")
+    public ResponseEntity<?> checkAuthenticate() {
+        authenticateService.checkAuthenticated();
+        ApiResponse<?> apiResponse = new ApiResponse<>(EResponseStatus.AUTHENTICATE_SUCCESS.getCode(),EResponseStatus.AUTHENTICATE_SUCCESS.getLabel());
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
     @GetMapping("/refresh-token")
@@ -83,14 +84,5 @@ public class AuthController {
 
         return ResponseEntity.created(location)
                 .body(new ApiResponse(1000, "User registered successfully@"));
-    }
-    private void authenticate(String username, String password) throws Exception {
-        try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        } catch (DisabledException e) {
-            throw new Exception("USER_DISABLED", e);
-        } catch (BadCredentialsException e) {
-            throw new Exception("INVALID_CREDENTIALS", e);
-        }
     }
 }

@@ -13,4 +13,6 @@ public interface IAuthenticateService {
     void refreshToken(HttpServletRequest request,HttpServletResponse response);
     List<String> getRoleAuthorize(UserPrincipal userPrincipal);
 
+    void checkAuthenticated();
+
 }

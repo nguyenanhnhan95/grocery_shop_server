@@ -52,7 +52,7 @@ public class SecurityConfig {
     private  final LogoutSuccessHandler logoutSuccessHandler;
     private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
-    private final String[] PUBLIC_ENDPOINTS={"/", "/error", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg","/auth/refresh-token","/auth/login","/auth/signup","/auth/logout",
+    private final String[] PUBLIC_ENDPOINTS={"/", "/error", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg","/auth/refresh-token","/auth/login","/auth/signup","/auth/logout","/auth/check-auth",
             "/**/*.jpg", "/**/*.html", "/**/*.css", "/**/*.js", "/home/**", "/oauth2/**","/auth/login/**","/keep-login","/product-category/**","/test/**"};
 
 

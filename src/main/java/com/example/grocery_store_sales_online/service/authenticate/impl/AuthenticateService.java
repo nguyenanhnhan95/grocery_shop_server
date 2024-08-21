@@ -22,10 +22,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -158,6 +155,17 @@ public class AuthenticateService implements IAuthenticateService {
         }catch (Exception ex){
             log.error("Exception occurred while persisting AuthenticateService:getRoleAuthorize to database , Exception message {}", ex.getMessage());
             throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());
+        }
+    }
+
+    @Override
+    public void checkAuthenticated() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
+            throw new ServiceBusinessExceptional(
+                    EResponseStatus.UNAUTHENTICATED.getLabel(),
+                    EResponseStatus.UNAUTHENTICATED.getCode()
+            );
         }
     }
 

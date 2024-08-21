@@ -11,6 +11,7 @@ public enum EResponseStatus implements IEnumComboItem {
     EDIT_SUCCESS(200, "Đã cập nhập dữ liệu thành công"),
     DELETE_SUCCESS(200, "Đã xóa dự liệu thành công"),
     LOGIN_SUCCESS(200, "Đăng nhập thành công "),
+    AUTHENTICATE_SUCCESS(200, "Tài khoản này xác thực thành công "),
     LOGOUT_SUCCESS(200, "log out thành công"),
     ACCESS_USER_SUCCESS(200, "Truy cập thông tin tài khoản thành công ."),
 
