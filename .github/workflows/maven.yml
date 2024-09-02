@@ -47,7 +47,7 @@ jobs:
         run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
       - name: Docker Push
         run: docker push ${{ secrets.DOCKER_HUB_NAME_TAG }}:grocery-shop-server
-      - name: Deploy to EC2 instance
+      - name: Deploy to EC2 instance 
         uses: appleboy/ssh-action@master
         with:
           host: ${{secrets.EC2_HOST}}
