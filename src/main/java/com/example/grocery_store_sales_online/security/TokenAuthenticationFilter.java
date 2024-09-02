@@ -1,16 +1,14 @@
 package com.example.grocery_store_sales_online.security;
 
-import com.example.grocery_store_sales_online.enums.AuthProvider;
 import com.example.grocery_store_sales_online.enums.EResponseStatus;
 import com.example.grocery_store_sales_online.exception.InvalidException;
 import com.example.grocery_store_sales_online.model.person.SocialProvider;
-import com.example.grocery_store_sales_online.service.socialProvider.ISocialProviderService;
+import com.example.grocery_store_sales_online.service.ISocialProviderService;
 import com.example.grocery_store_sales_online.utils.CommonConstants;
 import com.example.grocery_store_sales_online.utils.CookieUtils;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +39,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             String jwt = CookieUtils.getJwtFromCookieRequest(request);
-            Claims claims = tokenProvider.validateToken(jwt);
+            Claims claims = tokenProvider.validateToken(jwt,request,response);
             if (StringUtils.hasText(jwt) && claims!=null ) {
                 UserDetails userDetails;
                 Optional<SocialProvider> socialProvider = socialProviderService.findByProviderId(claims.getSubject());

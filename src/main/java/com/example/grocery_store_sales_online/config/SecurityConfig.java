@@ -52,7 +52,7 @@ public class SecurityConfig {
     private  final LogoutSuccessHandler logoutSuccessHandler;
     private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
-    private final String[] PUBLIC_ENDPOINTS={"/", "/error", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg","/auth/refresh-token","/auth/login","/auth/signup","/auth/logout","/auth/check-auth",
+    private final String[] PUBLIC_ENDPOINTS={"/", "/error", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg","/auth/login","/auth/signup","/auth/logout","/auth/check-auth","/address/**",
             "/**/*.jpg", "/**/*.html", "/**/*.css", "/**/*.js", "/home/**", "/oauth2/**","/auth/login/**","/keep-login","/product-category/**","/test/**"};
 
 
@@ -95,7 +95,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers(PUBLIC_ENDPOINTS)
                         .permitAll()
-                        .requestMatchers("/admin/**").hasAnyAuthority(ERole.ADMIN.getLabel(),ERole.EMPLOYEE.getLabel())
+                        .requestMatchers("/employee/**").hasAnyAuthority(ERole.ADMIN.getLabel())
                         .requestMatchers("/role/**").hasAnyAuthority(ERole.ADMIN.getLabel())
                         .requestMatchers("/products-variation/**","/products-variation-option/**","/shop-promotion/**","/products/**","/auth/role/**")
                         .authenticated()

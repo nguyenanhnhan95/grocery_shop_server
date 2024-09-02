@@ -26,6 +26,19 @@ public class CommonUtils {
         }
         return null;
     }
+    public static String generateNameAlias(String s) {
+        if (s != null) {
+            String temp = Normalizer.normalize(s.toLowerCase(), Normalizer.Form.NFD);
+            Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+            String a = pattern.matcher(temp).replaceAll("").replaceAll("đ", "d")
+                    .replaceAll("[^a-zA-Z0-9]", " ")
+                    .trim()
+                    .replaceAll(" +", "_");
+            return a ;
+        } else {
+            return "";
+        }
+    }
     public static String getFileExtension(String fileName) {
         if (fileName == null || fileName.lastIndexOf('.') == -1) {
             return ""; // Nếu không có phần mở rộng

@@ -1,7 +1,11 @@
 package com.example.grocery_store_sales_online.model.person;
 
 import com.example.grocery_store_sales_online.enums.EAccountStatus;
+import com.example.grocery_store_sales_online.enums.ECountry;
 import com.example.grocery_store_sales_online.enums.EScreenTheme;
+import com.example.grocery_store_sales_online.model.address.Districts;
+import com.example.grocery_store_sales_online.model.address.Provinces;
+import com.example.grocery_store_sales_online.model.address.Wards;
 import com.example.grocery_store_sales_online.model.common.Model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -20,7 +24,24 @@ public abstract class Person extends Model {
     private String email;
     private String avatar;
     private Date birthOfDate;
+    private String idIdentification;
     private Date lastLogin;
+    private String householdRegistration;
+
+    // Dia chi hien tai
+    private String address;
+
+    @ManyToOne
+    private Provinces provinces;
+
+    @ManyToOne
+    private Districts districts;
+
+    @ManyToOne
+    private Wards wards;
+    @Column
+    @Enumerated(EnumType.STRING)
+    private ECountry country;
     @Column
     @Enumerated(EnumType.STRING)
     private EScreenTheme screenTheme;

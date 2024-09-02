@@ -3,8 +3,11 @@ package com.example.grocery_store_sales_online.handler;
 import com.example.grocery_store_sales_online.enums.EResponseStatus;
 import com.example.grocery_store_sales_online.exception.*;
 import com.example.grocery_store_sales_online.payload.ApiResponse;
+import com.example.grocery_store_sales_online.utils.CommonConstants;
 import io.jsonwebtoken.ExpiredJwtException;
+import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Path;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -16,12 +19,14 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.StreamSupport;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     ResponseEntity<ApiResponse<?>> handleRunTimeException(RuntimeException exception) {
@@ -53,9 +58,20 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(value = ConstraintViolationException.class)
     ResponseEntity<ApiResponse<?>> handleConstrainViolationException(ConstraintViolationException exception) {
-        ApiResponse<?> apiResponse = new ApiResponse<>();
-        apiResponse.setCode(EResponseStatus.VIOLATION_CONSTRAIN.getCode());
-        apiResponse.setMessage(EResponseStatus.VIOLATION_CONSTRAIN.getLabel());
+        ApiResponse<Map<String, String>> apiResponse = new ApiResponse<>();
+        Map<String,String> errors = new HashMap<>();
+        exception.getConstraintViolations().forEach(item -> {
+            Path path = item.getPropertyPath();
+            // Lấy node cuối cùng của PropertyPath
+            String lastNodeName = StreamSupport.stream(path.spliterator(), false)
+                    .reduce((first, second) -> second) // Lấy node cuối cùng
+                    .map(Path.Node::getName)
+                    .orElse(CommonConstants.THIS_FILE_ENTER_FAIL);
+            errors.put(lastNodeName, item.getMessage());
+        });
+        apiResponse.setCode(EResponseStatus.ENTER_DATA_FAIL.getCode());
+        apiResponse.setMessage(EResponseStatus.ENTER_DATA_FAIL.getLabel());
+        apiResponse.setResult(errors);
         return ResponseEntity.badRequest().body(apiResponse);
     }
 

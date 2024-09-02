@@ -11,13 +11,14 @@ import com.example.grocery_store_sales_online.model.person.User;
 import com.example.grocery_store_sales_online.security.UserPrincipal;
 import com.example.grocery_store_sales_online.security.oauth2.user.OAuth2UserInfo;
 import com.example.grocery_store_sales_online.security.oauth2.user.OAuth2UserInfoFactory;
-import com.example.grocery_store_sales_online.service.email.EmailSenderService;
-import com.example.grocery_store_sales_online.service.employee.IEmployeeService;
-import com.example.grocery_store_sales_online.service.image.IImageService;
-import com.example.grocery_store_sales_online.service.role.impl.RoleService;
-import com.example.grocery_store_sales_online.service.socialProvider.ISocialProviderService;
-import com.example.grocery_store_sales_online.service.user.impl.UserService;
+import com.example.grocery_store_sales_online.service.IEmailSenderService;
+import com.example.grocery_store_sales_online.service.IEmployeeService;
+import com.example.grocery_store_sales_online.service.IImageService;
+import com.example.grocery_store_sales_online.service.impl.RoleServiceImpl;
+import com.example.grocery_store_sales_online.service.ISocialProviderService;
+import com.example.grocery_store_sales_online.service.impl.UserServiceImpl;
 import com.example.grocery_store_sales_online.utils.CommonConstants;
+import com.example.grocery_store_sales_online.utils.CommonUtils;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,10 +37,10 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
-    private final UserService userService;
-    private final RoleService roleService;
+    private final UserServiceImpl userService;
+    private final RoleServiceImpl roleService;
     private final ISocialProviderService socialProviderService;
-    private final EmailSenderService emailSenderService;
+    private final IEmailSenderService emailSenderService;
     private final IEmployeeService employeeService;
     private final IImageService imageService;
     @Value("${filestore.folder.image.avatar}")
@@ -100,6 +101,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         user.setEmail(oAuth2UserInfo.getEmail());
         user.setAccountStatus(EAccountStatus.ACTIVATED);
         user.setAvatar(oAuth2UserInfo.getImageUrl());
+        if(oAuth2UserInfo.getImageUrl()!=null ){
+            String pathImage = folderImage+CommonConstants.SLASH+CommonUtils.generateNameAlias(oAuth2UserInfo.getName())+CommonConstants.UNDER_SCOPE+oAuth2UserInfo.getId();
+            user.setAvatar(imageService.handleImageToServerByUrl(oAuth2UserInfo.getImageUrl(),pathImage));
+        }
         user.setTypeCustomer(ETypeCustomer.Normal);
         user.setLastLogin(new Date());
         Set<Role> setRole = new HashSet<>();
@@ -112,7 +117,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         socialProvider.setUser(saveUser);
         socialProviderService.saveModel(socialProvider);
         if (AuthProvider.google.toString().equals(AuthProvider.google.toString())) {
-            emailSenderService.sendEmail(user.getEmail(), user.getName(), "Bạn đã đăng ký thành công tài khoản ");
+            emailSenderService.notifyRegisterSuccess(user.getEmail());
         }
         return saveUser;
     }
@@ -132,7 +137,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         }
         if(employee.getAvatar()==null ){
 //            String extension = employee.getImageUrl().substring(employee.getImageUrl().lastIndexOf('.') + 1);
-            String pathImage = folderImage+CommonConstants.SLASH+oAuth2UserInfo.getName().replace(" ", "")+CommonConstants.UNDER_SCOPE+oAuth2UserInfo.getId();
+            String pathImage = folderImage+CommonConstants.SLASH+ CommonUtils.generateNameAlias(oAuth2UserInfo.getName()) +CommonConstants.UNDER_SCOPE+oAuth2UserInfo.getId();
             employee.setAvatar(imageService.handleImageToServerByUrl(oAuth2UserInfo.getImageUrl(),pathImage));
         }
         socialProvider.setEmployee(employee);
@@ -153,5 +158,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             employee.setEmail(oAuth2UserInfo.getEmail());
         }
         return employeeService.saveModel(employee);
+    }
+    private void checkAccountStatus(EAccountStatus status){
+        if(!EAccountStatus.ACTIVATED.equals(status)){
+            throw new OAuth2AuthenticationProcessingException("Tài khoản đã khóa .");
+        }
     }
 }

@@ -38,7 +38,7 @@
         "workflow-management:view",
         "system:view",
         "system-content:view",
-        "user:view",
+        "employee:view",
         "role:view",
         "support:view"
       ]
@@ -378,23 +378,23 @@
       ]
     },
     {
-      "id": "user",
-      "name": "Giá trị tùy chọn sản phẩm",
+      "id": "employee",
+      "name": "Quản lý nhân sự",
       "scopes": [
         {
-          "id": "user:view",
+          "id": "employee:view",
           "name": "Xem"
         },
         {
-          "id": "user:add",
+          "id": "employee:add",
           "name": "Thêm mới"
         },
         {
-          "id": "user:delete",
+          "id": "employee:delete",
           "name": "Xóa"
         },
         {
-          "id": "user:edit",
+          "id": "employee:edit",
           "name": "Sửa"
         }
       ]

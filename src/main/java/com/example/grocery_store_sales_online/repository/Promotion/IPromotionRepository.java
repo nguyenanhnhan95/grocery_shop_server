@@ -10,5 +10,5 @@ import org.springframework.data.repository.NoRepositoryBean;
 
 @NoRepositoryBean
 public interface IPromotionRepository extends IBaseRepository<Promotion,Long> , IGetListResult<Promotion>,
-        IFindByCode<Promotion>,IFindByName<Promotion> , IGetListCode<Promotion> {
+        IFindByCode<Promotion,String>,IFindByName<Promotion> , IGetListCode<Promotion> {
 }

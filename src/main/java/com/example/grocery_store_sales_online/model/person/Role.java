@@ -32,4 +32,6 @@ public class Role extends Model implements Serializable {
         this.name = name;
         this.permissions = permissions;
     }
+
+
 }

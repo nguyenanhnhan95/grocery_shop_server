@@ -20,4 +20,15 @@ public class UserRepository extends BaseRepository<User,Long> implements IUserRe
         return Optional.ofNullable(jpaQuery.select(user).from(user).where(user.email.eq(email)).fetchOne());
     }
 
+    @Override
+    public Optional<User> findByNameLogin(String nameLogin) {
+        JPAQuery<User> jpaQuery = new JPAQuery<>(em);
+        return Optional.ofNullable(jpaQuery.select(user).from(user).where(user.nameLogin.eq(nameLogin)).fetchOne());
+    }
+
+    @Override
+    public Optional<User> findByPhone(String email) {
+        JPAQuery<User> jpaQuery = new JPAQuery<>(em);
+        return Optional.ofNullable(jpaQuery.select(user).from(user).where(user.phone.eq(email)).fetchOne());
+    }
 }

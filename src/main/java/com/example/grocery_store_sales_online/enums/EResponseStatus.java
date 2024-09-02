@@ -68,7 +68,8 @@ public enum EResponseStatus implements IEnumComboItem {
     NOT_FORMAT_OBJECT(4119, "Dữ liệu đối tượng không phù hợp ."),
     CONFIG_IMAGE_FAIL(4120, "Cấu hình file ảnh lỗi ."),
     SEND_TO_IMAGE_SERVER_FAIL(4121, "Đẩy ảnh lên server bị lỗi ."),
-    CREATE_TOKEN_FAIL(4122, "Lỗi tạo token .");
+    CREATE_TOKEN_FAIL(4122, "Lỗi tạo token ."),
+    CONVERT_MAPPER_FAIL(4123, "Lỗi khi mapper dto to object .");
 
     EResponseStatus(int code, String text) {
         this.code = code;

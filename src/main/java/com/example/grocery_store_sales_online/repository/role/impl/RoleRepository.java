@@ -1,7 +1,9 @@
 package com.example.grocery_store_sales_online.repository.role.impl;
 
+import com.example.grocery_store_sales_online.enums.ERole;
 import com.example.grocery_store_sales_online.model.person.QRole;
 import com.example.grocery_store_sales_online.model.person.Role;
+import com.example.grocery_store_sales_online.projection.person.RoleProjection;
 import com.example.grocery_store_sales_online.repository.base.BaseRepository;
 import com.example.grocery_store_sales_online.repository.role.IRoleRepository;
 import com.example.grocery_store_sales_online.utils.QueryListResult;
@@ -11,6 +13,7 @@ import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.EntityManager;
 import org.apache.commons.collections4.MapUtils;
 import org.springframework.stereotype.Repository;
+import com.querydsl.core.types.Projections;
 
 import java.util.List;
 import java.util.Map;
@@ -58,4 +61,19 @@ public class RoleRepository extends BaseRepository<Role,Long> implements IRoleRe
         return jpaQuery;
     }
 
+    @Override
+    public List<RoleProjection> listNameAlias() {
+        JPAQuery<RoleProjection> jpaQuery = new JPAQuery<>(em);
+        return  jpaQuery.select(Projections.constructor(RoleProjection.class,role.id,role.name))
+                .from(role).fetch();
+    }
+
+    @Override
+    public List<RoleProjection> listRoleEmployee() {
+        JPAQuery<RoleProjection> jpaQuery = new JPAQuery<>(em);
+        return  jpaQuery.select(Projections.constructor(RoleProjection.class,role.id,role.name))
+                .from(role)
+                .where(role.alias.ne(ERole.USER.getLabel()))
+                .fetch();
+    }
 }

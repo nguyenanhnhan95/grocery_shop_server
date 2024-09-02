@@ -1,15 +1,13 @@
 package com.example.grocery_store_sales_online.security;
 
 import com.example.grocery_store_sales_online.enums.AuthProvider;
-import com.example.grocery_store_sales_online.enums.EResponseStatus;
-import com.example.grocery_store_sales_online.exception.ResourceNotFoundException;
 import com.example.grocery_store_sales_online.model.person.Employee;
 import com.example.grocery_store_sales_online.model.person.SocialProvider;
 import com.example.grocery_store_sales_online.model.person.User;
 
-import com.example.grocery_store_sales_online.service.employee.impl.EmployeeService;
-import com.example.grocery_store_sales_online.service.socialProvider.ISocialProviderService;
-import com.example.grocery_store_sales_online.service.user.impl.UserService;
+import com.example.grocery_store_sales_online.service.impl.EmployeeServiceImpl;
+import com.example.grocery_store_sales_online.service.ISocialProviderService;
+import com.example.grocery_store_sales_online.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -27,8 +25,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 public class CustomUserDetailsService implements UserDetailsService {
-    private final UserService userService;
-    private final EmployeeService employeeService;
+    private final UserServiceImpl userService;
+    private final EmployeeServiceImpl employeeService;
     private final ISocialProviderService socialProviderService;
 
     private static final Logger logger = LoggerFactory.getLogger(CustomUserDetailsService.class);

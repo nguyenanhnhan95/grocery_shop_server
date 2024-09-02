@@ -227,7 +227,7 @@ public class CommonConstants {
      * ERROR MESSAGE
      */
     public static final String DELETED = "Đã xóa";
-    public static final String PLEASE_COMPLETE_STEP = "Vui lòng hoàn thành bước ";
+    public static final String PLEASE_COMPLETE_STEP = "Vui lòng hoàn thành bước này trước .";
     public static final String DUPLICATE_FILE = "File dữ liệu bị trùng";
     public static final String FOLLOW_FORMAT_XLSX_XLS = "Chỉ chấp nhận các tệp nằm trong các định dạng sau : xls, xlsx";
     public static final String PROCESS_IS_CHANGE = "Hệ thống nhận thấy dữ liệu đã thay đổi. Vui lòng xác nhận thay đổi dữ liệu, kiểm tra cấu hình dịch vụ và đợi quản trị viên xét duyệt lại!";
@@ -247,17 +247,26 @@ public class CommonConstants {
     public static final String THIS_FIELD_DATE_GREATER_EQUAL_DATE_CURRENT="Phải lớn hơn hoặc bằng ngày hiện tại .";
     public static final String THIS_FILE_NOT_CONTAIN_CHARACTER_SPECIAL="^[^~!@#$%^&*()_=+{};'\"<>,.0-9-]+$";
     public static final String THIS_FILE_ENTER_FAIL="Trường này nhập dữ liệu bị lỗi . ";
+    public static final String THIS_FILE_SELECT_FAIL="Trường này lựa chọn dữ liệu bị lỗi . ";
     public static final String THIS_COMBOBOX_ITEM_CANNOT_EMPTY = "Vui lòng lựa chọn thông tin.";
     public static final String THIS_FILED_DATA_NOT_EXIST ="Dữ liệu không tồn tại";
+    public static final String THIS_FIELD_EMAIL_EXISTING="Địa chỉ email đã tồn tại .";
     public static final String THIS_DATA_EDIT_FAIL ="Dữ liệu chỉnh sửa bị lỗi .";
     public static final String THIS_UPLOAD_FILE_ITEM_CANNOT_EMPTY="Vui lòng tải dữ liệu .";
     public static final String THIS_FILE_SIZE_TOO_LARGE="File quá lớn .";
-    public static final String THIS_FILE_ERROR_EXTENSION="File extension không phù hợp .";
+    public static final String THIS_FILE_ERROR_EXTENSION="File  không phù hợp .";
+    public static final String THIS_FIELD_CONFIRM_NOT_MATCH = "Mật khẩu xác nhận không đúng. ";
     /**
-     * SEO meta tag
+     * REGEX DTO
      */
-    public static final String PAGE_TITLE = "Cổng dữ liệu - Tra cứu thông tin dịch tễ Covid-19";
-    public static final String LOGO = "/assets/fe/images/logo.svg";
+    public static final String REGEX_EMAIL="[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$";
+    public static final String REGEX_FULL_NAME="^([\\p{Lu}][\\p{Ll}]{1,8})(\\s([\\p{Lu}]|[\\p{Lu}][\\p{Ll}]{1,10})){0,5}$";
+    public static final String REGEX_NAME_LOGIN="[a-z0-9]+$";
+    public static final String REGEX_CCCD="^[1-9]{12}$";
+    public static final String REGEX_PHONE="^[0-9\\-\\+]{9,11}$";
+//    public static final String REGEX_ADDRESS = "[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơưĂĐĨŨƠƯẠỹ ?,-]+$";
+    public static final String REGEX_CHARACTER_VI="^[A-Za-zÀÁÂÃÈÊÌÒÓÔÙĂẰẲẴẸÊỄÌỌÔÙƯỨỲÝđĐâàầặêệễôươ\\s]+$";
+    public static final String REGEX_NUMBER="[0-9]+$";
 
 
     /**
@@ -273,6 +282,7 @@ public class CommonConstants {
      * FILE
      */
     public static  final  long MAX_FILE_SIZE=10 * 1024 * 1024;
+    public static  final  long MAX_FILE_SIZE_IMAGE=5 * 1024 * 1024;
     /**
      * COOKIE
      */
@@ -281,8 +291,8 @@ public class CommonConstants {
      * TIME TOKEN
      */
     public static final int EXPIRE_TOKEN_TIME=60 * 60 * 1000;
-    public static final int EXPIRE_REFRESH_TOKEN_TIME=15 * 60 * 1000;
-    public static final int REFRESH_TOKEN_TIME=30 * 60 *1000;
+    public static final int EXPIRE_REFRESH_TOKEN_TIME=10 * 60 * 1000;
+    public static final int REFRESH_TOKEN_TIME=60 * 60 *1000;
     public static final int EXPIRE_TOKEN_COOKIE=7 * 24 * 60 * 60;
 }
 

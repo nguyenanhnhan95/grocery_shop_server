@@ -8,11 +8,11 @@ import com.example.grocery_store_sales_online.model.person.Employee;
 import com.example.grocery_store_sales_online.model.person.SocialProvider;
 import com.example.grocery_store_sales_online.model.product.ProductCategory;
 import com.example.grocery_store_sales_online.model.person.Role;
-import com.example.grocery_store_sales_online.service.employee.impl.EmployeeService;
-import com.example.grocery_store_sales_online.service.productCategory.IProductCategoryService;
+import com.example.grocery_store_sales_online.service.impl.EmployeeServiceImpl;
+import com.example.grocery_store_sales_online.service.IProductCategoryService;
 
-import com.example.grocery_store_sales_online.service.role.impl.RoleService;
-import com.example.grocery_store_sales_online.service.socialProvider.ISocialProviderService;
+import com.example.grocery_store_sales_online.service.impl.RoleServiceImpl;
+import com.example.grocery_store_sales_online.service.ISocialProviderService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,8 +32,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class InitialDataCreator implements ApplicationListener<ApplicationReadyEvent> {
     private final AuthorizationProperties authorizationProperties;
-    private final RoleService roleService;
-    private final EmployeeService employeeService;
+    private final RoleServiceImpl roleService;
+    private final EmployeeServiceImpl employeeService;
     private final IProductCategoryService productCategoryService;
     private final PasswordEncoder passwordEncoder;
     private final CategoryProductProperties categoryProductProperties;

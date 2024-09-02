@@ -3,7 +3,7 @@ package com.example.grocery_store_sales_online.config;
 import com.example.grocery_store_sales_online.enums.EResponseStatus;
 import com.example.grocery_store_sales_online.exception.ServiceBusinessExceptional;
 import com.example.grocery_store_sales_online.model.File.FileEntry;
-import com.example.grocery_store_sales_online.service.s3.S3Service;
+import com.example.grocery_store_sales_online.service.impl.S3ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +26,7 @@ import static com.example.grocery_store_sales_online.utils.CommonConstants.UNDER
 @Slf4j
 public class FileConfiguration {
     private final ApplicationContext applicationContext;
-    private final S3Service s3Service;
+    private final S3ServiceImpl s3Service;
     @Value("${aws.s3.buckets.customer}")
     private String s3BucketsCustomer;
     @Value("${aws.s3.buckets.domain}")

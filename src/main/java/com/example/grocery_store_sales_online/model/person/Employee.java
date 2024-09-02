@@ -18,8 +18,6 @@ import java.util.Set;
 public class Employee extends Person  implements Serializable{
     private static final long serialVersionUID=1479437896339057579L;
 
-    private String idCard;
-
     private boolean corruption;
     @Column(length = 1000)
     private String culture;

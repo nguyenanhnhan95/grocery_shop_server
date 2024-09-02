@@ -416,23 +416,23 @@
         "/admin/system-content/edit",
         "/admin/system-content/add"
       ],
-      "iconClass": "book-open",
+      "iconClass": "fa-solid fa-users",
       "requiredPermissions": [
         "system-content:view"
       ],
       "subMenus": [
         {
-          "title": "Người dùng",
-          "href": "/admin/user",
+          "title": "Nhân sự",
+          "href": "/admin/employee",
           "resources": [
-            "/admin/user",
-            "/admin/user/add",
-            "/admin/user/edit",
-            "/admin/user/view"
+            "/admin/employee",
+            "/admin/employee/add",
+            "/admin/employee/edit",
+            "/admin/employee/view"
           ],
           "iconClass": "fa-regular fa-circle",
           "requiredPermissions": [
-            "user:view"
+            "employee:view"
           ]
         },
         {

@@ -1,5 +1,5 @@
 package com.example.grocery_store_sales_online.config;
-import com.example.grocery_store_sales_online.service.notification.impl.NotificationService;
+import com.example.grocery_store_sales_online.service.impl.NotificationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat;
 @EnableScheduling
 public class NotificationConfig {
     @Autowired
-    private NotificationService notificationService;
+    private NotificationServiceImpl notificationService;
     private static final Logger log = LoggerFactory.getLogger(NotificationConfig.class);
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
