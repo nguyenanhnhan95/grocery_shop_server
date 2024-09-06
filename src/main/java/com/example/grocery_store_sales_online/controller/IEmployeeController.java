@@ -23,19 +23,20 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Nullable;
 
 @RequestMapping("/employee")
+@Validated
 public interface IEmployeeController {
     @GetMapping("/search")
     ResponseEntity<ApiResponse<QueryListResult<EmployeeProjection>>> getListResult(@RequestParam("query") String queryParameter);
     @GetMapping("/")
     ResponseEntity<?> findByIdModel(@RequestParam("id") Long id);
-    @Validated
+
     @PostMapping(value = "",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     ResponseEntity<?> saveModel(@RequestPart("employeeDto") @Valid  EmployeeDto employeeDto,
                                  @RequestPart("avatar")  @FileSizeConstraint(maxSize = CommonConstants.MAX_FILE_SIZE_IMAGE)
                                  @FileTypeConstraint(contentType = {"image/png", "image/jpg", "image/jpeg"}) @Nullable  MultipartFile avatar);
-    @Validated
-    @PatchMapping("/")
-    ResponseEntity<?> editModel(@RequestParam("id") Long id, @RequestPart("employeeDto") @Valid EmployeeEditDto employeeEditDto,
-                                @RequestPart("avatar")  @FileSizeConstraint(maxSize = CommonConstants.MAX_FILE_SIZE_IMAGE)
-                                @FileTypeConstraint(contentType = {"image/png", "image/jpg", "image/jpeg"}) @Nullable  MultipartFile avatar);
+
+    @PutMapping("/")
+    ResponseEntity<?> editModel(@RequestParam("id") Long id, @RequestPart("employeeEditDto") @Valid EmployeeEditDto employeeEditDto,
+                                @RequestPart("avatar") @Nullable   @FileSizeConstraint(maxSize = CommonConstants.MAX_FILE_SIZE_IMAGE)
+                                @FileTypeConstraint(contentType = {"image/png", "image/jpg", "image/jpeg"})  MultipartFile avatar);
 }

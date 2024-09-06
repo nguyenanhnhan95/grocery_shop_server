@@ -8,6 +8,7 @@ import com.example.grocery_store_sales_online.payload.ApiResponse;
 import com.example.grocery_store_sales_online.projection.person.EmployeeProjection;
 import com.example.grocery_store_sales_online.service.IEmployeeService;
 import com.example.grocery_store_sales_online.utils.QueryListResult;
+import com.github.fge.jsonpatch.JsonPatch;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.http.HttpStatus;
@@ -43,7 +44,9 @@ public class EmployeeControllerImpl implements IEmployeeController {
 
     @Override
     public ResponseEntity<?> editModel(Long id, EmployeeEditDto employeeEditDto, @Nullable MultipartFile avatar) {
-        employeeEditDto.setAvatar(avatar);
+        if(avatar!=null){
+            employeeEditDto.setAvatar(avatar);
+        }
         employeeService.updateModelDto(id, employeeEditDto);
         ApiResponse<?> apiResponse = new ApiResponse<>(EResponseStatus.EDIT_SUCCESS.getCode(), EResponseStatus.EDIT_SUCCESS.getLabel());
         return ResponseEntity.ok().body(apiResponse);

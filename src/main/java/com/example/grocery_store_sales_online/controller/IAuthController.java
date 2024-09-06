@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/auth")
 public interface IAuthController {
     @PostMapping("/login")
-    ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response);
+    ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response);
     @GetMapping("/logout")
     ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response);
     @GetMapping("/check-auth")

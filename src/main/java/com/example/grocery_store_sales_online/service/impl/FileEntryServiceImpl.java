@@ -21,7 +21,7 @@ public class FileEntryServiceImpl extends BaseServiceImpl implements IFileEntryS
     private final FileEntryRepository fileEntryRepository;
     private final FileConfiguration fileConfiguration;
     @Override
-    public List<FileEntry> findAll() {
+    public List<FileEntry> findAllAble() {
         return fileEntryRepository.findAll();
     }
 

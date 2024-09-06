@@ -44,7 +44,7 @@
       ]
     },
     {
-      "name": "Manager",
+      "name": "Quản lý",
       "alias": "ROLE_MANAGER",
       "description": "Quản lý",
       "permissions": [
@@ -83,7 +83,7 @@
       ]
     },
     {
-      "name": "Employee",
+      "name": "Nhân viên",
       "alias": "ROLE_EMPLOYEE",
       "description": "Nhân viên",
       "permissions": [
@@ -118,7 +118,7 @@
       ]
     },
     {
-      "name": "User",
+      "name": "Khách hàng",
       "alias": "ROLE_USER",
       "description": "Khách hàng",
       "permissions": []

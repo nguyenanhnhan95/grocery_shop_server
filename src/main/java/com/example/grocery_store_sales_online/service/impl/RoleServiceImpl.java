@@ -4,10 +4,12 @@ import com.example.grocery_store_sales_online.components.Permission;
 import com.example.grocery_store_sales_online.components.Scope;
 import com.example.grocery_store_sales_online.config.AuthorizationProperties;
 import com.example.grocery_store_sales_online.dto.person.RoleDto;
+import com.example.grocery_store_sales_online.enums.EAccountStatus;
 import com.example.grocery_store_sales_online.enums.EResponseStatus;
+import com.example.grocery_store_sales_online.enums.ERole;
 import com.example.grocery_store_sales_online.exception.CustomValidationException;
 import com.example.grocery_store_sales_online.exception.ServiceBusinessExceptional;
-import com.example.grocery_store_sales_online.mapper.person.RoleMapper;
+import com.example.grocery_store_sales_online.custom.mapper.person.RoleMapper;
 import com.example.grocery_store_sales_online.model.person.Role;
 import com.example.grocery_store_sales_online.projection.person.RoleProjection;
 import com.example.grocery_store_sales_online.repository.role.impl.RoleRepository;
@@ -21,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -101,7 +104,6 @@ public class RoleServiceImpl extends BaseServiceImpl implements IRoleService {
         try {
             this.checkPermissions(model.getPermissions());
             Role role = roleMapper.convertDtoToRole(model);
-            role.setAlias(CommonUtils.convertToAlias("Role_"+role.getName()));
             setPersonAction(role);
             setMetaData(role);
             return roleRepository.save(role);
@@ -153,10 +155,10 @@ public class RoleServiceImpl extends BaseServiceImpl implements IRoleService {
     }
 
     @Override
-    public List<RoleProjection> listRoleAlias() {
+    public List<RoleProjection> findAllAble() {
         try {
             log.info("RoleService:listRoleAlias execution started.");
-            return roleRepository.listNameAlias();
+            return roleRepository.findAllProjection();
         }catch (Exception ex){
             log.error("Exception occurred while persisting RoleService:listRoleAlias to database , Exception message {}", ex.getMessage());
             throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());
@@ -191,6 +193,24 @@ public class RoleServiceImpl extends BaseServiceImpl implements IRoleService {
             throw ex;
         }catch (Exception ex){
             log.error("Exception occurred while persisting RoleService:listRoleByIDs to database , Exception message {}", ex.getMessage());
+            throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());
+        }
+    }
+
+    @Override
+    public List<Map<String, String>> findListAlias() {
+        try {
+            return Arrays.stream(ERole.values())
+                    .map(status -> {
+                        Map<String, String> map = new HashMap<>();
+                        map.put("id", status.getLabel());
+                        map.put("name", status.getText());
+                        return map;
+                    })
+                    .collect(Collectors.toList());
+
+        }catch (Exception ex){
+            log.error("Exception occurred while persisting RoleService:findListAlias to Enum EAccountStatus  , Exception message {}", ex.getMessage());
             throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());
         }
     }

@@ -4,7 +4,7 @@ import com.example.grocery_store_sales_online.dto.product.VariationDto;
 import com.example.grocery_store_sales_online.enums.EResponseStatus;
 import com.example.grocery_store_sales_online.exception.CustomValidationException;
 import com.example.grocery_store_sales_online.exception.ServiceBusinessExceptional;
-import com.example.grocery_store_sales_online.mapper.product.VariationMapper;
+import com.example.grocery_store_sales_online.custom.mapper.product.VariationMapper;
 import com.example.grocery_store_sales_online.model.product.Variation;
 import com.example.grocery_store_sales_online.repository.variation.IVariationJpaRepository;
 import com.example.grocery_store_sales_online.repository.variation.VariationRepository;
@@ -116,7 +116,7 @@ public class VariationServiceImpl extends BaseServiceImpl implements IVariationS
     }
 
     @Override
-    public List<Variation> findAll() {
+    public List<Variation> findAllAble() {
         try {
             log.info("VariationService:findAll execution started.");
             return variationRepository.findAll();

@@ -16,7 +16,11 @@ public class RoleDto {
     @Size(max = 50,message = THIS_FIELD_TOO_LONG)
     @NotBlank(message = THIS_FIELD_CANNOT_EMPTY_2)
     private String name;
+    @NotBlank(message = THIS_FIELD_CANNOT_EMPTY_2)
     @Size(max = 250,message = THIS_FIELD_TOO_LONG)
     private String description;
+
+    @NotBlank(message = THIS_FIELD_CANNOT_EMPTY_2)
+    private String alias;
     private Set<String> permissions = new HashSet<>();
 }

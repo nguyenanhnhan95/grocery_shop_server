@@ -9,6 +9,7 @@ import java.util.Optional;
 
 @NoRepositoryBean
 public interface IEmployeeRepository extends IFindByName<Employee>, IFindNameLogin<Employee>, IFindByEmail<Employee>,
-        IGetListResult<EmployeeProjection>, IFindByIdProjection<EmployeeProjection,Long>,IFindByPhone<Employee> {
+        IGetListResult<EmployeeProjection>, IFindByIdProjection<EmployeeProjection,Long>,IFindByPhone<Employee>,
+        IFindByIdCard<Employee> {
 
 }

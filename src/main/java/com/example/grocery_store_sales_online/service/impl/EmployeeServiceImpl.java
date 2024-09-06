@@ -5,13 +5,15 @@ import com.example.grocery_store_sales_online.dto.person.EmployeeEditDto;
 import com.example.grocery_store_sales_online.enums.AuthProvider;
 import com.example.grocery_store_sales_online.enums.EResponseStatus;
 import com.example.grocery_store_sales_online.enums.EScreenTheme;
+import com.example.grocery_store_sales_online.exception.CustomValidationException;
 import com.example.grocery_store_sales_online.exception.SendToAwsException;
 import com.example.grocery_store_sales_online.exception.ServiceBusinessExceptional;
-import com.example.grocery_store_sales_online.mapper.person.EmployeeMapper;
+import com.example.grocery_store_sales_online.custom.mapper.person.EmployeeMapper;
 import com.example.grocery_store_sales_online.model.person.Employee;
 import com.example.grocery_store_sales_online.model.person.SocialProvider;
 import com.example.grocery_store_sales_online.projection.person.EmployeeProjection;
 import com.example.grocery_store_sales_online.repository.employee.impl.EmployeeRepository;
+import com.example.grocery_store_sales_online.repository.user.IUserRepository;
 import com.example.grocery_store_sales_online.service.*;
 import com.example.grocery_store_sales_online.utils.CommonConstants;
 import com.example.grocery_store_sales_online.utils.CommonUtils;
@@ -19,8 +21,11 @@ import com.example.grocery_store_sales_online.utils.QueryListResult;
 import com.example.grocery_store_sales_online.utils.QueryParameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,9 +39,9 @@ public class EmployeeServiceImpl extends BaseServiceImpl implements IEmployeeSer
     private final EmployeeMapper employeeMapper;
     private final IImageService imageService;
     private final ISocialProviderService socialProviderService;
-
+    private final IUserRepository userRepository;
     @Override
-    public List<Employee> findAll() {
+    public List<Employee> findAllAble() {
         try {
             log.info("EmployeeService:findAll execution started.");
             return employeeRepository.findAll();
@@ -87,6 +92,7 @@ public class EmployeeServiceImpl extends BaseServiceImpl implements IEmployeeSer
     }
 
     @Override
+    @Transactional
     public Employee saveModelDto(EmployeeDto model) {
         try {
             log.info("EmployeeService:saveModelDto execution started.");
@@ -94,7 +100,7 @@ public class EmployeeServiceImpl extends BaseServiceImpl implements IEmployeeSer
             String idProvider = UUID.randomUUID().toString();
             if (model.getAvatar() != null) {
                 try {
-                    keyAvatar = imageService.handleImageAvatarToAws(model.getAvatar(), CommonUtils.generateNameAlias(model.getName()) + CommonConstants.UNDER_SCOPE + idProvider);
+                    keyAvatar = imageService.handleImageAvatarToAws(model.getAvatar(), CommonUtils.generateNameAlias(model.getName()) + CommonConstants.UNDER_SCOPE + idProvider,null);
                 } catch (Exception ex) {
                     throw new SendToAwsException(EResponseStatus.AWS_LOAD_IMAGE_FAIL.getLabel(), EResponseStatus.AWS_LOAD_IMAGE_FAIL.getCode());
                 }
@@ -120,27 +126,61 @@ public class EmployeeServiceImpl extends BaseServiceImpl implements IEmployeeSer
     }
 
     @Override
+    @Transactional
     public Employee updateModelDto(Long id, EmployeeEditDto employeeEditDto) {
         try {
             log.info("EmployeeService:updateModelDto execution started.");
             Optional<Employee> employee = this.findById(id);
+
             if (employee.isEmpty()) {
                 throw createValidationException("employeeDto", "notification", CommonConstants.THIS_DATA_EDIT_FAIL);
             }
+            String olderKey = employee.get().getAvatar();
+            Employee employeeEdited = employeeMapper.updateEmployeeFromDto(employeeEditDto,employee.get());
             if (employeeEditDto.getAvatar() != null) {
                 try {
-//                    keyAvatar = imageService.handleImageAvatarToAws(employeeDto.getAvatar(), CommonUtils.generateNameAlias(model.getName()) + CommonConstants.UNDER_SCOPE + idProvider);
+                    employee.get().setAvatar(imageService.handleImageAvatarToAws(employeeEditDto.getAvatar(), CommonUtils.generateNameAlias(employeeEditDto.getName()) + CommonConstants.UNDER_SCOPE + System.currentTimeMillis(),olderKey));
                 } catch (Exception ex) {
                     throw new SendToAwsException(EResponseStatus.AWS_LOAD_IMAGE_FAIL.getLabel(), EResponseStatus.AWS_LOAD_IMAGE_FAIL.getCode());
                 }
             }
-            return null;
+            this.processUpdate(employee.get(),employeeEditDto);
+
+            setPersonAction(employeeEdited);
+            setMetaData(employeeEdited);
+            return employeeRepository.saveModel(employeeEdited);
+        } catch (CustomValidationException ex) {
+            log.error("Exception occurred validation data input , Exception message {}", ex.getMessage());
+            throw ex;
         } catch (Exception ex) {
             log.error("Exception occurred while persisting PromotionService:updateModelDto to database , Exception message {}", ex.getMessage());
             throw new ServiceBusinessExceptional(EResponseStatus.EDIT_FAIL.getLabel(), EResponseStatus.EDIT_FAIL.getCode());
         }
     }
-
+    private void processUpdate(Employee employee,EmployeeEditDto employeeEditDto){
+        if(!employee.getNameLogin().equals(employeeEditDto.getNameLogin())){
+            if(userRepository.findByNameLogin(employeeEditDto.getNameLogin()).isPresent() || employeeRepository.findByNameLogin(employeeEditDto.getNameLogin()).isPresent()){
+                throw createValidationException("EmployeeEditDto","nameLogin",CommonConstants.THIS_FIELD_ALREADY_EXIST);
+            }
+            employee.setNameLogin(employeeEditDto.getNameLogin());
+        }
+        if(employeeEditDto.getEmail()!=null && !employeeEditDto.getEmail().isEmpty() && !employee.getEmail().equals(employeeEditDto.getEmail())){
+            if(userRepository.findByEmail(employeeEditDto.getEmail()).isPresent() || employeeRepository.findByEmail(employeeEditDto.getEmail()).isPresent()){
+                throw createValidationException("EmployeeEditDto","email",CommonConstants.THIS_FIELD_ALREADY_EXIST);
+            }
+            employee.setEmail(employeeEditDto.getEmail());
+        }
+        if(employeeEditDto.getIdCard()!=null && !employeeEditDto.getIdCard().isEmpty() && !employee.getIdCard().equals(employeeEditDto.getIdCard())){
+            if(userRepository.findByIdCard(employeeEditDto.getIdCard()).isPresent() || employeeRepository.findByIdCard(employeeEditDto.getIdCard()).isPresent()){
+                throw createValidationException("EmployeeEditDto","idCard",CommonConstants.THIS_FIELD_ALREADY_EXIST);
+            }
+            employee.setIdCard(employeeEditDto.getIdCard());
+        }
+        if(employeeEditDto.getPassword()!=null && !employeeEditDto.getPassword().isEmpty() && !employee.getPassword().equals(employeeEditDto.getPassword())){
+            BCryptPasswordEncoder bCryptPasswordEncoder= new BCryptPasswordEncoder();
+            employee.setPassword(bCryptPasswordEncoder.encode(employeeEditDto.getPassword()));
+        }
+    }
     @Override
     public QueryListResult<EmployeeProjection> getListResult(String queryParameter) {
         try {

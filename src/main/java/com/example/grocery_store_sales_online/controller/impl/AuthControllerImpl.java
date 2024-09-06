@@ -33,7 +33,7 @@ public class AuthControllerImpl implements IAuthController {
 
 
     @Override
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
         authenticateService.login(loginRequest,response);
         ApiResponse<?> apiResponse = new ApiResponse<>(EResponseStatus.LOGIN_SUCCESS.getCode(),EResponseStatus.LOGIN_SUCCESS.getLabel());
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);

@@ -24,7 +24,7 @@ public abstract class Person extends Model {
     private String email;
     private String avatar;
     private Date birthOfDate;
-    private String idIdentification;
+    private String idCard;
     private Date lastLogin;
     private String householdRegistration;
 

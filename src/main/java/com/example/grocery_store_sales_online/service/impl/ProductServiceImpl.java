@@ -5,8 +5,8 @@ import com.example.grocery_store_sales_online.enums.EResponseStatus;
 
 import com.example.grocery_store_sales_online.exception.CustomValidationException;
 import com.example.grocery_store_sales_online.exception.ServiceBusinessExceptional;
-import com.example.grocery_store_sales_online.mapper.product.ProductItemMapper;
-import com.example.grocery_store_sales_online.mapper.product.ProductMapper;
+import com.example.grocery_store_sales_online.custom.mapper.product.ProductItemMapper;
+import com.example.grocery_store_sales_online.custom.mapper.product.ProductMapper;
 import com.example.grocery_store_sales_online.model.File.Image;
 import com.example.grocery_store_sales_online.model.product.*;
 import com.example.grocery_store_sales_online.model.shop.Promotion;

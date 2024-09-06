@@ -54,6 +54,8 @@ public class SecurityConfig {
 
     private final String[] PUBLIC_ENDPOINTS={"/", "/error", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg","/auth/login","/auth/signup","/auth/logout","/auth/check-auth","/address/**",
             "/**/*.jpg", "/**/*.html", "/**/*.css", "/**/*.js", "/home/**", "/oauth2/**","/auth/login/**","/keep-login","/product-category/**","/test/**"};
+    private final String[] ACTION_MANAGE_ADMIN={ERole.MANAGER.getLabel(),ERole.ADMIN.getLabel(),ERole.EMPLOYEE.getLabel()};
+    private final String[] VIEW_MANAGE_ADMIN={ERole.MANAGER.getLabel(),ERole.ADMIN.getLabel(),ERole.EMPLOYEE.getLabel()};
 
 
     @Bean

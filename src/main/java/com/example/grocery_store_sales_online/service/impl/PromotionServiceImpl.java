@@ -4,7 +4,7 @@ import com.example.grocery_store_sales_online.dto.shop.PromotionDto;
 import com.example.grocery_store_sales_online.enums.EResponseStatus;
 import com.example.grocery_store_sales_online.exception.CustomValidationException;
 import com.example.grocery_store_sales_online.exception.ServiceBusinessExceptional;
-import com.example.grocery_store_sales_online.mapper.product.PromotionMapper;
+import com.example.grocery_store_sales_online.custom.mapper.product.PromotionMapper;
 import com.example.grocery_store_sales_online.model.shop.Promotion;
 import com.example.grocery_store_sales_online.repository.Promotion.impl.PromotionRepository;
 import com.example.grocery_store_sales_online.service.IPromotionService;
@@ -52,7 +52,7 @@ public class PromotionServiceImpl extends BaseServiceImpl implements IPromotionS
     }
 
     @Override
-    public List<Promotion> findAll() {
+    public List<Promotion> findAllAble() {
         try {
             log.info("PromotionService:findAll execution started.");
             return promotionRepository.findAll();

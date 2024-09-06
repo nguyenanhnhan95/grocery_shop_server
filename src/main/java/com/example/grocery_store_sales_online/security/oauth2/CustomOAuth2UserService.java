@@ -102,7 +102,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         user.setAccountStatus(EAccountStatus.ACTIVATED);
         user.setAvatar(oAuth2UserInfo.getImageUrl());
         if(oAuth2UserInfo.getImageUrl()!=null ){
-            String pathImage = folderImage+CommonConstants.SLASH+CommonUtils.generateNameAlias(oAuth2UserInfo.getName())+CommonConstants.UNDER_SCOPE+oAuth2UserInfo.getId();
+            String pathImage = folderImage+CommonUtils.generateNameAlias(oAuth2UserInfo.getName())+CommonConstants.UNDER_SCOPE+oAuth2UserInfo.getId();
             user.setAvatar(imageService.handleImageToServerByUrl(oAuth2UserInfo.getImageUrl(),pathImage));
         }
         user.setTypeCustomer(ETypeCustomer.Normal);
@@ -137,7 +137,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         }
         if(employee.getAvatar()==null ){
 //            String extension = employee.getImageUrl().substring(employee.getImageUrl().lastIndexOf('.') + 1);
-            String pathImage = folderImage+CommonConstants.SLASH+ CommonUtils.generateNameAlias(oAuth2UserInfo.getName()) +CommonConstants.UNDER_SCOPE+oAuth2UserInfo.getId();
+            String pathImage = folderImage+ CommonUtils.generateNameAlias(oAuth2UserInfo.getName()) +CommonConstants.UNDER_SCOPE+oAuth2UserInfo.getId();
             employee.setAvatar(imageService.handleImageToServerByUrl(oAuth2UserInfo.getImageUrl(),pathImage));
         }
         socialProvider.setEmployee(employee);

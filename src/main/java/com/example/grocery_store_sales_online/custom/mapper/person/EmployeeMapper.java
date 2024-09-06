@@ -1,6 +1,7 @@
-package com.example.grocery_store_sales_online.mapper.person;
+package com.example.grocery_store_sales_online.custom.mapper.person;
 
 import com.example.grocery_store_sales_online.dto.person.EmployeeDto;
+import com.example.grocery_store_sales_online.dto.person.EmployeeEditDto;
 import com.example.grocery_store_sales_online.enums.EResponseStatus;
 import com.example.grocery_store_sales_online.exception.ServiceBusinessExceptional;
 import com.example.grocery_store_sales_online.model.address.Districts;
@@ -13,9 +14,7 @@ import com.example.grocery_store_sales_online.service.IImageService;
 import com.example.grocery_store_sales_online.service.IRoleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
+import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,7 +36,7 @@ public abstract class EmployeeMapper {
     @Mapping(source = "name", target = "name")
     @Mapping(source = "nameLogin", target = "nameLogin")
     @Mapping(source = "phone", target = "phone")
-    @Mapping(source = "idIdentification", target = "idIdentification")
+    @Mapping(source = "idCard", target = "idCard")
     @Mapping(source = "password", target = "password")
     @Mapping(source = "birthOfDate", target = "birthOfDate")
     @Mapping(source = "address", target = "address")
@@ -47,6 +46,16 @@ public abstract class EmployeeMapper {
     @Mapping(source = "districts", target = "districts", qualifiedByName = "mapDistricts")
     @Mapping(source = "wards", target = "wards", qualifiedByName = "mapWards")
     public abstract Employee convertEmployeeDtoToEmployee(EmployeeDto employeeDto);
+    @Mapping(source = "name", target = "name")
+    @Mapping(source = "birthOfDate", target = "birthOfDate")
+    @Mapping(source = "address", target = "address")
+    @Mapping(source = "avatar", target = "avatar",qualifiedByName = "mapAvatar")
+    @Mapping(source = "roles", target = "roles", qualifiedByName = "mapRole")
+    @Mapping(source = "provinces", target = "provinces", qualifiedByName = "mapProvinces")
+    @Mapping(source = "districts", target = "districts", qualifiedByName = "mapDistricts")
+    @Mapping(source = "wards", target = "wards", qualifiedByName = "mapWards")
+    public abstract Employee updateEmployeeFromDto(EmployeeEditDto employeeEditDto, @MappingTarget Employee employee);
+
     @Named("mapAvatar")
     protected String mapAvatar(MultipartFile avatar){
         return null;
@@ -83,4 +92,5 @@ public abstract class EmployeeMapper {
     protected Wards mapWards(String wards) {
         return mapAddress(wards, addressService::findByCodeWards);
     }
+
 }

@@ -34,9 +34,17 @@ public class RoleControllerImpl implements IRoleController {
     @Override
     public ResponseEntity<ApiResponse<?>> getList() {
         ApiResponse<?> result = new ApiResponse<>(EResponseStatus.FETCH_DATA_SUCCESS.getCode(),
-                EResponseStatus.FETCH_DATA_SUCCESS.getLabel(), roleService.listRoleAlias());
+                EResponseStatus.FETCH_DATA_SUCCESS.getLabel(), roleService.findAllAble());
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<ApiResponse<?>> getListAlias() {
+        ApiResponse<?> result = new ApiResponse<>(EResponseStatus.FETCH_DATA_SUCCESS.getCode(),
+                EResponseStatus.FETCH_DATA_SUCCESS.getLabel(), roleService.findListAlias());
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
     @Override
     public ResponseEntity<ApiResponse<?>> getListRoleEmployee() {
         ApiResponse<?> result = new ApiResponse<>(EResponseStatus.FETCH_DATA_SUCCESS.getCode(),

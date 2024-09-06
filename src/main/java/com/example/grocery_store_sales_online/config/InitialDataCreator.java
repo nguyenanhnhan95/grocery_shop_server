@@ -18,7 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +35,6 @@ public class InitialDataCreator implements ApplicationListener<ApplicationReadyE
     private final RoleServiceImpl roleService;
     private final EmployeeServiceImpl employeeService;
     private final IProductCategoryService productCategoryService;
-    private final PasswordEncoder passwordEncoder;
     private final CategoryProductProperties categoryProductProperties;
     private final ISocialProviderService socialProviderService;
     Logger logger = LoggerFactory.getLogger(InitialDataCreator.class);
@@ -61,13 +60,14 @@ public class InitialDataCreator implements ApplicationListener<ApplicationReadyE
     }
 
     public void initManager() {
-        boolean noUserCreated = employeeService.findAll().isEmpty();
+        boolean noUserCreated = employeeService.findAllAble().isEmpty();
         if (noUserCreated) {
+            BCryptPasswordEncoder bCryptPasswordEncoder= new BCryptPasswordEncoder();
             Employee admin = new Employee();
             admin.setNameLogin("Admin");
             admin.setName("Nhàn");
             admin.setEmail("nguyenanhnhan95@gmail.com");
-            admin.setPassword(passwordEncoder.encode("123123"));
+            admin.setPassword(bCryptPasswordEncoder.encode("123123"));
             admin.setAccountStatus(EAccountStatus.ACTIVATED);
             Optional<Role> roleAdmin = roleService.findByAlias(ERole.ADMIN.getLabel());
             if (roleAdmin.isPresent() ) {

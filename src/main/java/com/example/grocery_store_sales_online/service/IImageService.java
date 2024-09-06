@@ -8,5 +8,5 @@ public interface IImageService extends ISaveModelAble<Image> {
     Image handleToImage(MultipartFile file, String directory);
     String saveImage(MultipartFile image);
     String handleImageToServerByUrl(String url ,String directory);
-    String handleImageAvatarToAws(MultipartFile image,String directory);
+    String handleImageAvatarToAws(MultipartFile image,String directory,String olderKey);
 }

@@ -1,4 +1,4 @@
-package com.example.grocery_store_sales_online.mapper.person;
+package com.example.grocery_store_sales_online.custom.mapper.person;
 
 import org.mapstruct.Mapper;
 

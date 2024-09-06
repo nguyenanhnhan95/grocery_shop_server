@@ -3,7 +3,7 @@ package com.example.grocery_store_sales_online.service.impl;
 import com.example.grocery_store_sales_online.dto.product.ProductItemDto;
 import com.example.grocery_store_sales_online.enums.EResponseStatus;
 import com.example.grocery_store_sales_online.exception.ServiceBusinessExceptional;
-import com.example.grocery_store_sales_online.mapper.product.ProductItemMapper;
+import com.example.grocery_store_sales_online.custom.mapper.product.ProductItemMapper;
 import com.example.grocery_store_sales_online.model.File.Image;
 import com.example.grocery_store_sales_online.model.product.ProductItem;
 import com.example.grocery_store_sales_online.repository.image.impl.ImageRepository;

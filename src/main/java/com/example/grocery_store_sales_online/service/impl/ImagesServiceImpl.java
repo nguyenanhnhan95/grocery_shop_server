@@ -37,7 +37,8 @@ public class ImagesServiceImpl extends BaseServiceImpl implements IImageService 
     private String s3BucketsDomain;
     @Value("${filestore.folder.image}")
     private String folderStoreImage;
-
+    @Value("${filestore.folder.image.avatar}")
+    private String folderStoreAvatar;
     @Override
     public Image saveModel(Image model) {
         log.info("imagesService:saveModel(image) execution started.");
@@ -91,14 +92,20 @@ public class ImagesServiceImpl extends BaseServiceImpl implements IImageService 
     }
 
     @Override
-    public String handleImageAvatarToAws(MultipartFile image, String directory) {
+    public String handleImageAvatarToAws(MultipartFile image, String directory ,String olderKey) {
         try {
             BufferedImage originalImage = ImageIO.read(image.getInputStream());
             String extension = CommonUtils.getFileExtension(image.getOriginalFilename());
             List<Pair<Integer, Integer>> listSize = ProcessImage.getHeightSmallAndMedium2();
-            String absolutePath = folderStoreImage+directory+extension;
-            if (s3Service.checkKeyFileExisting(absolutePath)) {
+            String absolutePath = folderStoreAvatar+directory+CommonConstants.DOT+extension;
+            if(s3Service.checkKeyFileExisting(image.getOriginalFilename())){
+                return olderKey;
+            }
+            if (s3Service.checkKeyFileExisting(absolutePath) ) {
                 return absolutePath;
+            }
+            if(olderKey!=null && olderKey.contains(folderStoreAvatar)){
+                s3Service.deleteObject(s3BucketsCustomer,olderKey);
             }
             if (!listSize.isEmpty()) {
                 if (listSize.size() == 2) {

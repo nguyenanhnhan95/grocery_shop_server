@@ -31,7 +31,7 @@ public class PromotionControllerImpl implements IPromotionController {
 
     @Override
     public ResponseEntity<ApiResponse<List<Promotion>>> findAll() {
-        ApiResponse<List<Promotion>> result = new ApiResponse<>(EResponseStatus.FETCH_DATA_SUCCESS.getCode(), EResponseStatus.FETCH_DATA_SUCCESS.getLabel(),  promotionService.findAll());
+        ApiResponse<List<Promotion>> result = new ApiResponse<>(EResponseStatus.FETCH_DATA_SUCCESS.getCode(), EResponseStatus.FETCH_DATA_SUCCESS.getLabel(),  promotionService.findAllAble());
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 

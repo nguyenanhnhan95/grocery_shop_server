@@ -12,14 +12,18 @@ public class PasswordValidator extends BaseValidator implements ConstraintValida
     @Override
     public boolean isValid(PersonDto personDto, ConstraintValidatorContext context) {
         try {
-            boolean isPassword= StringUtils.isBlank(personDto.getPassword());
-            boolean isConfirmPassword = StringUtils.isBlank(personDto.getConfirmPassword());
+            boolean isPassword= StringUtils.isBlank(personDto.getPassword())||personDto.getPassword()==null;
+            boolean isConfirmPassword = StringUtils.isBlank(personDto.getConfirmPassword()) || personDto.getConfirmPassword()==null;
             if(isPassword){
                 if(!isConfirmPassword){
                     addMessageValidation(context,"password", CommonConstants.PLEASE_COMPLETE_STEP);
                     return false;
                 }
             }else {
+                if(isConfirmPassword){
+                    addMessageValidation(context,"confirmPassword", CommonConstants.THIS_FIELD_CANNOT_EMPTY);
+                    return false;
+                }
                 if(!personDto.getConfirmPassword().equals(personDto.getPassword())){
                     addMessageValidation(context,"confirmPassword", CommonConstants.THIS_FIELD_CONFIRM_NOT_MATCH);
                     return false;

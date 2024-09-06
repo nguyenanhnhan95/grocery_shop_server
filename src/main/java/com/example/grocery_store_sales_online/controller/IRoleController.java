@@ -16,8 +16,10 @@ import java.util.Set;
 public interface IRoleController {
     @GetMapping("/search")
     ResponseEntity<ApiResponse<QueryListResult<Role>>> getListResult(@RequestParam("query") String queryParameter);
-    @GetMapping("/alias")
+    @GetMapping("")
     ResponseEntity<ApiResponse<?>> getList();
+    @GetMapping("/alias")
+    ResponseEntity<ApiResponse<?>> getListAlias();
     @GetMapping("/employee")
     ResponseEntity<ApiResponse<?>> getListRoleEmployee();
     @DeleteMapping("/")
@@ -28,6 +30,6 @@ public interface IRoleController {
     ResponseEntity<?> findByIdModel(@RequestParam("id") Long id);
     @PostMapping("")
     ResponseEntity<?> saveModel(@Valid @RequestBody RoleDto roleDto);
-    @PatchMapping("/")
+    @PutMapping("/")
     ResponseEntity<?> editModel(@PathParam("id") Long id, @Valid @RequestBody RoleDto roleDto);
 }

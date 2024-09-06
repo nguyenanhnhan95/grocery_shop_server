@@ -62,7 +62,7 @@ public class RoleRepository extends BaseRepository<Role,Long> implements IRoleRe
     }
 
     @Override
-    public List<RoleProjection> listNameAlias() {
+    public List<RoleProjection> findAllProjection() {
         JPAQuery<RoleProjection> jpaQuery = new JPAQuery<>(em);
         return  jpaQuery.select(Projections.constructor(RoleProjection.class,role.id,role.name))
                 .from(role).fetch();

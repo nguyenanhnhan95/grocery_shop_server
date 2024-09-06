@@ -20,9 +20,8 @@ public class EmployeeProjection {
     private Date createDate;
     private EAccountStatus accountStatus;
     private List<Long> roles;
-    private String idIdentification;
+    private String idCard;
     private Date birthOfDate;
-    private String password;
     private String address;
     private String provinces;
     private String districts;
@@ -43,7 +42,7 @@ public class EmployeeProjection {
     @QueryProjection
     public EmployeeProjection(Long id, String avatar, String name, String nameLogin, String phone,String email,
                               EAccountStatus accountStatus, String idIdentification, Date birthOfDate,
-                              String password, String address, String provinces, String districts,
+                              String address, String provinces, String districts,
                               String wards, List<Long> roles) {
         this.id = id;
         this.name = name;
@@ -53,9 +52,8 @@ public class EmployeeProjection {
         this.avatar = avatar;
         this.accountStatus = accountStatus;
         this.roles = roles;
-        this.idIdentification = idIdentification;
+        this.idCard = idIdentification;
         this.birthOfDate = birthOfDate;
-        this.password = password;
         this.address = address;
         this.provinces = provinces;
         this.districts = districts;

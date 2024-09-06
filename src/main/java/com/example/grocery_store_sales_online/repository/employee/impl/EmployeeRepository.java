@@ -67,6 +67,12 @@ public class EmployeeRepository extends BaseRepository<Employee, Long> implement
                 .where(employee.phone.eq(phone)).fetchFirst());
     }
     @Override
+    public Optional<Employee> findByIdCard(String idCard) {
+        JPAQuery<Employee> jpaQuery = new JPAQuery<>(em);
+        return Optional.ofNullable(jpaQuery.select(employee).from(employee)
+                .where(employee.idCard.eq(idCard)).fetchFirst());
+    }
+    @Override
     public Optional<EmployeeProjection> findByIdProjection(Long id) {
         JPAQuery<EmployeeProjection> jpaQuery = new JPAQuery<>(em);
         return Optional.ofNullable(jpaQuery.select(Projections.constructor(
@@ -78,9 +84,8 @@ public class EmployeeRepository extends BaseRepository<Employee, Long> implement
                         employee.phone,
                         employee.email,
                         employee.accountStatus,
-                        employee.idIdentification,
+                        employee.idCard,
                         employee.birthOfDate,
-                        employee.password,
                         employee.address,
                         employee.provinces.code.as("provinces"),
                         employee.districts.code.as("districts"),

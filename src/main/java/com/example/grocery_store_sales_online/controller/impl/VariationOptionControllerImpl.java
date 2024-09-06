@@ -35,7 +35,7 @@ public class VariationOptionControllerImpl implements IVariationOptionController
 
     @Override
     public ResponseEntity<ApiResponse<List<VariationOption>>> findAll() {
-        List<VariationOption> variationOptions = variationOptionService.findAll();
+        List<VariationOption> variationOptions = variationOptionService.findAllAble();
         ApiResponse<List<VariationOption>> result = new ApiResponse<>(EResponseStatus.FETCH_DATA_SUCCESS.getCode(), EResponseStatus.FETCH_DATA_SUCCESS.getLabel(),
                 variationOptions);
         return new ResponseEntity<>(result, HttpStatus.OK);
