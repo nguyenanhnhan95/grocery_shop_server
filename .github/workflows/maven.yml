@@ -29,7 +29,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_HUB_USER_NAME }}
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
-      - name: Check Docker Images 
+      - name: Check Docker Images  
         run: |
           echo "docker-hub connection successful"           
           check_image_docker_hub() {
