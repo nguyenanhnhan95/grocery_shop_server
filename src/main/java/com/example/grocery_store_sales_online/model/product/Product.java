@@ -27,6 +27,8 @@ public class Product extends Model {
     @JoinTable(name = "product_image", joinColumns = { @JoinColumn(name = "product_id") },
             inverseJoinColumns = {@JoinColumn(name = "image_id") })
     private List<Image> images = new ArrayList<>();
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private List<ProductItem> productItems = new ArrayList<>();
     @ManyToOne
     private ProductCategory productCategory;
     @ManyToOne

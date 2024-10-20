@@ -5,6 +5,8 @@ import com.example.grocery_store_sales_online.exception.CustomValidationExceptio
 import com.example.grocery_store_sales_online.exception.ServiceBusinessExceptional;
 import com.example.grocery_store_sales_online.model.common.Model;
 import com.example.grocery_store_sales_online.security.UserPrincipal;
+import com.example.grocery_store_sales_online.utils.CommonConstants;
+import com.example.grocery_store_sales_online.utils.ProcessImage;
 import com.example.grocery_store_sales_online.utils.QueryParameter;
 import com.google.gson.Gson;
 import jakarta.annotation.Nullable;
@@ -16,8 +18,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
+
+import static com.example.grocery_store_sales_online.utils.CommonConstants.MAX_FILE_SIZE;
+import static com.example.grocery_store_sales_online.utils.CommonConstants.THIS_FIELD_NOT_CORRECT_FORMAT;
+
 @Slf4j
 public class BaseServiceImpl {
     private static final int DEFAULT_SIZE = 10;
@@ -123,6 +130,23 @@ public class BaseServiceImpl {
         bindingResult.addError(new FieldError(objectName, field, message));
         return new CustomValidationException(bindingResult, EResponseStatus.EXISTING.getCode());
     }
+    protected void validateImage(String nameObject, String field, MultipartFile image){
+        if (image == null || !ProcessImage.checkExtensionImage(image.getOriginalFilename())) {
+            throw createValidationException(nameObject, field, THIS_FIELD_NOT_CORRECT_FORMAT);
+        }
+        if (image.getSize() > MAX_FILE_SIZE) {
+            throw createValidationException(nameObject, field, CommonConstants.THIS_FILE_SIZE_TOO_LARGE);
+        }
+    }
+    protected void validateImages(String nameObject, String field, List<MultipartFile> images){
+        for (MultipartFile image: images) {
+            if (image == null || !ProcessImage.checkExtensionImage(image.getOriginalFilename())) {
+                throw createValidationException(nameObject, field, THIS_FIELD_NOT_CORRECT_FORMAT);
+            }
+            if (image.getSize() > MAX_FILE_SIZE) {
+                throw createValidationException(nameObject, field, CommonConstants.THIS_FILE_SIZE_TOO_LARGE);
+            }
+        }
 
-
+    }
 }

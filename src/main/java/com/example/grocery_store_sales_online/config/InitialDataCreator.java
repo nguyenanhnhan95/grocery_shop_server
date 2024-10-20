@@ -4,16 +4,17 @@ package com.example.grocery_store_sales_online.config;
 import com.example.grocery_store_sales_online.enums.AuthProvider;
 import com.example.grocery_store_sales_online.enums.EAccountStatus;
 import com.example.grocery_store_sales_online.enums.ERole;
-import com.example.grocery_store_sales_online.model.person.Employee;
 import com.example.grocery_store_sales_online.model.person.SocialProvider;
+import com.example.grocery_store_sales_online.model.person.User;
 import com.example.grocery_store_sales_online.model.product.ProductCategory;
 import com.example.grocery_store_sales_online.model.person.Role;
-import com.example.grocery_store_sales_online.service.impl.EmployeeServiceImpl;
+import com.example.grocery_store_sales_online.repository.role.impl.RoleRepository;
+import com.example.grocery_store_sales_online.service.IUserService;
 import com.example.grocery_store_sales_online.service.IProductCategoryService;
 
-import com.example.grocery_store_sales_online.service.impl.RoleServiceImpl;
 import com.example.grocery_store_sales_online.service.ISocialProviderService;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -22,18 +23,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 
 @Component
 @RequiredArgsConstructor
 public class InitialDataCreator implements ApplicationListener<ApplicationReadyEvent> {
     private final AuthorizationProperties authorizationProperties;
-    private final RoleServiceImpl roleService;
-    private final EmployeeServiceImpl employeeService;
+    private final RoleRepository roleRepository;
+    private final IUserService userService;
     private final IProductCategoryService productCategoryService;
     private final CategoryProductProperties categoryProductProperties;
     private final ISocialProviderService socialProviderService;
@@ -41,16 +39,18 @@ public class InitialDataCreator implements ApplicationListener<ApplicationReadyE
 
     @Override
     @Transactional
-    public void onApplicationEvent(ApplicationReadyEvent event) {
+    public void onApplicationEvent(@NotNull ApplicationReadyEvent event) {
+
         initRole();
         initManager();
         initCategoryProduct();
     }
 
     public void initRole() {
-        for (Role role : authorizationProperties.getRoles()) {
-            createUpdateRole(role);
+        if(roleRepository.findAll().isEmpty()){
+            roleRepository.saveAll(authorizationProperties.getRoles());
         }
+
     }
 
     public void initCategoryProduct() {
@@ -60,44 +60,31 @@ public class InitialDataCreator implements ApplicationListener<ApplicationReadyE
     }
 
     public void initManager() {
-        boolean noUserCreated = employeeService.findAllAble().isEmpty();
+        boolean noUserCreated = userService.findAllAble().isEmpty();
         if (noUserCreated) {
             BCryptPasswordEncoder bCryptPasswordEncoder= new BCryptPasswordEncoder();
-            Employee admin = new Employee();
+            User admin = new User();
             admin.setNameLogin("Admin");
             admin.setName("Nhàn");
             admin.setEmail("nguyenanhnhan95@gmail.com");
             admin.setPassword(bCryptPasswordEncoder.encode("123123"));
             admin.setAccountStatus(EAccountStatus.ACTIVATED);
-            Optional<Role> roleAdmin = roleService.findByAlias(ERole.ADMIN.getLabel());
-            if (roleAdmin.isPresent() ) {
+            List<Role> roleAdmin = roleRepository.findByAliasRoles(ERole.ADMIN.getCode());
+            if (!roleAdmin.isEmpty() && roleAdmin.get(0).getName().equals("Admin")) {
                 Set<Role> roles = new HashSet<Role>();
-                roles.add(roleAdmin.get());
+                roles.add(roleAdmin.get(0));
                 admin.setRoles(roles);
             }
-            Employee saveEmployee =employeeService.saveModel(admin);
+            User saveUser =userService.saveModel(admin);
             SocialProvider socialProvider = new SocialProvider();
             socialProvider.setProviderId(UUID.randomUUID().toString());
             socialProvider.setProvider(AuthProvider.local);
-            socialProvider.setEmployee(saveEmployee);
+            socialProvider.setUser(saveUser);
             socialProviderService.saveModel(socialProvider);
         }
     }
 
-    private void createUpdateRole(Role role) {
-        Optional<Role> current = roleService.findByAlias(role.getAlias());
-        if (current.isPresent()) {
-            Role roleCurrent = current.get();
-            roleCurrent.setDescription(role.getDescription());
-            roleCurrent.setName(role.getName());
-            if (roleCurrent.getPermissions().isEmpty()) {
-                roleCurrent.setPermissions(role.getPermissions());
-            }
-            roleService.saveModel(roleCurrent);
-        } else {
-            roleService.saveModel(role);
-        }
-    }
+
 
     private void createUpdateProductCategory(ProductCategory productCategory) {
         ProductCategory current = productCategoryService.findByHref(productCategory.getHref());

@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 
@@ -20,7 +21,7 @@ public class AuthorizationProperties {
     @Getter
     private Set<Role> roles = new HashSet<Role>();
     @Getter
-    private Set<Permission> permissions = new HashSet<>();
+    private Set<Permission> permissions = new LinkedHashSet<>();
 
     public AuthorizationProperties() {
         try {

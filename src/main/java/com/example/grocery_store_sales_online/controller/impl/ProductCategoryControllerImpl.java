@@ -4,6 +4,7 @@ import com.example.grocery_store_sales_online.controller.IProductCategoryControl
 import com.example.grocery_store_sales_online.enums.EResponseStatus;
 import com.example.grocery_store_sales_online.model.product.ProductCategory;
 import com.example.grocery_store_sales_online.payload.ApiResponse;
+import com.example.grocery_store_sales_online.projection.product.ProductCategoryProjection;
 import com.example.grocery_store_sales_online.service.IProductCategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,12 +20,12 @@ public class ProductCategoryControllerImpl implements IProductCategoryController
 
     @Override
     public ResponseEntity<?> getProductCategories(){
-        ApiResponse<List<ProductCategory>> result = new ApiResponse<>(EResponseStatus.FETCH_DATA_SUCCESS.getCode(), EResponseStatus.FETCH_DATA_SUCCESS.getLabel(), productCategoryService.findAllMenu());
+        ApiResponse<List<ProductCategoryProjection>> result = new ApiResponse<>(EResponseStatus.FETCH_DATA_SUCCESS.getCode(), EResponseStatus.FETCH_DATA_SUCCESS.getLabel(), productCategoryService.findAllMenu());
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
     @Override
     public ResponseEntity<?> getChildrenProductCategories(){
-        ApiResponse<List<ProductCategory>> result = new ApiResponse<>(EResponseStatus.FETCH_DATA_SUCCESS.getCode(), EResponseStatus.FETCH_DATA_SUCCESS.getLabel(), productCategoryService.findAllChildren());
+        ApiResponse<List<ProductCategoryProjection>> result = new ApiResponse<>(EResponseStatus.FETCH_DATA_SUCCESS.getCode(), EResponseStatus.FETCH_DATA_SUCCESS.getLabel(), productCategoryService.findAllChildren());
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }

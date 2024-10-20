@@ -20,21 +20,20 @@ import java.util.List;
 public class MenuAdminControllerImpl implements IMenuAdminController {
     private final MenuAdminProperties menuAdminProperties;
     @Override
-    public ResponseEntity<?> getListMainMenus(@CurrentUser UserPrincipal userPrincipal){
+    public ResponseEntity<?> getListMainMenus(UserPrincipal userPrincipal){
         List<MainMenu> mainMenus = menuAdminProperties.getMainMenus(userPrincipal);
         ApiResponse<?> apiResponse = new ApiResponse<>(EResponseStatus.FETCH_DATA_SUCCESS.getCode(), EResponseStatus.FETCH_DATA_SUCCESS.getLabel(),mainMenus);
             return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
     @Override
-    public ResponseEntity<?> getMainMenuByPath(@CurrentUser UserPrincipal userPrincipal, @RequestParam("path") String path){
+    public ResponseEntity<?> getMainMenuByPath(UserPrincipal userPrincipal, String path){
         MainMenu menu = menuAdminProperties.getMainMenuPath(userPrincipal,path);
         ApiResponse<?> apiResponse = new ApiResponse<>(EResponseStatus.FETCH_DATA_SUCCESS.getCode(), EResponseStatus.FETCH_DATA_SUCCESS.getLabel(),menu);
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
     @Override
-    public ResponseEntity<?> getMenuParentByPathChildren(@CurrentUser UserPrincipal userPrincipal, @RequestParam("pathChildren") String pathChildren){
-        MainMenu menu = menuAdminProperties.getMenuParentByPathChildren(userPrincipal,pathChildren);
-        ApiResponse<?> apiResponse = new ApiResponse<>(EResponseStatus.FETCH_DATA_SUCCESS.getCode(), EResponseStatus.FETCH_DATA_SUCCESS.getLabel(),menu);
+    public ResponseEntity<?> getMenuParentByPathChildren(UserPrincipal userPrincipal, String pathChildren){
+        ApiResponse<?> apiResponse = new ApiResponse<>(EResponseStatus.FETCH_DATA_SUCCESS.getCode(), EResponseStatus.FETCH_DATA_SUCCESS.getLabel(),menuAdminProperties.getMenuParentByPathChildren(userPrincipal,pathChildren));
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 

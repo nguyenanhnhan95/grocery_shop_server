@@ -15,7 +15,5 @@ public class SocialProvider extends Model {
     @Enumerated(EnumType.STRING)
     private AuthProvider provider;
     @ManyToOne
-    private Employee employee;
-    @ManyToOne
     private User user;
 }

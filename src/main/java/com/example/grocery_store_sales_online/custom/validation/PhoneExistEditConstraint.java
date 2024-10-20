@@ -1,7 +1,6 @@
 package com.example.grocery_store_sales_online.custom.validation;
 
 import com.example.grocery_store_sales_online.custom.validation.handle.PhoneExistEditValidator;
-import com.example.grocery_store_sales_online.custom.validation.handle.PhoneExistValidator;
 import com.example.grocery_store_sales_online.utils.CommonConstants;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

@@ -5,120 +5,142 @@
       "alias": "ROLE_ADMIN",
       "description": "Quản lý hệ thống ",
       "permissions": [
-        "dashboard:view",
-        "manage:view",
-        "article:view",
+        "dash-board:view",
         "article-post:view",
+        "article-post:add",
+        "article-post:edit",
+        "article-post:delete",
         "article-list:view",
+        "article-list:add",
+        "article-list:edit",
+        "article-list:delete",
         "article-featured:view",
-        "shop:view",
+        "article-featured:add",
+        "article-featured:edit",
+        "article-featured:delete",
         "shop-overview:view",
+        "shop-overview:add",
+        "shop-overview:edit",
+        "shop-overview:delete",
         "shop-order:view",
-        "shop-passenger:view",
+        "shop-order:add",
+        "shop-order:edit",
+        "shop-order:delete",
         "shop-promotion:view",
-        "product:view",
-        "product-manage:view",
+        "shop-promotion:add",
+        "shop-promotion:edit",
+        "shop-promotion:delete",
         "products:view",
-        "products-sold:view",
-        "products-import/view",
-        "products-inventory:view",
-        "products-variation:view",
-        "products-variation-option:view",
-        "album:view",
+        "products:add",
+        "products:edit",
+        "products:delete",
+        "product-import:view",
+        "product-import:add",
+        "product-import:edit",
+        "product-import:delete",
+        "option-variation:view",
+        "option-variation:add",
+        "option-variation:edit",
+        "option-variation:delete",
+        "variation:view",
+        "variation:add",
+        "variation:edit",
+        "variation:delete",
+        "albums:view",
+        "albums:add",
+        "albums:edit",
+        "albums:delete",
         "files:view",
-        "web-content:view",
-        "website:view",
-        "post:view",
-        "topic:view",
-        "featured-post:view",
+        "files:add",
+        "files:edit",
+        "files:delete",
+        "website-article:view",
+        "website-article:add",
+        "website-article:edit",
+        "website-article:delete",
+        "website-topic:view",
+        "website-topic:add",
+        "website-topic:delete",
+        "website-topic:edit",
+        "website-featured:view",
+        "website-featured:edit",
+        "website-featured:add",
+        "website-featured:delete",
         "setting:view",
-        "web-setting:view",
-        "home-page:view",
-        "news:view",
+        "setting:add",
+        "setting:edit",
+        "setting:delete",
+        "setting-home:view",
+        "setting-home:add",
+        "setting-home:edit",
+        "setting-home:delete",
         "workflow-management:view",
-        "system:view",
-        "system-content:view",
+        "workflow-management:add",
+        "workflow-management:edit",
+        "workflow-management:delete",
         "employee:view",
+        "employee:add",
+        "employee:edit",
+        "employee:delete",
         "role:view",
-        "support:view"
+        "role:add",
+        "role:edit",
+        "role:delete",
+        "support:view",
+        "support:add",
+        "support:edit",
+        "support:delete"
       ]
     },
     {
-      "name": "Quản lý",
+      "name": "Quản lý khu vực một",
       "alias": "ROLE_MANAGER",
       "description": "Quản lý",
       "permissions": [
-        "dashboard:view",
-        "manage:view",
-        "article:view",
+        "dash-board:view",
         "article-post:view",
         "article-list:view",
         "article-featured:view",
-        "shop:view",
         "shop-overview:view",
         "shop-order:view",
-        "shop-passenger:view",
         "shop-promotion:view",
-        "product:view",
-        "product-manage:view",
         "products:view",
-        "products-sold:view",
-        "products-import/view",
-        "products-inventory:view",
-        "products-variation:view",
-        "products-variation-option:view",
-        "album:view",
-        "files:view",
-        "web-content:view",
-        "website:view",
-        "post:view",
-        "topic:view",
-        "featured-post:view",
-        "setting:view",
-        "web-setting:view",
-        "home-page:view",
-        "news:view",
+        "product-import:view",
+        "option-variation:view",
+        "variation:view",
+        "website-article:view",
+        "website-topic:view",
+        "website-featured:view",
         "workflow-management:view",
         "support:view"
       ]
     },
     {
-      "name": "Nhân viên",
+      "name": "Nhân viên bán hàng",
       "alias": "ROLE_EMPLOYEE",
       "description": "Nhân viên",
       "permissions": [
-        "dashboard:view",
-        "manage:view",
-        "article:view",
+        "dash-board:view",
         "article-post:view",
         "article-list:view",
         "article-featured:view",
-        "shop:view",
         "shop-overview:view",
         "shop-order:view",
-        "shop-passenger:view",
         "shop-promotion:view",
-        "product:view",
-        "product-manage:view",
         "products:view",
-        "products-sold:view",
-        "products-import/view",
-        "products-inventory:view",
-        "products-variation:view",
-        "products-variation-option:view",
-        "album:view",
+        "product-import:view",
+        "option-variation:view",
+        "variation:view",
+        "albums:view",
         "files:view",
-        "web-content:view",
-        "website:view",
-        "post:view",
-        "topic:view",
-        "featured-post:view",
-        "news:view",
+        "website-article:view",
+        "website-topic:view",
+        "website-featured:view",
         "workflow-management:view"
       ]
     },
     {
-      "name": "Khách hàng",
+      "name": "Khách hàng mới",
       "alias": "ROLE_USER",
       "description": "Khách hàng",
       "permissions": []
@@ -126,11 +148,11 @@
   ],
   "permissions": [
     {
-      "id": "dashboard",
+      "id": "dash-board",
       "name": "Dashboard",
       "scopes": [
         {
-          "id": "dashboard:view",
+          "id": "dash-board:view",
           "name": "Xem"
         }
       ]
@@ -246,28 +268,6 @@
       ]
     },
     {
-      "id": "shop-passenger",
-      "name": "Quản lý khách hàng",
-      "scopes": [
-        {
-          "id": "shop-passenger:view",
-          "name": "Xem"
-        },
-        {
-          "id": "shop-passenger:add",
-          "name": "Thêm mới"
-        },
-        {
-          "id": "shop-passenger:delete",
-          "name": "Xóa"
-        },
-        {
-          "id": "shop-passenger:edit",
-          "name": "Sửa"
-        }
-      ]
-    },
-    {
       "id": "shop-promotion",
       "name": "Quản lý khuyến mãi",
       "scopes": [
@@ -312,67 +312,243 @@
       ]
     },
     {
-      "id": "products-import",
+      "id": "product-import",
       "name": "Quản lý nhập sản phẩm",
       "scopes": [
         {
-          "id": "products-import:view",
+          "id": "product-import:view",
           "name": "Xem"
         },
         {
-          "id": "products-import:add",
+          "id": "product-import:add",
           "name": "Thêm mới"
         },
         {
-          "id": "products-import:delete",
+          "id": "product-import:delete",
           "name": "Xóa"
         },
         {
-          "id": "products-import:edit",
+          "id": "product-import:edit",
           "name": "Sửa"
         }
       ]
     },
     {
-      "id": "products-variation",
+      "id": "variation",
       "name": "Tùy chọn sản phẩm",
       "scopes": [
         {
-          "id": "products-variation:view",
+          "id": "variation:view",
           "name": "Xem"
         },
         {
-          "id": "products-variation:add",
+          "id": "variation:add",
           "name": "Thêm mới"
         },
         {
-          "id": "products-variation:delete",
+          "id": "variation:delete",
           "name": "Xóa"
         },
         {
-          "id": "products-import:edit",
+          "id": "variation:edit",
           "name": "Sửa"
         }
       ]
     },
     {
-      "id": "products-variation-option",
+      "id": "option-variation",
       "name": "Giá trị tùy chọn sản phẩm",
       "scopes": [
         {
-          "id": "products-variation-option:view",
+          "id": "option-variation:view",
           "name": "Xem"
         },
         {
-          "id": "products-variation-option:add",
+          "id": "option-variation:add",
           "name": "Thêm mới"
         },
         {
-          "id": "products-variation-option:delete",
+          "id": "option-variation:delete",
           "name": "Xóa"
         },
         {
-          "id": "products-import:edit",
+          "id": "option-variation:edit",
+          "name": "Sửa"
+        }
+      ]
+    },
+    {
+      "id": "albums",
+      "name": "Hình ảnh",
+      "scopes": [
+        {
+          "id": "albums:view",
+          "name": "Xem"
+        },
+        {
+          "id": "albums:add",
+          "name": "Thêm mới"
+        },
+        {
+          "id": "albums:delete",
+          "name": "Xóa"
+        },
+        {
+          "id": "albums:edit",
+          "name": "Sửa"
+        }
+      ]
+    },
+    {
+      "id": "files",
+      "name": "Files",
+      "scopes": [
+        {
+          "id": "files:view",
+          "name": "Xem"
+        },
+        {
+          "id": "files:add",
+          "name": "Thêm mới"
+        },
+        {
+          "id": "files:delete",
+          "name": "Xóa"
+        },
+        {
+          "id": "files:edit",
+          "name": "Sửa"
+        }
+      ]
+    },
+    {
+      "id": "website-article",
+      "name": "Bài viết",
+      "scopes": [
+        {
+          "id": "website-article:view",
+          "name": "Xem"
+        },
+        {
+          "id": "website-article:add",
+          "name": "Thêm mới"
+        },
+        {
+          "id": "website-article:delete",
+          "name": "Xóa"
+        },
+        {
+          "id": "website-article:edit",
+          "name": "Sửa"
+        }
+      ]
+    },
+    {
+      "id": "website-topic",
+      "name": "Chủ đề",
+      "scopes": [
+        {
+          "id": "website-topic:view",
+          "name": "Xem"
+        },
+        {
+          "id": "website-topic:add",
+          "name": "Thêm mới"
+        },
+        {
+          "id": "website-topic:delete",
+          "name": "Xóa"
+        },
+        {
+          "id": "website-topic:edit",
+          "name": "Sửa"
+        }
+      ]
+    },
+    {
+      "id": "website-featured",
+      "name": "Bài viết nổi bật",
+      "scopes": [
+        {
+          "id": "website-featured:view",
+          "name": "Xem"
+        },
+        {
+          "id": "website-featured:add",
+          "name": "Thêm mới"
+        },
+        {
+          "id": "website-featured:delete",
+          "name": "Xóa"
+        },
+        {
+          "id": "website-featured:edit",
+          "name": "Sửa"
+        }
+      ]
+    },
+    {
+      "id": "setting",
+      "name": "Cấu hình chung",
+      "scopes": [
+        {
+          "id": "setting:view",
+          "name": "Xem"
+        },
+        {
+          "id": "setting:add",
+          "name": "Thêm mới"
+        },
+        {
+          "id": "setting:delete",
+          "name": "Xóa"
+        },
+        {
+          "id": "setting:edit",
+          "name": "Sửa"
+        }
+      ]
+    },
+    {
+      "id": "setting-home",
+      "name": "Trang chủ",
+      "scopes": [
+        {
+          "id": "setting-home:view",
+          "name": "Xem"
+        },
+        {
+          "id": "setting-home:add",
+          "name": "Thêm mới"
+        },
+        {
+          "id": "setting-home:delete",
+          "name": "Xóa"
+        },
+        {
+          "id": "setting-home:edit",
+          "name": "Sửa"
+        }
+      ]
+    },
+    {
+      "id": "workflow-management",
+      "name": "Quản lý công việc",
+      "scopes": [
+        {
+          "id": "workflow-management:view",
+          "name": "Xem"
+        },
+        {
+          "id": "workflow-management:add",
+          "name": "Thêm mới"
+        },
+        {
+          "id": "workflow-management:delete",
+          "name": "Xóa"
+        },
+        {
+          "id": "workflow-management:edit",
           "name": "Sửa"
         }
       ]
@@ -417,6 +593,29 @@
         },
         {
           "id": "role:edit",
+          "name": "Sửa"
+        }
+      ]
+    }
+  ,
+    {
+      "id": "support",
+      "name": "Trợ giúp",
+      "scopes": [
+        {
+          "id": "support:view",
+          "name": "Xem"
+        },
+        {
+          "id": "support:add",
+          "name": "Thêm mới"
+        },
+        {
+          "id": "support:delete",
+          "name": "Xóa"
+        },
+        {
+          "id": "support:edit",
           "name": "Sửa"
         }
       ]

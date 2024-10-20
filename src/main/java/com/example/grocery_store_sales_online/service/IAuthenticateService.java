@@ -8,10 +8,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public interface IAuthenticateService {
-    String login(LoginRequest loginRequest, HttpServletResponse response);
+    String login(LoginRequest loginRequest,HttpServletRequest request, HttpServletResponse response);
     void logout(HttpServletRequest request, HttpServletResponse response);
     List<String> getRoleAuthorize(UserPrincipal userPrincipal);
 
     void checkAuthenticated();
-
+    void authorizePage(String permission);
 }

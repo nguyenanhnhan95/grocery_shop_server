@@ -1,10 +1,11 @@
 package com.example.grocery_store_sales_online.service.impl;
 
+import com.example.grocery_store_sales_online.components.ListNameERole;
 import com.example.grocery_store_sales_online.components.Permission;
 import com.example.grocery_store_sales_online.components.Scope;
 import com.example.grocery_store_sales_online.config.AuthorizationProperties;
 import com.example.grocery_store_sales_online.dto.person.RoleDto;
-import com.example.grocery_store_sales_online.enums.EAccountStatus;
+import com.example.grocery_store_sales_online.dto.person.RoleEditDto;
 import com.example.grocery_store_sales_online.enums.EResponseStatus;
 import com.example.grocery_store_sales_online.enums.ERole;
 import com.example.grocery_store_sales_online.exception.CustomValidationException;
@@ -15,7 +16,6 @@ import com.example.grocery_store_sales_online.projection.person.RoleProjection;
 import com.example.grocery_store_sales_online.repository.role.impl.RoleRepository;
 import com.example.grocery_store_sales_online.service.IRoleService;
 import com.example.grocery_store_sales_online.utils.CommonConstants;
-import com.example.grocery_store_sales_online.utils.CommonUtils;
 import com.example.grocery_store_sales_online.utils.QueryListResult;
 import com.example.grocery_store_sales_online.utils.QueryParameter;
 import lombok.RequiredArgsConstructor;
@@ -32,14 +32,37 @@ public class RoleServiceImpl extends BaseServiceImpl implements IRoleService {
     private final RoleRepository roleRepository;
     private final AuthorizationProperties authorizationProperties;
     private final RoleMapper roleMapper;
+    private final ListNameERole listNameRole;
 
     @Override
-    public Optional<Role> findByAlias(String alias) {
+    public List<Role> findByAliasRoles(String alias) {
         try {
             log.info("RoleService:findByAlias execution started.");
-            return roleRepository.findByAlias(alias);
+            return roleRepository.findByAliasRoles(alias);
         } catch (Exception ex) {
             log.error("Exception occurred while persisting RoleService:findByAlias to database , Exception message {}", ex.getMessage());
+            throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());
+        }
+    }
+
+    @Override
+    public Optional<Role> findByNameAndAlias(String name, String alias) {
+        try {
+            log.info("RoleService:findByNameAndAlias execution started.");
+            return roleRepository.findByNameAndAlias(name, alias);
+        } catch (Exception ex) {
+            log.error("Exception occurred while persisting RoleService:findByNameAndAlias to database , Exception message {}", ex.getMessage());
+            throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());
+        }
+    }
+
+    @Override
+    public List<Map<String, String>> listNameRoleByERole(String nameERole) {
+        try {
+            log.info("RoleService:listNameRoleByERole execution started.");
+            return listNameRole.listNameRoleByERole(nameERole);
+        } catch (Exception ex) {
+            log.error("Exception occurred while persisting RoleService:listNameRoleByERole to ListNameERole , Exception message {}", ex.getMessage());
             throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());
         }
     }
@@ -57,23 +80,38 @@ public class RoleServiceImpl extends BaseServiceImpl implements IRoleService {
     }
 
     @Override
-    public Optional<Role> findById(Long id) {
+    public Role findById(Long id) {
+        log.info("RoleService:findById execution started.");
         try {
-            log.info("RoleService:findById execution started.");
-            return roleRepository.findById(id);
+            return roleRepository.findById(id)
+                    .orElseThrow(() ->
+                            new ServiceBusinessExceptional(
+                                    EResponseStatus.NOT_FOUND_BY_ID.getLabel(),
+                                    EResponseStatus.NOT_FOUND_BY_ID.getCode()
+                            )
+                    );
+        } catch (ServiceBusinessExceptional ex) {
+            throw ex;
         } catch (Exception ex) {
             log.error("Exception occurred while persisting RoleService:findById  to database , Exception message {}", ex.getMessage());
             throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());
         }
     }
-
     @Override
-    public QueryListResult<Role> getListResult(String queryParameter) {
+    public RoleProjection findByIdProjection(Long id) {
+        log.info("RoleService:findByIdProjection execution started.");
         try {
-            log.info("RoleService:getListResult execution started.");
-            return roleRepository.getListResult(readJsonQuery(queryParameter, QueryParameter.class));
+            return roleRepository.findByIdRoleProjection(id)
+                    .orElseThrow(() ->
+                            new ServiceBusinessExceptional(
+                                    EResponseStatus.NOT_FOUND_BY_ID.getLabel(),
+                                    EResponseStatus.NOT_FOUND_BY_ID.getCode()
+                            )
+                    );
+        } catch (ServiceBusinessExceptional ex) {
+            throw ex;
         } catch (Exception ex) {
-            log.error("Exception occurred while persisting RoleService.getListResult to database , Exception message {}", ex.getMessage());
+            log.error("Exception occurred while persisting RoleService:findByIdProjection  to database , Exception message {}", ex.getMessage());
             throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());
         }
     }
@@ -82,14 +120,11 @@ public class RoleServiceImpl extends BaseServiceImpl implements IRoleService {
     public void deleteModel(Long id) {
         try {
             log.info("PromotionService:deleteModel execution started.");
-            Optional<Role> role = findById(id);
+            Optional<Role> role = roleRepository.findById(id);
             if (role.isEmpty()) {
                 throw new ServiceBusinessExceptional(EResponseStatus.NO_EXISTING.getLabel(), EResponseStatus.NO_EXISTING.getCode());
             }
-            setMetaData(role.get());
-            setPersonAction(role.get());
-            role.get().setDeleted(true);
-            roleRepository.save(role.get());
+            roleRepository.deleteById(id);
         } catch (ServiceBusinessExceptional ex) {
             throw ex;
         } catch (Exception ex) {
@@ -102,7 +137,9 @@ public class RoleServiceImpl extends BaseServiceImpl implements IRoleService {
     public Role saveModelDto(RoleDto model) {
         log.info("RoleService:saveModelDto execution started.");
         try {
-            this.checkPermissions(model.getPermissions());
+            if (roleRepository.findByName(model.getName()).isPresent()) {
+                throw createValidationException("roleDto", "name", CommonConstants.THIS_FIELD_ALREADY_EXIST);
+            }
             Role role = roleMapper.convertDtoToRole(model);
             setPersonAction(role);
             setMetaData(role);
@@ -115,51 +152,47 @@ public class RoleServiceImpl extends BaseServiceImpl implements IRoleService {
             throw new ServiceBusinessExceptional(EResponseStatus.SAVE_FAIL.getLabel(), EResponseStatus.SAVE_FAIL.getCode());
         }
     }
-
     @Override
-    public Role updateModelDto(Long id, RoleDto model) {
+    public QueryListResult<Role> getListResult(String queryParameter) {
+        try {
+            log.info("RoleService:getListResult execution started.");
+            return roleRepository.getListResult(readJsonQuery(queryParameter, QueryParameter.class));
+        } catch (Exception ex) {
+            log.error("Exception occurred while persisting RoleService.getListResult to database , Exception message {}", ex.getMessage());
+            throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());
+        }
+    }
+    @Override
+    public Role updateModelDto(Long id, RoleEditDto model) {
         log.info("RoleService:updateModelDto execution started.");
         try {
-            Optional<Role > role = findById(id);
-            role.orElseThrow(()-> createValidationException("roleDto", "notification", CommonConstants.THIS_DATA_EDIT_FAIL));
-            if(roleRepository.findByName(model.getName()).isEmpty()){
-                throw  createValidationException("roleDto", "name", CommonConstants.THIS_FIELD_ALREADY_EXIST);
+            Optional<Role> role = roleRepository.findById(id);
+            role.orElseThrow(() -> createValidationException("roleDto", "notification", CommonConstants.THIS_DATA_EDIT_FAIL));
+            Optional<Role> roleOptional = roleRepository.findByName(model.getName());
+            if (roleOptional.isEmpty() || !role.get().getName().equals(model.getName())) {
+                throw createValidationException("roleDto", "name", CommonConstants.THIS_FIELD_ALREADY_EXIST);
             }
-            this.checkPermissions(model.getPermissions());
-            roleMapper.updateDtoTo(model,role.get());
+            roleMapper.updateDtoTo(model, role.get());
             setMetaData(role.get());
             setPersonAction(role.get());
             return roleRepository.saveModel(role.get());
         } catch (CustomValidationException ex) {
             log.error("Exception occurred validation data input , Exception message {}", ex.getMessage());
             throw ex;
-        } catch (Exception ex){
+        } catch (Exception ex) {
             log.error("Exception occurred while persisting PromotionService:updateModelDto to database , Exception message {}", ex.getMessage());
             throw new ServiceBusinessExceptional(EResponseStatus.EDIT_FAIL.getLabel(), EResponseStatus.EDIT_FAIL.getCode());
         }
 //        return null;
     }
-    private void checkPermissions(Set<String> setPermission){
-        log.info("RoleService:checkPermissions execution started.");
-        Set<Permission> permissions = authorizationProperties.getPermissions();
-        if (setPermission != null) {
-            boolean checkContain = permissions.stream()
-                    .flatMap(permission -> permission.getScopes().stream())
-                    .map(Scope::getId)
-                    .anyMatch(setPermission::contains);
 
-            if (!checkContain) {
-                throw createValidationException("roleDto", "permissions", CommonConstants.THIS_FILE_ENTER_FAIL);
-            }
-        }
-    }
 
     @Override
     public List<RoleProjection> findAllAble() {
         try {
             log.info("RoleService:listRoleAlias execution started.");
             return roleRepository.findAllProjection();
-        }catch (Exception ex){
+        } catch (Exception ex) {
             log.error("Exception occurred while persisting RoleService:listRoleAlias to database , Exception message {}", ex.getMessage());
             throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());
         }
@@ -170,7 +203,7 @@ public class RoleServiceImpl extends BaseServiceImpl implements IRoleService {
         try {
             log.info("RoleService:listRoleEmployee execution started.");
             return roleRepository.listRoleEmployee();
-        }catch (Exception ex){
+        } catch (Exception ex) {
             log.error("Exception occurred while persisting RoleService:listRoleEmployee to database , Exception message {}", ex.getMessage());
             throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());
         }
@@ -189,9 +222,9 @@ public class RoleServiceImpl extends BaseServiceImpl implements IRoleService {
                 }
             });
             return roles;
-        }catch (ServiceBusinessExceptional ex){
+        } catch (ServiceBusinessExceptional ex) {
             throw ex;
-        }catch (Exception ex){
+        } catch (Exception ex) {
             log.error("Exception occurred while persisting RoleService:listRoleByIDs to database , Exception message {}", ex.getMessage());
             throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());
         }
@@ -203,15 +236,17 @@ public class RoleServiceImpl extends BaseServiceImpl implements IRoleService {
             return Arrays.stream(ERole.values())
                     .map(status -> {
                         Map<String, String> map = new HashMap<>();
-                        map.put("id", status.getLabel());
-                        map.put("name", status.getText());
+                        map.put("id", status.getCode());
+                        map.put("name", status.getLabel());
                         return map;
                     })
                     .collect(Collectors.toList());
 
-        }catch (Exception ex){
+        } catch (Exception ex) {
             log.error("Exception occurred while persisting RoleService:findListAlias to Enum EAccountStatus  , Exception message {}", ex.getMessage());
             throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());
         }
     }
+
+
 }

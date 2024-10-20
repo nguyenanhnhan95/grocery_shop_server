@@ -12,39 +12,37 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+import static com.example.grocery_store_sales_online.utils.CommonConstants.REGEX_CCCD;
+
 
 @Getter
 @Setter
 public class EmployeeDto extends PersonDto {
-    @Size(max = 100,message = CommonConstants.THIS_FIELD_TOO_LONG)
-    @Size(min = 4,message = CommonConstants.THIS_FIELD_TOO_SHORT)
+    @SizeStringConstraint(sizeMin = 4, sizeMax = 100)
     @Pattern(regexp = CommonConstants.REGEX_FULL_NAME,message = CommonConstants.THIS_FIELD_VALUE_NOT_FORMAT)
     @NotBlank(message = CommonConstants.THIS_FIELD_CANNOT_EMPTY_2)
     private String name;
+    @SizeStringConstraint(sizeMin = 4, sizeMax = 70)
     @NotBlank(message = CommonConstants.THIS_FIELD_CANNOT_EMPTY_2)
     @NameLoginExistConstraint()
     private String nameLogin;
-    @Pattern(regexp = CommonConstants.REGEX_CCCD,message = CommonConstants.THIS_FIELD_VALUE_NOT_FORMAT)
+    @RegexConstraint(allowNull =true,regex = REGEX_CCCD)
     @IdCardConstraint()
     private String idCard;
-    @Size(max = 11, message = CommonConstants.THIS_FIELD_TOO_LONG)
-    @Size(min = 9, message = CommonConstants.THIS_FIELD_TOO_SHORT)
+    @SizeStringConstraint(sizeMin = 9, sizeMax = 11)
     @Pattern(regexp = CommonConstants.REGEX_PHONE, message = CommonConstants.THIS_FIELD_VALUE_NOT_FORMAT)
     @PhoneExistConstraint()
     private String phone;
-    @Size(max = 70,message = CommonConstants.THIS_FIELD_TOO_LONG)
-    @Size(min = 6,message = CommonConstants.THIS_FIELD_TOO_SHORT)
+    @SizeStringConstraint(sizeMin = 6, sizeMax = 70)
     @Pattern(regexp = CommonConstants.REGEX_EMAIL,message = CommonConstants.THIS_FIELD_VALUE_NOT_FORMAT)
     @Email(message = CommonConstants.THIS_FIELD_VALUE_NOT_FORMAT)
     @EmailExistConstraint()
     private String email;
     @NotBlank(message = CommonConstants.THIS_FIELD_CANNOT_EMPTY)
-    @Size(max = 70,message = CommonConstants.THIS_FIELD_TOO_LONG)
-    @Size(min = 6,message = CommonConstants.THIS_FIELD_TOO_SHORT)
+    @SizeStringConstraint(sizeMin = 4, sizeMax = 70)
     private String password;
     @NotBlank(message = CommonConstants.THIS_FIELD_CANNOT_EMPTY)
-    @Size(max = 70,message = CommonConstants.THIS_FIELD_TOO_LONG)
-    @Size(min = 6,message = CommonConstants.THIS_FIELD_TOO_SHORT)
+    @SizeStringConstraint(sizeMin = 6, sizeMax = 70)
     private String confirmPassword;
 
     @NotBlank(message = CommonConstants.THIS_COMBOBOX_ITEM_CANNOT_EMPTY)

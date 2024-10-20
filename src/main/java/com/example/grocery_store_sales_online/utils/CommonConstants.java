@@ -241,13 +241,14 @@ public class CommonConstants {
     public static final String THIS_FIELD_CANNOT_EMPTY_2 = "Trường này là bắt buộc.";
     public static final String THIS_FIELD_TOO_LONG="Trường này quá dài .";
     public static final String THIS_FIELD_TOO_SHORT="Trường này quá ngắn .";
+    public static final String THIS_FIELD_SIZE_NOT_FORMAT="Trường này nhập độ dài không phù hợp .";
     public static final String PHONENUMBER_ISNOT_THE_CORRECT_FORMAT = "Số điện thoại không đúng định dạng.";
     public static final String THIS_FIELD_NOT_CORRECT_FORMAT="Trường này nhập không đúng định dạng .";
     public static final String THIS_FIELD_VALUE_NOT_FORMAT="Trường này nhập giá trị không phù hợp .";
     public static final String THIS_FIELD_DATE_GREATER_EQUAL_DATE_CURRENT="Phải lớn hơn hoặc bằng ngày hiện tại .";
     public static final String THIS_FILE_NOT_CONTAIN_CHARACTER_SPECIAL="^[^~!@#$%^&*()_=+{};'\"<>,.0-9-]+$";
-    public static final String THIS_FILE_ENTER_FAIL="Trường này nhập dữ liệu bị lỗi . ";
-    public static final String THIS_FILE_SELECT_FAIL="Trường này lựa chọn dữ liệu bị lỗi . ";
+    public static final String THIS_FIELD_ENTER_FAIL ="Trường này nhập dữ liệu bị lỗi . ";
+    public static final String THIS_FIELD_SELECT_FAIL ="Trường này lựa chọn dữ liệu bị lỗi . ";
     public static final String THIS_COMBOBOX_ITEM_CANNOT_EMPTY = "Vui lòng lựa chọn thông tin.";
     public static final String THIS_FILED_DATA_NOT_EXIST ="Dữ liệu không tồn tại";
     public static final String THIS_FIELD_EMAIL_EXISTING="Địa chỉ email đã tồn tại .";
@@ -287,12 +288,22 @@ public class CommonConstants {
      * COOKIE
      */
     public static  final  String COOKIE_AUTH_TOKEN="auth-token";
+
+    public static final String COOKIE_THEME="mode-screen";
     /**
      * TIME TOKEN
      */
-    public static final int EXPIRE_TOKEN_TIME=60 * 60 * 1000;
+    public static final int EXPIRE_TOKEN_TIME=60*60 * 1000;
     public static final int EXPIRE_REFRESH_TOKEN_TIME=10 * 60 * 1000;
-    public static final int REFRESH_TOKEN_TIME=60 * 60 *1000;
+    public static final int REFRESH_TOKEN_TIME=60*60 *1000;
     public static final int EXPIRE_TOKEN_COOKIE=7 * 24 * 60 * 60;
+    public static final int EXPIRE_THEME_COOKIE=30 * 24 * 60 * 60;
+    /**
+     * SESSION
+     */
+    public static final String SESSION_ATTEMPT_LOGIN="attempt-login";
+    public static final String SESSION_NOTIFICATION_FAIL_LOGIN="fail-login";
+    public static final String ATTEMPT_LOGIN_MESSAGE="Bạn đã thử quá nhiều. Vui thử lại sao";
+
 }
 

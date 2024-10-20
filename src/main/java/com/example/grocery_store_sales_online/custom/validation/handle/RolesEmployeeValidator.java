@@ -28,10 +28,10 @@ public class RolesEmployeeValidator extends BaseValidator implements ConstraintV
             for (Long id : Ids) {
                 Optional<Role> role = roleRepository.findById(id);
                 if (role.isEmpty()) {
-                    addMessageValidation(context,"roles",CommonConstants.THIS_FILE_ENTER_FAIL);
+                    addMessageValidation(context,"roles",CommonConstants.THIS_FIELD_ENTER_FAIL);
                     return false;
                 }
-                if(role.get().getAlias().equals(ERole.USER.getLabel())){
+                if(role.get().getAlias().equals(ERole.USER.getCode())){
                     addMessageValidation(context,"roles",CommonConstants.THIS_FIELD_NOT_CORRECT_FORMAT);
                     return false;
                 }

@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface ISocialProviderRepository {
     Optional<SocialProvider> findByProviderAndIdProvider(AuthProvider authProvider, String idProvider);
-    List<SocialProvider> findByIdEmployee(Long idEmployee);
+//    List<SocialProvider> findByIdEmployee(Long idEmployee);
     List<SocialProvider> findByIdUser(Long idUser);
     Optional<SocialProvider> findByProviderId(String providerId);
 }

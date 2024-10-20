@@ -4,11 +4,12 @@ import com.example.grocery_store_sales_online.components.IEnumComboItem;
 import lombok.Getter;
 
 public enum ERating implements IEnumComboItem {
-    One(1,"One"),
-    Two(2,"Two"),
-    Three(3,"Three"),
-    Four(4,"Four"),
-    Five(5,"Five");
+    One(1, "One"),
+    Two(2, "Two"),
+    Three(3, "Three"),
+    Four(4, "Four"),
+    Five(5, "Five");
+
     private ERating(Integer star, String text) {
         this.star = star;
         this.text = text;
@@ -18,6 +19,10 @@ public enum ERating implements IEnumComboItem {
     private Integer star;
 
     private String text;
+
+    public Integer getStar() {
+        return star;
+    }
 
     @Override
     public String getLabel() {

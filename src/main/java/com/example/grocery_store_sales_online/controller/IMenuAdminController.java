@@ -14,5 +14,5 @@ public interface IMenuAdminController {
     @GetMapping("/path")
     ResponseEntity<?> getMainMenuByPath(@CurrentUser UserPrincipal userPrincipal, @RequestParam("path") String path);
     @GetMapping("/path-children")
-    ResponseEntity<?> getMenuParentByPathChildren(@CurrentUser UserPrincipal userPrincipal, @RequestParam("pathChildren") String pathChildren);
+    ResponseEntity<?> getMenuParentByPathChildren(@CurrentUser UserPrincipal userPrincipal, @RequestParam("children") String pathChildren);
 }

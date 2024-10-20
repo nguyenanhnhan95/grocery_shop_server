@@ -1,5 +1,7 @@
 package com.example.grocery_store_sales_online.repository.Promotion.impl;
 
+import com.blazebit.persistence.CriteriaBuilderFactory;
+import com.blazebit.persistence.querydsl.BlazeJPAQuery;
 import com.example.grocery_store_sales_online.model.shop.Promotion;
 import com.example.grocery_store_sales_online.model.shop.QPromotion;
 import com.example.grocery_store_sales_online.repository.Promotion.IPromotionRepository;
@@ -22,27 +24,27 @@ import java.util.Optional;
 public class PromotionRepository extends BaseRepository<Promotion, Long> implements IPromotionRepository {
     protected QPromotion promotion = QPromotion.promotion;
 
-    public PromotionRepository(EntityManager em) {
-        super(Promotion.class, em);
+    public PromotionRepository(EntityManager em, CriteriaBuilderFactory criteriaBuilderFactory) {
+        super(Promotion.class, em,criteriaBuilderFactory);
     }
 
     @Override
     public Optional<Promotion> findByName(String name) {
-        JPAQuery<Promotion> jpaQuery = new JPAQuery<>(em);
+        BlazeJPAQuery<Promotion> jpaQuery = new BlazeJPAQuery<>(em,criteriaBuilderFactory);
         Promotion result = jpaQuery.select(promotion).from(promotion).where(promotion.name.eq(name)).fetchOne();
         return Optional.ofNullable(result);
     }
 
     @Override
     public QueryListResult<Promotion> getListResult(QueryParameter queryParameter) {
-        JPAQuery<Promotion> query = search(queryParameter.getCriterias());
+        BlazeJPAQuery<Promotion> query = search(queryParameter.getCriterias());
         List<Promotion> result = page(query, queryParameter.getSize(), queryParameter.getPage()).fetch();
         long total = query.fetchCount();
         return QueryListResult.<Promotion>builder().result(result).total(total).build();
     }
 
-    public JPAQuery<Promotion> search(Map<String, Object> params) {
-        JPAQuery<Promotion> jpaQuery = new JPAQuery<>(em);
+    public BlazeJPAQuery<Promotion> search(Map<String, Object> params) {
+        BlazeJPAQuery<Promotion> jpaQuery = new BlazeJPAQuery<>(em,criteriaBuilderFactory);
         jpaQuery.select(promotion).from(promotion);
         if (params != null && !params.isEmpty()) {
             String keyword = MapUtils.getString(params, "name");

@@ -13,11 +13,12 @@ public enum EPayment implements IEnumComboItem {
     Processing("Đang xử lý"),
     Voided("Vô hiệu hóa");
 
-     EPayment(String text) {
+    EPayment(String text) {
         this.text = text;
     }
 
     private String text;
+
     @Override
     public String getLabel() {
         return text;

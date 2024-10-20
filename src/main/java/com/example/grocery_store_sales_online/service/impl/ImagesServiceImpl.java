@@ -20,7 +20,9 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.example.grocery_store_sales_online.utils.CommonConstants.SLASH;
 
@@ -99,7 +101,7 @@ public class ImagesServiceImpl extends BaseServiceImpl implements IImageService 
             List<Pair<Integer, Integer>> listSize = ProcessImage.getHeightSmallAndMedium2();
             String absolutePath = folderStoreAvatar+directory+CommonConstants.DOT+extension;
             if(s3Service.checkKeyFileExisting(image.getOriginalFilename())){
-                return olderKey;
+                return image.getOriginalFilename();
             }
             if (s3Service.checkKeyFileExisting(absolutePath) ) {
                 return absolutePath;
@@ -146,8 +148,20 @@ public class ImagesServiceImpl extends BaseServiceImpl implements IImageService 
         if (!isStoredFailed) {
             return image;
         }
-        log.error("imagesService:hanldeToImage file not exist.");
+        log.error("imagesService:handleToImage file not exist.");
         throw new ServiceBusinessExceptional(EResponseStatus.CONFIG_IMAGE_FAIL.getLabel(), EResponseStatus.CONFIG_IMAGE_FAIL.getCode());
+    }
+
+    @Override
+    public List<Image> handleToImages(List<MultipartFile> files, String directory) {
+        try {
+            return files.stream()
+                    .map(file -> this.handleToImage(file, directory))
+                    .collect(Collectors.toList());
+        }catch (Exception ex){
+            log.error("imagesService:handleToImage file not exist.");
+            throw new ServiceBusinessExceptional(EResponseStatus.CONFIG_IMAGE_FAIL.getLabel(), EResponseStatus.CONFIG_IMAGE_FAIL.getCode());
+        }
     }
 
     private void saveMediumAndSmall(MultipartFile image, String keyFileStore) {

@@ -3,7 +3,12 @@ package com.example.grocery_store_sales_online.utils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.text.Normalizer;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
 @Slf4j
 public class CommonUtils {
     private CommonUtils(){
@@ -50,5 +55,20 @@ public class CommonUtils {
             return ""; // Nếu không có phần mở rộng
         }
         return fileName.substring(fileName.lastIndexOf(CommonConstants.SLASH) + 1);
+    }
+    public static List<Long> convertStringToListLong(String commaSeparatedIds) {
+        if (commaSeparatedIds == null || commaSeparatedIds.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return Arrays.stream(commaSeparatedIds.split(","))
+                .map(Long::valueOf)
+                .collect(Collectors.toList());
+    }
+    public static List<String> convertStringToList(String commaSeparatedIds) {
+        if (commaSeparatedIds == null || commaSeparatedIds.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return Arrays.stream(commaSeparatedIds.split(","))
+                .collect(Collectors.toList());
     }
 }

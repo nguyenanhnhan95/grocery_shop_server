@@ -8,7 +8,6 @@ import com.example.grocery_store_sales_online.payload.ApiResponse;
 import com.example.grocery_store_sales_online.projection.person.EmployeeProjection;
 import com.example.grocery_store_sales_online.service.IEmployeeService;
 import com.example.grocery_store_sales_online.utils.QueryListResult;
-import com.github.fge.jsonpatch.JsonPatch;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.http.HttpStatus;
@@ -22,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class EmployeeControllerImpl implements IEmployeeController {
     private final IEmployeeService employeeService;
     @Override
-    public ResponseEntity<ApiResponse<QueryListResult<EmployeeProjection>>> getListResult(@RequestParam("query") String queryParameter) {
+    public ResponseEntity<ApiResponse<QueryListResult<EmployeeProjection>>> getListResult(String queryParameter) {
         ApiResponse<QueryListResult<EmployeeProjection>> result = new ApiResponse<>(EResponseStatus.FETCH_DATA_SUCCESS.getCode(),
                 EResponseStatus.FETCH_DATA_SUCCESS.getLabel(), employeeService.getListResult(queryParameter));
         return new ResponseEntity<>(result, HttpStatus.OK);
@@ -43,7 +42,7 @@ public class EmployeeControllerImpl implements IEmployeeController {
     }
 
     @Override
-    public ResponseEntity<?> editModel(Long id, EmployeeEditDto employeeEditDto, @Nullable MultipartFile avatar) {
+    public ResponseEntity<?> editModel(Long id, EmployeeEditDto employeeEditDto, MultipartFile avatar) {
         if(avatar!=null){
             employeeEditDto.setAvatar(avatar);
         }
@@ -51,6 +50,14 @@ public class EmployeeControllerImpl implements IEmployeeController {
         ApiResponse<?> apiResponse = new ApiResponse<>(EResponseStatus.EDIT_SUCCESS.getCode(), EResponseStatus.EDIT_SUCCESS.getLabel());
         return ResponseEntity.ok().body(apiResponse);
     }
+
+    @Override
+    public ResponseEntity<?> deleteModel(Long id) {
+        employeeService.deleteModel(id);
+        ApiResponse<?> apiResponse = new ApiResponse<>(EResponseStatus.DELETE_SUCCESS.getCode(), EResponseStatus.DELETE_SUCCESS.getLabel());
+        return ResponseEntity.ok().body(apiResponse);
+    }
+
 //    @GetMapping("/me")
 //    @PreAuthorize("hasRole('ROLE_ADMIN')")
 //    public Employee getCurrentEmployee(@CurrentUser UserPrincipal userPrincipal){

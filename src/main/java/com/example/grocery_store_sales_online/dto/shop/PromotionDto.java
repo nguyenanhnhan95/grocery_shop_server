@@ -28,7 +28,7 @@ public class PromotionDto {
     private Double discountRate;
     @NotNull(message = THIS_FIELD_CANNOT_EMPTY_2)
     private Date startDate;
-    //    @NotBlank(message = EValidationDto.NOT_BLANK.)
+    //    @NotBlank(message = .NOT_BLANK.)
 
     private Date endDate;
 }

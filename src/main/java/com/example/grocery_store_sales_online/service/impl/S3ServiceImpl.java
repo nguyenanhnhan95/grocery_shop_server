@@ -46,12 +46,12 @@ public class S3ServiceImpl implements IS3Service {
     @Override
     public void putObject(String bucketName, String key, MultipartFile file){
         log.info("S3Service:putObject execution started.");
-        log.info("buketname"+bucketName);
         try {
             PutObjectRequest objectRequest = PutObjectRequest.builder()
                     .bucket(bucketName)
                     .key(key)
                     .build();
+
             s3Client.putObject(objectRequest, RequestBody.fromBytes(file.getBytes()));
         }catch (Exception ex){
             log.error("Exception occurred while config S3Client:s3Client , Exception message {}", ex.getMessage());
@@ -77,8 +77,15 @@ public class S3ServiceImpl implements IS3Service {
     public boolean checkKeyFileExisting(String keyFile){
         log.info("imagesService:checkKeyFileExisting execution started.");
         try {
-            byte[] image=this.getObject(s3BucketsCustomer,keyFile);
-            return image != null;
+            HeadObjectRequest headObjectRequest = HeadObjectRequest.builder()
+                    .bucket(s3BucketsCustomer)
+                    .key(keyFile)
+                    .build();
+
+            s3Client.headObject(headObjectRequest);
+
+            System.out.println("Object exists");
+            return true;
         }catch (Exception ex){
             return false;
         }

@@ -52,10 +52,10 @@ public class SecurityConfig {
     private  final LogoutSuccessHandler logoutSuccessHandler;
     private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
-    private final String[] PUBLIC_ENDPOINTS={"/", "/error", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg","/auth/login","/auth/signup","/auth/logout","/auth/check-auth","/address/**",
+    private final String[] PUBLIC_ENDPOINTS={"/", "/error", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg","/auth/login","/auth/signup","/auth/logout","/auth/check-auth","/auth/authorize-page","/address/**",
             "/**/*.jpg", "/**/*.html", "/**/*.css", "/**/*.js", "/home/**", "/oauth2/**","/auth/login/**","/keep-login","/product-category/**","/test/**"};
-    private final String[] ACTION_MANAGE_ADMIN={ERole.MANAGER.getLabel(),ERole.ADMIN.getLabel(),ERole.EMPLOYEE.getLabel()};
-    private final String[] VIEW_MANAGE_ADMIN={ERole.MANAGER.getLabel(),ERole.ADMIN.getLabel(),ERole.EMPLOYEE.getLabel()};
+    private final String[] ACTION_MANAGE_ADMIN={ERole.MANAGER.getCode(),ERole.ADMIN.getCode(),ERole.EMPLOYEE.getCode()};
+    private final String[] VIEW_MANAGE_ADMIN={ERole.MANAGER.getCode(),ERole.ADMIN.getCode(),ERole.EMPLOYEE.getCode()};
 
 
     @Bean
@@ -97,11 +97,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers(PUBLIC_ENDPOINTS)
                         .permitAll()
-                        .requestMatchers("/employee/**").hasAnyAuthority(ERole.ADMIN.getLabel())
-                        .requestMatchers("/role/**").hasAnyAuthority(ERole.ADMIN.getLabel())
-                        .requestMatchers("/products-variation/**","/products-variation-option/**","/shop-promotion/**","/products/**","/auth/role/**")
+                        .requestMatchers("/employee/**").hasAnyAuthority(ERole.ADMIN.getCode())
+                        .requestMatchers("/role/**").hasAnyAuthority(ERole.ADMIN.getCode())
+                        .requestMatchers("/variation/**","/option-variation/**","/shop-promotion/**","/products/**","/auth/role/**")
                         .authenticated()
-                        .requestMatchers("/user/**","/menu/admin-side/**","/profile/**")
+                        .requestMatchers("/user/**","/menu/admin-side/**","/profile/**","/auth/role")
                         .authenticated()
                 )
 //                .logout((logout)->logout.logoutUrl("/logout")

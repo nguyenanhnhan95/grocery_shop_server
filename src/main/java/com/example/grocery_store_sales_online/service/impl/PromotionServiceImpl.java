@@ -63,14 +63,17 @@ public class PromotionServiceImpl extends BaseServiceImpl implements IPromotionS
     }
 
     @Override
-    public Optional<Promotion> findById(Long id) {
+    public Promotion findById(Long id) {
         try {
-            log.info("PromotionService:findById execution started.");
-            Optional<Promotion> promotion = promotionRepository.findById(id);
-            if(promotion.isEmpty()){
-                throw new  Exception(EResponseStatus.NOT_FOUND_BY_ID.getLabel());
-            }
-            return promotionRepository.findById(id);
+            return promotionRepository.findById(id)
+                    .orElseThrow(() ->
+                            new ServiceBusinessExceptional(
+                                    EResponseStatus.NOT_FOUND_BY_ID.getLabel(),
+                                    EResponseStatus.NOT_FOUND_BY_ID.getCode()
+                            )
+                    );
+        } catch (ServiceBusinessExceptional ex) {
+            throw ex;
         } catch (Exception ex) {
             log.error("Exception occurred while persisting PromotionService:findById to database , Exception message {}", ex.getMessage());
             throw new ServiceBusinessExceptional(EResponseStatus.NOT_FOUND_DATA.getLabel(), EResponseStatus.NOT_FOUND_DATA.getCode());
@@ -105,7 +108,7 @@ public class PromotionServiceImpl extends BaseServiceImpl implements IPromotionS
     public Promotion updateModelDto(Long id, PromotionDto promotionDto) {
         try {
             log.info("PromotionService:updateModelDto execution started.");
-            Optional<Promotion> promotion = findById(id);
+            Optional<Promotion> promotion = promotionRepository.findById(id);
             promotion.orElseThrow(()-> createValidationException("promotionDto", "notification", THIS_FILED_DATA_NOT_EXIST));
             if (findByCode(promotionDto.getCode().trim()).isPresent() && !promotionDto.getCode().equals(promotion.get().getCode())) {
                 throw createValidationException("promotionDto", "code", THIS_FIELD_ALREADY_EXIST);

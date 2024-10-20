@@ -7,12 +7,10 @@ import com.example.grocery_store_sales_online.exception.ServiceBusinessException
 import com.example.grocery_store_sales_online.model.address.Districts;
 import com.example.grocery_store_sales_online.model.address.Provinces;
 import com.example.grocery_store_sales_online.model.address.Wards;
-import com.example.grocery_store_sales_online.model.person.Employee;
 import com.example.grocery_store_sales_online.model.person.Role;
+import com.example.grocery_store_sales_online.model.person.User;
 import com.example.grocery_store_sales_online.service.IAddressService;
-import com.example.grocery_store_sales_online.service.IImageService;
 import com.example.grocery_store_sales_online.service.IRoleService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,26 +38,24 @@ public abstract class EmployeeMapper {
     @Mapping(source = "password", target = "password")
     @Mapping(source = "birthOfDate", target = "birthOfDate")
     @Mapping(source = "address", target = "address")
-    @Mapping(source = "avatar", target = "avatar",qualifiedByName = "mapAvatar")
+    @Mapping(target = "avatar", ignore = true)
     @Mapping(source = "roles", target = "roles", qualifiedByName = "mapRole")
     @Mapping(source = "provinces", target = "provinces", qualifiedByName = "mapProvinces")
     @Mapping(source = "districts", target = "districts", qualifiedByName = "mapDistricts")
     @Mapping(source = "wards", target = "wards", qualifiedByName = "mapWards")
-    public abstract Employee convertEmployeeDtoToEmployee(EmployeeDto employeeDto);
+    public abstract User convertEmployeeDtoToEmployee(EmployeeDto employeeDto);
     @Mapping(source = "name", target = "name")
     @Mapping(source = "birthOfDate", target = "birthOfDate")
     @Mapping(source = "address", target = "address")
-    @Mapping(source = "avatar", target = "avatar",qualifiedByName = "mapAvatar")
+    @Mapping(target = "avatar", ignore = true)
+    @Mapping(target = "password", ignore = true)
     @Mapping(source = "roles", target = "roles", qualifiedByName = "mapRole")
     @Mapping(source = "provinces", target = "provinces", qualifiedByName = "mapProvinces")
     @Mapping(source = "districts", target = "districts", qualifiedByName = "mapDistricts")
     @Mapping(source = "wards", target = "wards", qualifiedByName = "mapWards")
-    public abstract Employee updateEmployeeFromDto(EmployeeEditDto employeeEditDto, @MappingTarget Employee employee);
+    public abstract User updateEmployeeFromDto(EmployeeEditDto employeeEditDto, @MappingTarget User user);
 
-    @Named("mapAvatar")
-    protected String mapAvatar(MultipartFile avatar){
-        return null;
-    }
+
     @Named("mapRole")
     protected Set<Role> mapRole(List<Long> roleId) {
         return roleService.listRoleByIDs(roleId);

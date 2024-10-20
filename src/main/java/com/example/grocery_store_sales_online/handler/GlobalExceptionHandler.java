@@ -5,21 +5,21 @@ import com.example.grocery_store_sales_online.exception.*;
 import com.example.grocery_store_sales_online.payload.ApiResponse;
 import com.example.grocery_store_sales_online.utils.CommonConstants;
 import io.jsonwebtoken.ExpiredJwtException;
-import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Path;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.HashMap;
@@ -66,7 +66,7 @@ public class GlobalExceptionHandler {
             String lastNodeName = StreamSupport.stream(path.spliterator(), false)
                     .reduce((first, second) -> second) // Lấy node cuối cùng
                     .map(Path.Node::getName)
-                    .orElse(CommonConstants.THIS_FILE_ENTER_FAIL);
+                    .orElse(CommonConstants.THIS_FIELD_ENTER_FAIL);
             errors.put(lastNodeName, item.getMessage());
         });
         apiResponse.setCode(EResponseStatus.ENTER_DATA_FAIL.getCode());
@@ -138,7 +138,13 @@ public class GlobalExceptionHandler {
         apiResponse.setMessage(exception.getMessage());
         return ResponseEntity.status(HttpStatus.LOCKED).body(apiResponse);
     }
-
+    @ExceptionHandler(value = AccessDeniedException.class)
+    ResponseEntity<ApiResponse<?>> handleAccessDeniedException(AccessDeniedException exception) {
+        ApiResponse<?> apiResponse = new ApiResponse<>();
+        apiResponse.setCode(EResponseStatus.NOT_AUTHORIZE.getCode());
+        apiResponse.setMessage(EResponseStatus.NOT_AUTHORIZE.getLabel());
+        return ResponseEntity.badRequest().body(apiResponse);
+    }
     @ExceptionHandler(value = InvalidException.class)
     ResponseEntity<ApiResponse<?>> handleInvalidException(InvalidException exception) {
         ApiResponse<?> apiResponse = new ApiResponse<>();
@@ -162,7 +168,13 @@ public class GlobalExceptionHandler {
         apiResponse.setMessage(exception.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
     }
-
+    @ExceptionHandler(EmptyException.class)
+    ResponseEntity<ApiResponse<?>> handleServiceException(EmptyException exception) {
+        ApiResponse<?> apiResponse = new ApiResponse<>();
+        apiResponse.setCode(EResponseStatus.DATA_EMPTY.getCode());
+        apiResponse.setMessage(exception.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
+    }
     @ExceptionHandler(MethodArgumentNotValidException.class)
     ResponseEntity<ApiResponse<?>>  handleMethodArgumentException(MethodArgumentNotValidException exception) {
         Map<String, String> errors = new HashMap<>();
@@ -178,7 +190,12 @@ public class GlobalExceptionHandler {
         for (FieldError error : exception.getBindingResult().getFieldErrors()) {
             errors.put(error.getField(), error.getDefaultMessage());
         }
-        ApiResponse<?> apiResponse = new ApiResponse<>(EResponseStatus.ENTER_DATA_FAIL.getCode(), EResponseStatus.ACCOUNT_NOT_EXISTING.getLabel(), errors);
+        ApiResponse<?> apiResponse = new ApiResponse<>(EResponseStatus.ENTER_DATA_FAIL.getCode(), EResponseStatus.ENTER_DATA_FAIL.getLabel(), errors);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
+    }
+    @ExceptionHandler(HandlerMethodValidationException.class)
+    ResponseEntity<ApiResponse<?>>  handleHandlerMethodValidationException(HandlerMethodValidationException exception) {
+        ApiResponse<?> apiResponse = new ApiResponse<>(EResponseStatus.DATA_TO_SERVER_VALIDATION_FAIL.getCode(), EResponseStatus.ENTER_DATA_FAIL.getLabel(), exception.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
     }
 }

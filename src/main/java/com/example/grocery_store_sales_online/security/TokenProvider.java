@@ -6,6 +6,7 @@ import com.example.grocery_store_sales_online.exception.InvalidException;
 import com.example.grocery_store_sales_online.exception.ServiceBusinessExceptional;
 import com.example.grocery_store_sales_online.model.InvalidatedToken;
 import com.example.grocery_store_sales_online.repository.token.InvalidatedTokenRepository;
+import com.example.grocery_store_sales_online.repository.user.impl.UserRepository;
 import com.example.grocery_store_sales_online.service.ISocialProviderService;
 import com.example.grocery_store_sales_online.utils.CommonConstants;
 import com.example.grocery_store_sales_online.utils.CookieUtils;
@@ -33,7 +34,7 @@ import java.util.UUID;
 public class TokenProvider {
     private static final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
     private final AppProperties appProperties;
-    private final ISocialProviderService socialProviderService;
+    private final UserRepository userRepository;
     private final InvalidatedTokenRepository invalidatedTokenRepository;
 
     public String createToken(Authentication authentication,boolean keepLogin) {
@@ -45,7 +46,7 @@ public class TokenProvider {
             expiryDate = new Date(expiryDate.getTime() + CommonConstants.EXPIRE_TOKEN_TIME);
         }
         return Jwts.builder()
-                .setSubject(userPrincipal.getIdProvider())
+                .setSubject(userPrincipal.getId().toString())
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
 //                .claim("scope",buildScope(userPrincipal))
@@ -83,9 +84,10 @@ public class TokenProvider {
 
     public Claims validateToken(String authToken , HttpServletRequest request , HttpServletResponse response) {
         try {
+
             Claims claims = Jwts.parser().setSigningKey(appProperties.getAuth().getTokenSecret()).parseClaimsJws(authToken).getBody();
-            if (socialProviderService.findByProviderId(claims.getSubject()).isEmpty()) {
-                return null;
+            if (userRepository.findById(Long.valueOf(claims.getSubject())).isEmpty()) {
+                throw new InvalidException(EResponseStatus.NOT_FOUND_USER.getLabel(), EResponseStatus.NOT_FOUND_USER.getCode());
             }
             if (invalidatedTokenRepository.findByIdToken((String) claims.get("idToken")).isPresent()) {
                 throw new InvalidException(EResponseStatus.UNAUTHENTICATED.getLabel(), EResponseStatus.UNAUTHENTICATED.getCode());

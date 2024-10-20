@@ -17,7 +17,7 @@ public class ProductItem extends Model {
     private Double price;
     private Long qtyInStock;
     @Column(unique = true)
-    private String sky;
+    private String sku;
     @ManyToMany()
     @JoinTable(name = "product_configuration", joinColumns = { @JoinColumn(name = "product_item_id") },
             inverseJoinColumns = {@JoinColumn(name = "variation_option_id") })

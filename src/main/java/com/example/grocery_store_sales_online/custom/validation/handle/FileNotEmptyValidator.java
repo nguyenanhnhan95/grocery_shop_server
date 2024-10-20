@@ -4,16 +4,31 @@ import com.example.grocery_store_sales_online.custom.validation.FileNotEmptyCons
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
-public class FileNotEmptyValidator extends BaseValidator implements ConstraintValidator<FileNotEmptyConstraint, MultipartFile> {
+import java.util.List;
+@Slf4j
+public class FileNotEmptyValidator extends BaseValidator implements ConstraintValidator<FileNotEmptyConstraint, Object> {
 
 
     @Override
-    public boolean isValid(MultipartFile file, ConstraintValidatorContext context) {
-        if(file==null || file.isEmpty()){
+    @SuppressWarnings("unchecked")
+    public boolean isValid(Object ob, ConstraintValidatorContext context) {
+        if (ob == null) {
             return false;
         }
-        return true;
+        try {
+            if (ob instanceof MultipartFile) {
+                return !((MultipartFile) ob).isEmpty();
+            } else if (ob instanceof List) {
+                List<MultipartFile> multipartFiles = (List<MultipartFile>) ob;
+                return !multipartFiles.isEmpty();
+            }
+            return true;
+        }catch (Exception ex){
+            log.error("Exception occurred while persisting FileNotEmptyValidator:isValid to validate , Exception message {}", ex.getMessage());
+            return false;
+        }
     }
 }

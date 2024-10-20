@@ -15,6 +15,6 @@ public enum EDepartment implements IEnumComboItem {
     private String text;
     @Override
     public String getLabel() {
-        return null;
+        return text;
     }
 }

@@ -21,6 +21,7 @@ public abstract class Person extends Model {
     private String name;
     private String nameLogin;
     private String phone;
+    @Column(unique=true)
     private String email;
     private String avatar;
     private Date birthOfDate;

@@ -63,7 +63,12 @@ public class FileEntryServiceImpl extends BaseServiceImpl implements IFileEntryS
     public void deleteModel(Long id) {
         try {
             log.info("FileEntryService:deleteModel execution started.");
-            FileEntry fileEntry = findById(id).orElseThrow();
+            FileEntry fileEntry = fileEntryRepository.findById(id).orElseThrow(() ->
+                    new ServiceBusinessExceptional(
+                            EResponseStatus.NOT_FOUND_BY_ID.getLabel(),
+                            EResponseStatus.NOT_FOUND_BY_ID.getCode()
+                    )
+            );
             fileEntryRepository.deleteById(fileEntry.getId());
             fileConfiguration.deleteToServer(fileEntry);
         } catch (Exception ex) {
@@ -73,10 +78,17 @@ public class FileEntryServiceImpl extends BaseServiceImpl implements IFileEntryS
     }
 
     @Override
-    public Optional<FileEntry> findById(Long id) {
+    public FileEntry findById(Long id) {
         try {
-            log.info("FileEntryService:findById execution started.");
-            return fileEntryRepository.findById(id);
+            return fileEntryRepository.findById(id)
+                    .orElseThrow(() ->
+                            new ServiceBusinessExceptional(
+                                    EResponseStatus.NOT_FOUND_BY_ID.getLabel(),
+                                    EResponseStatus.NOT_FOUND_BY_ID.getCode()
+                            )
+                    );
+        } catch (ServiceBusinessExceptional ex) {
+            throw ex;
         } catch (Exception ex) {
             log.error("Exception occurred while persisting FileEntryService:findById to database , Exception message {}", ex.getMessage());
             throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());

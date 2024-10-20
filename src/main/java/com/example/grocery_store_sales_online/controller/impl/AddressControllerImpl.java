@@ -22,17 +22,17 @@ public class AddressControllerImpl implements IAddressController {
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
     @Override
-    public ResponseEntity<?> getByCodeProvince(@RequestParam("code") String code) {
+    public ResponseEntity<?> getByCodeProvince(String code) {
         ApiResponse<?> apiResponse = new ApiResponse<>(EResponseStatus.FETCH_DATA_SUCCESS.getCode(),EResponseStatus.FETCH_DATA_SUCCESS.getLabel(),addressService.findByCodeProvinceProjection(code));
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
     @Override
-    public ResponseEntity<?> getListDistrictByCodeProvince(@RequestParam("code") String code) {
+    public ResponseEntity<?> getListDistrictByCodeProvince(String code) {
         ApiResponse<?> apiResponse = new ApiResponse<>(EResponseStatus.FETCH_DATA_SUCCESS.getCode(),EResponseStatus.FETCH_DATA_SUCCESS.getLabel(),addressService.listDistrictsByCodeProvince(code));
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
     @Override
-    public ResponseEntity<?> getListWardByCodeDistrict(@RequestParam("code") String code) {
+    public ResponseEntity<?> getListWardByCodeDistrict(String code) {
         ApiResponse<?> apiResponse = new ApiResponse<>(EResponseStatus.FETCH_DATA_SUCCESS.getCode(),EResponseStatus.FETCH_DATA_SUCCESS.getLabel(),addressService.listWardsByCodeDistrict(code));
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }

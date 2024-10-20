@@ -10,12 +10,19 @@ public enum EAccountStatus implements IEnumComboItem {
     @Getter
     private String label;
     @Getter
-    private String style;
+    private String code;
 
-    private EAccountStatus(String label, String style) {
+    private EAccountStatus(String label, String code) {
         this.label = label;
-        this.style = style;
+        this.code = code;
     }
 
+    @Override
+    public String getLabel() {
+        return label;
+    }
 
+    public String getCode() {
+        return code;
+    }
 }

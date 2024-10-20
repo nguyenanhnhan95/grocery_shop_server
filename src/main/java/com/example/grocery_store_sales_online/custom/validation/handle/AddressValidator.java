@@ -31,7 +31,7 @@ public class AddressValidator extends BaseValidator implements ConstraintValidat
                 boolean isWardsValid = StringUtils.isNotBlank(wards);
                 if (isProvincesValid) {
                     if (provincesRepository.findByCode(provinces).isEmpty()) {
-                        this.addMessageValidation(context,"provinces",CommonConstants.THIS_FILE_ENTER_FAIL);
+                        this.addMessageValidation(context,"provinces",CommonConstants.THIS_FIELD_ENTER_FAIL);
                         return false;
                     }
                     if (!isDistrictsValid) {
@@ -44,7 +44,7 @@ public class AddressValidator extends BaseValidator implements ConstraintValidat
                         return false;
                     } else {
                         if (districtRepository.findByCode(districts).isEmpty()) {
-                            this.addMessageValidation(context,"districts",CommonConstants.THIS_FILE_ENTER_FAIL);
+                            this.addMessageValidation(context,"districts",CommonConstants.THIS_FIELD_ENTER_FAIL);
                             return false;
                         }
                         if (!isWardsValid) {
@@ -52,7 +52,7 @@ public class AddressValidator extends BaseValidator implements ConstraintValidat
                             return false;
                         } else {
                             if (wardRepository.findByCode(wards).isEmpty()) {
-                                this.addMessageValidation(context,"wards",CommonConstants.THIS_FILE_ENTER_FAIL);
+                                this.addMessageValidation(context,"wards",CommonConstants.THIS_FIELD_ENTER_FAIL);
                                 return false;
                             }
                         }
@@ -66,12 +66,12 @@ public class AddressValidator extends BaseValidator implements ConstraintValidat
                     }
 
                     if (isDistrictsValid && districtRepository.findByCode(districts).isEmpty()) {
-                        this.addMessageValidation(context, "districts", CommonConstants.THIS_FILE_ENTER_FAIL);
+                        this.addMessageValidation(context, "districts", CommonConstants.THIS_FIELD_ENTER_FAIL);
                         isValid = false;
                     }
 
                     if (isWardsValid && wardRepository.findByCode(wards).isEmpty()) {
-                        this.addMessageValidation(context, "wards", CommonConstants.THIS_FILE_ENTER_FAIL);
+                        this.addMessageValidation(context, "wards", CommonConstants.THIS_FIELD_ENTER_FAIL);
                         isValid = false;
                     }
 

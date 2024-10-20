@@ -23,7 +23,7 @@ public class PromotionControllerImpl implements IPromotionController {
     private final IPromotionService promotionService;
 
     @Override
-    public ResponseEntity<ApiResponse<QueryListResult<Promotion>>> getListResult(@RequestParam("query") String queryParameter) {
+    public ResponseEntity<ApiResponse<QueryListResult<Promotion>>> getListResult( String queryParameter) {
         ApiResponse<QueryListResult<Promotion>> result = new ApiResponse<>(EResponseStatus.FETCH_DATA_SUCCESS.getCode(),
                 EResponseStatus.FETCH_DATA_SUCCESS.getLabel(), promotionService.getListResult(queryParameter));
         return new ResponseEntity<>(result, HttpStatus.OK);
@@ -36,30 +36,29 @@ public class PromotionControllerImpl implements IPromotionController {
     }
 
     @Override
-    public ResponseEntity<?> saveModel(@Valid @RequestBody PromotionDto promotionDto) {
+    public ResponseEntity<?> saveModel(PromotionDto promotionDto) {
         promotionService.saveModelDto(promotionDto);
         ApiResponse<?> apiResponse = new ApiResponse<>(EResponseStatus.SAVE_SUCCESS.getCode(), EResponseStatus.SAVE_SUCCESS.getLabel());
         return ResponseEntity.ok().body(apiResponse);
     }
 
     @Override
-    public ResponseEntity<?> editModel(@PathParam("id") Long id, @Valid @RequestBody PromotionDto promotionDto) {
+    public ResponseEntity<?> editModel(@PathParam("id") Long id, PromotionDto promotionDto) {
         promotionService.updateModelDto(id, promotionDto);
         ApiResponse<?> apiResponse = new ApiResponse<>(EResponseStatus.EDIT_SUCCESS.getCode(), EResponseStatus.EDIT_SUCCESS.getLabel());
         return ResponseEntity.ok().body(apiResponse);
     }
 
     @Override
-    public ResponseEntity<?> deleteModel(@RequestParam("id") Long id) {
+    public ResponseEntity<?> deleteModel(Long id) {
         promotionService.deleteModel(id);
         ApiResponse<?> apiResponse = new ApiResponse<>(EResponseStatus.DELETE_SUCCESS.getCode(), EResponseStatus.DELETE_SUCCESS.getLabel());
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<?> findByIdModel(@RequestParam("id") Long id) {
-        Optional<Promotion> promotion = promotionService.findById(id);
-        ApiResponse<?> apiResponse = new ApiResponse<>(EResponseStatus.FETCH_DATA_SUCCESS.getCode(), EResponseStatus.FETCH_DATA_SUCCESS.getLabel(), promotion);
+    public ResponseEntity<?> findByIdModel(Long id) {
+        ApiResponse<?> apiResponse = new ApiResponse<>(EResponseStatus.FETCH_DATA_SUCCESS.getCode(), EResponseStatus.FETCH_DATA_SUCCESS.getLabel(), promotionService.findById(id));
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 

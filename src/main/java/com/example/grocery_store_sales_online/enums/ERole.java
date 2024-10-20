@@ -7,19 +7,19 @@ public enum ERole implements IEnumComboItem {
     USER("ROLE_USER","Khách Hàng"),
     MANAGER("ROLE_MANAGER","Quản lý"),
     EMPLOYEE("ROLE_EMPLOYEE","Nhân viên");
+    private final String code;
     private final String label;
-    private final String text;
-    ERole(String label,String text) {
-        this.label = label;
-        this.text =text;
+    ERole(String code,String text) {
+        this.code = code;
+        this.label =text;
     }
 
-    public String getText() {
-        return this.text;
+    public String getCode() {
+        return code;
     }
 
     @Override
     public String getLabel() {
-        return this.label;
+        return label;
     }
 }

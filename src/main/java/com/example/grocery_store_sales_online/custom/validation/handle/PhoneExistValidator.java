@@ -1,17 +1,15 @@
 package com.example.grocery_store_sales_online.custom.validation.handle;
 
 import com.example.grocery_store_sales_online.custom.validation.PhoneExistConstraint;
-import com.example.grocery_store_sales_online.repository.employee.IEmployeeRepository;
-import com.example.grocery_store_sales_online.repository.user.IUserRepository;
+import com.example.grocery_store_sales_online.repository.user.impl.UserRepository;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class PhoneExistValidator implements ConstraintValidator<PhoneExistConstraint,String> {
-    private final IEmployeeRepository employeeRepository;
-    private final IUserRepository userRepository;
 
-    public PhoneExistValidator(IEmployeeRepository employeeRepository, IUserRepository userRepository) {
-        this.employeeRepository = employeeRepository;
+    private final UserRepository userRepository;
+
+    public PhoneExistValidator(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
     @Override
@@ -19,6 +17,6 @@ public class PhoneExistValidator implements ConstraintValidator<PhoneExistConstr
         if(phone==null || phone.isEmpty()){
             return true;
         }
-        return userRepository.findByPhone(phone.trim()).isEmpty() && employeeRepository.findByPhone(phone.trim()).isEmpty();
+        return userRepository.findByPhone(phone.trim()).isEmpty();
     }
 }

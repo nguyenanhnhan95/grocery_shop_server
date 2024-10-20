@@ -12,7 +12,7 @@ import java.lang.annotation.*;
 @Target( { ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AccountStatusConstraint {
-    String message() default CommonConstants.THIS_FILE_SELECT_FAIL;
+    String message() default CommonConstants.THIS_FIELD_SELECT_FAIL;
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

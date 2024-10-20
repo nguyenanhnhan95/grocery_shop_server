@@ -21,4 +21,8 @@ public enum ETypeCustomer implements IEnumComboItem {
     public String getLabel() {
         return text;
     }
+
+    public String getStyle() {
+        return style;
+    }
 }

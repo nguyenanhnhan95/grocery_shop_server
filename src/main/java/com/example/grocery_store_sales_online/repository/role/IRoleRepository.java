@@ -8,8 +8,12 @@ import com.example.grocery_store_sales_online.repository.common.IFindByName;
 import com.example.grocery_store_sales_online.repository.common.IGetListResult;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface IRoleRepository extends IFindByName<Role>, IGetListResult<Role>, IFindByAlias<Role>, IFindAllProjection<RoleProjection> {
+public interface IRoleRepository extends IFindByName<Role>, IGetListResult<Role>, IFindAllProjection<RoleProjection> {
 
     List<RoleProjection> listRoleEmployee();
+    List<Role> findByAliasRoles(String alias);
+    Optional<Role> findByNameAndAlias(String name,String alias);
+    Optional<RoleProjection> findByIdRoleProjection(Long id);
 }

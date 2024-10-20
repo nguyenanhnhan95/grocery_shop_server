@@ -7,35 +7,20 @@
         "/admin/dash-board",
         "/admin"
       ],
-      "iconClass": "home",
-      "subMenus": [],
       "requiredPermissions": [
-        "dashboard:view"
-      ]
+        "dash-board:view"
+      ],
+      "iconClass": "home",
+      "subMenus": []
     },
     {
       "title": "QUẢN LÝ CHUNG",
       "href": "",
-      "header": true,
-      "resources": [
-      ],
-      "requiredPermissions": [
-        "manage:view"
-      ]
+      "header": true
     },
     {
       "title": "Nội dung",
-      "href": "/admin/article",
-      "resources": [
-        "/admin/article",
-        "/admin/article/view",
-        "/admin/article/add",
-        "/admin/article/edit"
-      ],
       "iconClass": "fa-regular fa-file-lines",
-      "requiredPermissions": [
-        "article:view"
-      ],
       "subMenus": [
         {
           "title": "Bài viết",
@@ -48,7 +33,10 @@
           ],
           "iconClass": "fa-regular fa-circle",
           "requiredPermissions": [
-            "article-post:view"
+            "article-post:view",
+            "article-post:add",
+            "article-post:edit",
+            "article-post:delete"
           ]
         },
         {
@@ -62,7 +50,10 @@
           ],
           "iconClass": "fa-regular fa-circle",
           "requiredPermissions": [
-            "article-list:view"
+            "article-list:view",
+            "article-list:edit",
+            "article-list:add",
+            "article-list:delete"
           ]
         },
         {
@@ -76,21 +67,17 @@
           ],
           "iconClass": "fa-regular fa-circle",
           "requiredPermissions": [
-            "article-featured:view"
+            "article-featured:view",
+            "article-featured:add",
+            "article-featured:edit",
+            "article-featured:delete"
           ]
         }
       ]
     },
     {
       "title": "Quản lý shop",
-      "href": "/admin/shop",
-      "resources": [
-        "shop"
-      ],
       "iconClass": "fa-solid fa-cart-shopping",
-      "requiredPermissions": [
-        "shop:view"
-      ],
       "subMenus": [
         {
           "title": "Tổng quan",
@@ -103,7 +90,10 @@
           ],
           "iconClass": "fa-regular fa-circle",
           "requiredPermissions": [
-            "shop-overview:view"
+            "shop-overview:view",
+            "shop-overview:add",
+            "shop-overview:edit",
+            "shop-overview:delete"
           ]
         },
         {
@@ -117,7 +107,10 @@
           ],
           "iconClass": "fa-regular fa-circle",
           "requiredPermissions": [
-            "shop-order:view"
+            "shop-order:view",
+            "shop-order:add",
+            "shop-order:edit",
+            "shop-order:delete"
           ]
         },
         {
@@ -131,7 +124,10 @@
           ],
           "iconClass": "fa-regular fa-circle",
           "requiredPermissions": [
-            "shop-passenger:view"
+            "shop-passenger:view",
+            "shop-passenger:add",
+            "shop-passenger:edit",
+            "shop-passenger:delete"
           ]
         },
         {
@@ -145,30 +141,21 @@
           ],
           "iconClass": "fa-regular fa-circle",
           "requiredPermissions": [
-            "shop-promotion:view"
+            "shop-promotion:view",
+            "shop-promotion:add",
+            "shop-promotion:edit",
+            "shop-promotion:delete"
           ]
         }
       ]
     },
     {
       "title": "Sản phẩm",
-      "href": "",
-      "header": true,
-      "resources": [],
-      "requiredPermissions": [
-        "product:view"
-      ]
+      "header": true
     },
     {
       "title": "Quản lý sản phẩm",
-      "href": "",
-      "resources": [
-        "/admin/product-manage/view"
-      ],
       "iconClass": "fa-solid  fa-folder-tree",
-      "requiredPermissions": [
-        "product-manage:view"
-      ],
       "subMenus": [
         {
           "title": "Tất cả sản phẩm",
@@ -181,65 +168,80 @@
           ],
           "iconClass": "fa-regular fa-circle",
           "requiredPermissions": [
-            "products:view"
+            "products:view",
+            "products:add",
+            "products:edit",
+            "products:delete"
           ]
         },
         {
           "title": "Sản phẩm nhập hàng",
-          "href": "/admin/products-import",
+          "href": "/admin/product-import",
           "resources": [
-            "/admin/products-import",
-            "/admin/products-import/view",
-            "/admin/products-import/add",
-            "/admin/products-import/edit"
+            "/admin/product-import",
+            "/admin/product-import/view",
+            "/admin/product-import/add",
+            "/admin/product-import/edit"
           ],
           "iconClass": "fa-regular fa-circle",
           "requiredPermissions": [
-            "products-import/view"
+            "product-import:view",
+            "product-import:add",
+            "product-import:edit",
+            "product-import:delete"
           ]
         },
         {
           "title": "Tùy Chọn Sản Phẩm",
-          "href": "/admin/products-variation",
+          "href": "/admin/variation",
           "resources": [
-            "/admin/products-variation",
-            "/admin/products-variation/view",
-            "/admin/products-variation/add",
-            "/admin/products-variation/edit"
+            "/admin/variation",
+            "/admin/variation/view",
+            "/admin/variation/add",
+            "/admin/variation/edit"
           ],
           "iconClass": "fa-regular fa-circle",
           "requiredPermissions": [
-            "products-variation:view"
+            "variation:view",
+            "variation:add",
+            "variation:edit",
+            "variation:delete"
           ]
         },
         {
           "title": "Giá Trị Tùy Chọn",
-          "href": "/admin/products-variation-option",
+          "href": "/admin/option-variation",
           "resources": [
-            "/admin/products-variation-option",
-            "/admin/products-variation-option/view",
-            "/admin/products-variation-option/edit",
-            "/admin/products-variation-option/add"
+            "/admin/option-variation",
+            "/admin/option-variation/view",
+            "/admin/option-variation/edit",
+            "/admin/option-variation/add"
           ],
           "iconClass": "fa-regular fa-circle",
           "requiredPermissions": [
-            "products-variation-option:view"
+            "option-variation:view",
+            "option-variation:add",
+            "option-variation:edit",
+            "option-variation:delete"
           ]
         }
       ]
     },
     {
       "title": "Hình ảnh",
-      "href": "/admin/album",
+      "href": "/admin/albums",
       "resources": [
-        "/admin/album",
-        "/admin/album/add",
-        "/admin/album/edit",
-        "/admin/album/view"
+        "/admin/albums",
+        "/admin/albums/add",
+        "/admin/albums/edit",
+        "/admin/albums/view"
       ],
       "iconClass": "fa-solid fa-file-image",
       "requiredPermissions": [
-        "album:view"
+        "albums:view",
+        "albums:add",
+        "albums:edit",
+        "albums:delete"
       ]
     },
     {
@@ -249,128 +251,114 @@
         "/admin/files",
         "/admin/files/add",
         "/admin/files/view",
-        "/admin/files/edit"
+        "/admin/files/edit",
+        "/admin/files/delete"
       ],
       "iconClass": "fa-solid fa-solid fa-folder-open",
       "requiredPermissions": [
-        "files:view"
+        "files:view",
+        "files:add",
+        "files:edit",
+        "files:delete"
       ]
     },
     {
       "title": "QUẢN LÝ WEBSITE",
-      "href": "",
-      "header": true,
-      "resources": [],
-      "requiredPermissions": [
-        "web-content:view"
-      ]
+      "header": true
     },
     {
       "title": "Website",
-      "href": "/admin/website",
-      "resources": [
-        "/admin/website",
-        "/admin/website/view",
-        "/admin/website/edit",
-        "/admin/website/add"
-      ],
       "iconClass": "fa-brands fa-edge-legacy",
-      "requiredPermissions": [
-        "website:view"
-      ],
       "subMenus": [
         {
           "title": "Bài viết",
-          "href": "/admin/post",
+          "href": "/admin/website-article",
           "resources": [
-            "/admin/post",
-            "/admin/post/add",
-            "/admin/post/view",
-            "/admin/post/edit"
+            "/admin/website-article",
+            "/admin/website-article/add",
+            "/admin/website-article/view",
+            "/admin/website-article/edit"
           ],
           "iconClass": "fa-regular fa-circle",
           "requiredPermissions": [
-            "post:view"
+            "website-article:view",
+            "website-article:add",
+            "website-article:edit",
+            "website-article:delete"
           ]
         },
         {
           "title": "Chủ đề",
-          "href": "/admin/topic",
+          "href": "/admin/website-topic",
           "resources": [
-            "/admin/topic",
-            "/admin/topic/add",
-            "/admin/topic/view",
-            "/admin/topic/edit"
+            "/admin/website-topic",
+            "/admin/website-topic/add",
+            "/admin/website-topic/view",
+            "/admin/website-topic/edit"
           ],
           "iconClass": "fa-regular fa-circle",
           "requiredPermissions": [
-            "topic:view"
+            "website-topic:view",
+            "website-topic:add",
+            "website-topic:edit",
+            "website-topic:delete"
           ]
         },
         {
           "title": "Bài viết nổi bật",
-          "href": "/admin/featured-post",
+          "href": "/admin/website-featured",
           "resources": [
-            "/admin/featured-post"
+            "/admin/website-featured",
+            "/admin/website-featured/add",
+            "/admin/website-featured/edit",
+            "/admin/website-featured/view"
           ],
           "iconClass": "fa-regular fa-circle",
           "requiredPermissions": [
-            "featured-post:view"
+            "website-featured:view",
+            "website-featured:add",
+            "website-featured:edit",
+            "website-featured:delete"
           ]
         }
       ]
     },
     {
       "title": "Cấu hình",
-      "href": "/admin/setting",
-      "resources": [
-        "/admin/setting"
-      ],
       "iconClass": "fa-solid fa-gear",
-      "requiredPermissions": [
-        "setting:view"
-      ],
       "subMenus": [
         {
           "title": "Cấu hình chung",
-          "href": "/admin/web-setting",
+          "href": "/admin/setting",
           "resources": [
-            "/admin/web-setting",
-            "/admin/web-setting/view",
-            "/admin/web-setting/edit",
-            "/admin/web-setting/add"
+            "/admin/setting",
+            "/admin/setting/view",
+            "/admin/setting/edit",
+            "/admin/setting/add"
           ],
           "iconClass": "fa-regular fa-circle",
           "requiredPermissions": [
-            "web-setting:view"
+            "setting:view",
+            "setting:add",
+            "setting:edit",
+            "setting:delete"
           ]
         },
         {
           "title": "Trang chủ",
-          "href": "/admin/home-page",
+          "href": "/admin/setting-home",
           "resources": [
-            "/admin/home-page",
-            "/admin/home-page/add",
-            "/admin/home-page/edit",
-            "/admin/home-page/vew"
+            "/admin/setting-home",
+            "/admin/setting-home/add",
+            "/admin/setting-home/edit",
+            "/admin/setting-home/vew"
           ],
           "iconClass": "fa-regular fa-circle",
           "requiredPermissions": [
-            "home-page:view"
-          ]
-        },
-        {
-          "title": "Tin tức",
-          "href": "/admin/news",
-          "resources": [
-            "/admin/news",
-            "/admin/news/edit",
-            "/admin/news/add",
-            "/admin/news/view"
-          ],
-          "iconClass": "fa-regular fa-circle",
-          "requiredPermissions": [
-            "news:view"
+            "setting-home:view",
+            "setting-home:add",
+            "setting-home:edit",
+            "setting-home:delete"
           ]
         }
       ]
@@ -378,11 +366,7 @@
     {
       "title": "Công việc",
       "href": "",
-      "header": true,
-      "resources": [],
-      "requiredPermissions": [
-        "workflow-management:view"
-      ]
+      "header": true
     },
     {
       "title": "Quản lý công việc",
@@ -393,33 +377,21 @@
         "/admin/workflow-management/detail",
         "/admin/workflow-management/edit"
       ],
-      "iconClass": "folder",
+      "iconClass": "fa-solid fa-folder",
       "requiredPermissions": [
-        "workflow-management:view"
+        "workflow-management:view",
+        "workflow-management:add",
+        "workflow-management:edit",
+        "workflow-management:delete"
       ]
     },
     {
       "title": "HỆ THỐNG",
-      "href": "",
-      "header": true,
-      "resources": [],
-      "requiredPermissions": [
-        "system:view"
-      ]
+      "header": true
     },
     {
       "title": "Hệ thống",
-      "href": "/admin/system-content",
-      "resources": [
-        "/admin/system-content",
-        "/admin/system-content/view",
-        "/admin/system-content/edit",
-        "/admin/system-content/add"
-      ],
       "iconClass": "fa-solid fa-users",
-      "requiredPermissions": [
-        "system-content:view"
-      ],
       "subMenus": [
         {
           "title": "Nhân sự",
@@ -432,7 +404,10 @@
           ],
           "iconClass": "fa-regular fa-circle",
           "requiredPermissions": [
-            "employee:view"
+            "employee:view",
+            "employee:add",
+            "employee:edit",
+            "employee:delete"
           ]
         },
         {
@@ -442,11 +417,14 @@
             "/admin/role",
             "/admin/role/add",
             "/admin/role/edit",
-            "/admin/role/detail"
+            "/admin/role/delete"
           ],
           "iconClass": "fa-regular fa-circle",
           "requiredPermissions": [
-            "role:view"
+            "role:view",
+            "role:add",
+            "role:edit",
+            "role:delete"
           ]
         }
       ]
@@ -460,7 +438,7 @@
         "/admin/support/add",
         "/admin/support/edit"
       ],
-      "iconClass": "help-circle",
+      "iconClass": "fa-solid fa-circle-question",
       "requiredPermissions": [
         "support:view"
       ]

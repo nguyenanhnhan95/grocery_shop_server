@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface IAddressController {
     @GetMapping("/provinces")
     ResponseEntity<?> getListProvince();
-    @GetMapping("/province/")
+    @GetMapping("/province")
     ResponseEntity<?> getByCodeProvince(@RequestParam("code") String code);
-    @GetMapping("/district/")
+    @GetMapping("/district")
     ResponseEntity<?> getListDistrictByCodeProvince(@RequestParam("code") String code);
-    @GetMapping("/ward/")
+    @GetMapping("/ward")
     public ResponseEntity<?> getListWardByCodeDistrict(@RequestParam("code") String code);
 }

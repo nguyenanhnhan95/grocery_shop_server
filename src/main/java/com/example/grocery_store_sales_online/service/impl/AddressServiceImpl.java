@@ -1,6 +1,7 @@
 package com.example.grocery_store_sales_online.service.impl;
 
 import com.example.grocery_store_sales_online.enums.EResponseStatus;
+import com.example.grocery_store_sales_online.exception.EmptyException;
 import com.example.grocery_store_sales_online.exception.ServiceBusinessExceptional;
 import com.example.grocery_store_sales_online.model.address.Districts;
 import com.example.grocery_store_sales_online.model.address.Provinces;
@@ -85,8 +86,8 @@ public class AddressServiceImpl extends BaseServiceImpl implements IAddressServi
             if(districts.isPresent()){
                 return districts.get();
             }
-            throw new ServiceBusinessExceptional(EResponseStatus.NOT_FOUND_DATA.getLabel(), EResponseStatus.NOT_FOUND_DATA.getCode());
-        } catch (ServiceBusinessExceptional ex) {
+            throw new EmptyException(EResponseStatus.DATA_EMPTY.getLabel());
+        } catch (EmptyException ex) {
             throw ex;
         } catch (Exception ex) {
             log.error("Exception occurred while persisting AddressService:findByCodeProvince to database , Exception message {}", ex.getMessage());

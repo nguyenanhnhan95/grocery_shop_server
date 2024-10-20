@@ -33,8 +33,8 @@ public class AuthControllerImpl implements IAuthController {
 
 
     @Override
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
-        authenticateService.login(loginRequest,response);
+    public ResponseEntity<?> login(LoginRequest loginRequest,HttpServletRequest request, HttpServletResponse response) {
+        authenticateService.login(loginRequest,request,response);
         ApiResponse<?> apiResponse = new ApiResponse<>(EResponseStatus.LOGIN_SUCCESS.getCode(),EResponseStatus.LOGIN_SUCCESS.getLabel());
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
@@ -50,13 +50,21 @@ public class AuthControllerImpl implements IAuthController {
         ApiResponse<?> apiResponse = new ApiResponse<>(EResponseStatus.AUTHENTICATE_SUCCESS.getCode(),EResponseStatus.AUTHENTICATE_SUCCESS.getLabel());
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
+
     @Override
-    public ResponseEntity<?> getRolesUser(@CurrentUser UserPrincipal userPrincipal){
+    public ResponseEntity<?> authorizePage(String requirePage) {
+        authenticateService.authorizePage(requirePage);
+        ApiResponse<?> apiResponse = new ApiResponse<>(EResponseStatus.AUTHENTICATE_SUCCESS.getCode(),EResponseStatus.AUTHENTICATE_SUCCESS.getLabel());
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<?> getRolesUser(UserPrincipal userPrincipal){
         ApiResponse<?> apiResponse = new ApiResponse<>(EResponseStatus.FETCH_DATA_SUCCESS.getCode(),EResponseStatus.FETCH_DATA_SUCCESS.getLabel(),authenticateService.getRoleAuthorize(userPrincipal));
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
     @Override
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
+    public ResponseEntity<?> registerUser(SignUpRequest signUpRequest) {
         if(userService.existsByEmail(signUpRequest.getEmail())) {
             throw new AppException(EResponseStatus.USER_EXISTED);
         }

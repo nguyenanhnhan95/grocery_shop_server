@@ -29,16 +29,7 @@ public class SocialProviderServiceImpl extends BaseServiceImpl implements ISocia
         }
     }
 
-    @Override
-    public List<SocialProvider> findByIdEmployee(Long idEmployee) {
-        try {
-            log.info("SocialProviderService:findByIdEmployee execution started.");
-            return socialProviderRepository.findByIdEmployee(idEmployee);
-        }catch (Exception ex){
-            log.error("Exception occurred while persisting SocialProviderService:findByIdEmployee to database , Exception message {}", ex.getMessage());
-            throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());
-        }
-    }
+
 
     @Override
     public List<SocialProvider> findByIdUser(Long idUser) {

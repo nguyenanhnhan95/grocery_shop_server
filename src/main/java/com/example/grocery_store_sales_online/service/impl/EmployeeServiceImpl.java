@@ -4,16 +4,14 @@ import com.example.grocery_store_sales_online.dto.person.EmployeeDto;
 import com.example.grocery_store_sales_online.dto.person.EmployeeEditDto;
 import com.example.grocery_store_sales_online.enums.AuthProvider;
 import com.example.grocery_store_sales_online.enums.EResponseStatus;
-import com.example.grocery_store_sales_online.enums.EScreenTheme;
 import com.example.grocery_store_sales_online.exception.CustomValidationException;
 import com.example.grocery_store_sales_online.exception.SendToAwsException;
 import com.example.grocery_store_sales_online.exception.ServiceBusinessExceptional;
 import com.example.grocery_store_sales_online.custom.mapper.person.EmployeeMapper;
-import com.example.grocery_store_sales_online.model.person.Employee;
 import com.example.grocery_store_sales_online.model.person.SocialProvider;
+import com.example.grocery_store_sales_online.model.person.User;
 import com.example.grocery_store_sales_online.projection.person.EmployeeProjection;
-import com.example.grocery_store_sales_online.repository.employee.impl.EmployeeRepository;
-import com.example.grocery_store_sales_online.repository.user.IUserRepository;
+import com.example.grocery_store_sales_online.repository.user.impl.UserRepository;
 import com.example.grocery_store_sales_online.service.*;
 import com.example.grocery_store_sales_online.utils.CommonConstants;
 import com.example.grocery_store_sales_online.utils.CommonUtils;
@@ -21,9 +19,8 @@ import com.example.grocery_store_sales_online.utils.QueryListResult;
 import com.example.grocery_store_sales_online.utils.QueryParameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Lazy;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,16 +32,19 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class EmployeeServiceImpl extends BaseServiceImpl implements IEmployeeService {
-    private final EmployeeRepository employeeRepository;
     private final EmployeeMapper employeeMapper;
     private final IImageService imageService;
     private final ISocialProviderService socialProviderService;
-    private final IUserRepository userRepository;
+    private final UserRepository userRepository;
+
+    @Value("${filestore.folder.image.avatar}")
+    private String folderStoreAvatar;
+
     @Override
-    public List<Employee> findAllAble() {
+    public List<User> findAllAble() {
         try {
             log.info("EmployeeService:findAll execution started.");
-            return employeeRepository.findAll();
+            return userRepository.findAllEmployee();
         } catch (Exception ex) {
             log.error("Exception occurred while persisting EmployeeService:findAll  to database , Exception message {}", ex.getMessage());
             throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());
@@ -52,12 +52,12 @@ public class EmployeeServiceImpl extends BaseServiceImpl implements IEmployeeSer
     }
 
     @Override
-    public Employee saveModel(Employee employee) {
+    public User saveModel(User user) {
         try {
             log.info("EmployeeService:saveEmployee execution started.");
-            setMetaData(employee);
-            setPersonAction(employee);
-            return employeeRepository.saveModel(employee);
+            setMetaData(user);
+            setPersonAction(user);
+            return userRepository.saveModel(user);
         } catch (Exception ex) {
             log.error("Exception occurred while persisting EmployeeService:saveEmployee save to database , Exception message {}", ex.getMessage());
             throw new ServiceBusinessExceptional(EResponseStatus.SAVE_FAIL.getLabel(), EResponseStatus.SAVE_FAIL.getCode());
@@ -65,21 +65,30 @@ public class EmployeeServiceImpl extends BaseServiceImpl implements IEmployeeSer
     }
 
     @Override
-    public Optional<Employee> findByName(String name) {
-        try {
-            log.info("EmployeeService:findByUserName execution started.");
-            return employeeRepository.findByName(name);
-        } catch (Exception ex) {
-            log.error("Exception occurred while persisting EmployeeService:findByUserName  to database , Exception message {}", ex.getMessage());
-            throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());
-        }
+    public Optional<User> findByName(String name) {
+//        try {
+//            log.info("EmployeeService:findByUserName execution started.");
+//            return employeeRepository.findByName(name);
+//        } catch (Exception ex) {
+//            log.error("Exception occurred while persisting EmployeeService:findByUserName  to database , Exception message {}", ex.getMessage());
+//            throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());
+//        }
+        return null;
     }
 
     @Override
-    public Optional<Employee> findById(Long id) {
+    public User findById(Long id) {
+        log.info("EmployeeService:findById {} execution started.", id);
         try {
-            log.info("EmployeeService:findById execution started.");
-            return employeeRepository.findById(id);
+            return userRepository.findByIdEmployee(id)
+                    .orElseThrow(() ->
+                            new ServiceBusinessExceptional(
+                                    EResponseStatus.NOT_FOUND_BY_ID.getLabel(),
+                                    EResponseStatus.NOT_FOUND_BY_ID.getCode()
+                            )
+                    );
+        } catch (ServiceBusinessExceptional ex) {
+            throw ex;
         } catch (Exception ex) {
             log.error("Exception occurred while persisting EmployeeService:findById save to database , Exception message {}", ex.getMessage());
             throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());
@@ -87,35 +96,51 @@ public class EmployeeServiceImpl extends BaseServiceImpl implements IEmployeeSer
     }
 
     @Override
-    public void deleteModel(Long aLong) {
-
+    public void deleteModel(Long id) {
+        try {
+            log.info("EmployeeService:deleteModel execution started.");
+            User employee = userRepository.findByIdEmployee(id)
+                    .orElseThrow(() ->
+                            new ServiceBusinessExceptional(
+                                    EResponseStatus.NOT_FOUND_BY_ID.getLabel(),
+                                    EResponseStatus.NOT_FOUND_BY_ID.getCode()
+                            )
+                    );
+            employee.setDeleted(true);
+            userRepository.saveModel(employee);
+        } catch (ServiceBusinessExceptional ex) {
+            log.error("Exception occurred while persisting EmployeeService:deleteModel save to database , Exception message {}", ex.getMessage());
+            throw ex;
+        } catch (Exception ex) {
+            log.error("Exception occurred while persisting EmployeeService:deleteModel save to database , Exception message {}", ex.getMessage());
+            throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());
+        }
     }
 
     @Override
     @Transactional
-    public Employee saveModelDto(EmployeeDto model) {
+    public User saveModelDto(EmployeeDto model) {
         try {
             log.info("EmployeeService:saveModelDto execution started.");
             String keyAvatar = null;
             String idProvider = UUID.randomUUID().toString();
             if (model.getAvatar() != null) {
                 try {
-                    keyAvatar = imageService.handleImageAvatarToAws(model.getAvatar(), CommonUtils.generateNameAlias(model.getName()) + CommonConstants.UNDER_SCOPE + idProvider,null);
+
+                    keyAvatar = imageService.handleImageAvatarToAws(model.getAvatar(), CommonUtils.generateNameAlias(model.getName()) + CommonConstants.UNDER_SCOPE + idProvider, null);
                 } catch (Exception ex) {
                     throw new SendToAwsException(EResponseStatus.AWS_LOAD_IMAGE_FAIL.getLabel(), EResponseStatus.AWS_LOAD_IMAGE_FAIL.getCode());
                 }
             }
-            try {
-                Employee employee = employeeMapper.convertEmployeeDtoToEmployee(model);
-                employee.setAvatar(keyAvatar);
-                setMetaData(employee);
-                setPersonAction(employee);
-                Employee saveEmployee = employeeRepository.saveModel(employee);
-                this.createAndSaveSocialProvider(saveEmployee, idProvider);
-                return saveEmployee;
-            } catch (Exception ex) {
-                throw ex;
-            }
+            User employee = employeeMapper.convertEmployeeDtoToEmployee(model);
+            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+            employee.setPassword(bCryptPasswordEncoder.encode(employee.getPassword()));
+            employee.setAvatar(keyAvatar);
+            setMetaData(employee);
+            setPersonAction(employee);
+            User saveUser = userRepository.saveModel(employee);
+            this.createAndSaveSocialProvider(saveUser, idProvider);
+            return this.saveModel(saveUser);
         } catch (SendToAwsException ex) {
             log.error("Exception occurred while persisting EmployeeService:saveModelDto to database , Exception message {}", ex.getMessage());
             throw ex;
@@ -127,28 +152,22 @@ public class EmployeeServiceImpl extends BaseServiceImpl implements IEmployeeSer
 
     @Override
     @Transactional
-    public Employee updateModelDto(Long id, EmployeeEditDto employeeEditDto) {
+    public User updateModelDto(Long id, EmployeeEditDto employeeEditDto) {
         try {
             log.info("EmployeeService:updateModelDto execution started.");
-            Optional<Employee> employee = this.findById(id);
+            User employee = userRepository.findByIdEmployee(id)
+                    .orElseThrow(() ->
+                            createValidationException("employeeDto", "notification", CommonConstants.THIS_DATA_EDIT_FAIL)
+                    );
 
-            if (employee.isEmpty()) {
-                throw createValidationException("employeeDto", "notification", CommonConstants.THIS_DATA_EDIT_FAIL);
-            }
-            String olderKey = employee.get().getAvatar();
-            Employee employeeEdited = employeeMapper.updateEmployeeFromDto(employeeEditDto,employee.get());
-            if (employeeEditDto.getAvatar() != null) {
-                try {
-                    employee.get().setAvatar(imageService.handleImageAvatarToAws(employeeEditDto.getAvatar(), CommonUtils.generateNameAlias(employeeEditDto.getName()) + CommonConstants.UNDER_SCOPE + System.currentTimeMillis(),olderKey));
-                } catch (Exception ex) {
-                    throw new SendToAwsException(EResponseStatus.AWS_LOAD_IMAGE_FAIL.getLabel(), EResponseStatus.AWS_LOAD_IMAGE_FAIL.getCode());
-                }
-            }
-            this.processUpdate(employee.get(),employeeEditDto);
+//            String olderKey = employee.get().getAvatar();
+            User employeeEdited = employeeMapper.updateEmployeeFromDto(employeeEditDto, employee);
+
+            this.processUpdate(employee, employeeEditDto);
 
             setPersonAction(employeeEdited);
             setMetaData(employeeEdited);
-            return employeeRepository.saveModel(employeeEdited);
+            return userRepository.saveModel(employeeEdited);
         } catch (CustomValidationException ex) {
             log.error("Exception occurred validation data input , Exception message {}", ex.getMessage());
             throw ex;
@@ -157,35 +176,46 @@ public class EmployeeServiceImpl extends BaseServiceImpl implements IEmployeeSer
             throw new ServiceBusinessExceptional(EResponseStatus.EDIT_FAIL.getLabel(), EResponseStatus.EDIT_FAIL.getCode());
         }
     }
-    private void processUpdate(Employee employee,EmployeeEditDto employeeEditDto){
-        if(!employee.getNameLogin().equals(employeeEditDto.getNameLogin())){
-            if(userRepository.findByNameLogin(employeeEditDto.getNameLogin()).isPresent() || employeeRepository.findByNameLogin(employeeEditDto.getNameLogin()).isPresent()){
-                throw createValidationException("EmployeeEditDto","nameLogin",CommonConstants.THIS_FIELD_ALREADY_EXIST);
+
+    private void processUpdate(User employee, EmployeeEditDto employeeEditDto) {
+        if (employeeEditDto.getAvatar() != null) {
+            try {
+                employee.setAvatar(imageService.handleImageAvatarToAws(employeeEditDto.getAvatar(), CommonUtils.generateNameAlias(employeeEditDto.getName()) + CommonConstants.UNDER_SCOPE + System.currentTimeMillis(), employee.getAvatar()));
+            } catch (Exception ex) {
+                throw new SendToAwsException(EResponseStatus.AWS_LOAD_IMAGE_FAIL.getLabel(), EResponseStatus.AWS_LOAD_IMAGE_FAIL.getCode());
+            }
+        }
+        if (!employee.getNameLogin().equals(employeeEditDto.getNameLogin())) {
+            if (userRepository.findByNameLogin(employeeEditDto.getNameLogin()).isPresent()) {
+                throw createValidationException("EmployeeEditDto", "nameLogin", CommonConstants.THIS_FIELD_ALREADY_EXIST);
             }
             employee.setNameLogin(employeeEditDto.getNameLogin());
         }
-        if(employeeEditDto.getEmail()!=null && !employeeEditDto.getEmail().isEmpty() && !employee.getEmail().equals(employeeEditDto.getEmail())){
-            if(userRepository.findByEmail(employeeEditDto.getEmail()).isPresent() || employeeRepository.findByEmail(employeeEditDto.getEmail()).isPresent()){
-                throw createValidationException("EmployeeEditDto","email",CommonConstants.THIS_FIELD_ALREADY_EXIST);
+        if (employeeEditDto.getEmail() != null && !employeeEditDto.getEmail().isEmpty() && !employee.getEmail().equals(employeeEditDto.getEmail())) {
+            if (userRepository.findByEmail(employeeEditDto.getEmail()).isPresent()) {
+                throw createValidationException("EmployeeEditDto", "email", CommonConstants.THIS_FIELD_ALREADY_EXIST);
             }
             employee.setEmail(employeeEditDto.getEmail());
         }
-        if(employeeEditDto.getIdCard()!=null && !employeeEditDto.getIdCard().isEmpty() && !employee.getIdCard().equals(employeeEditDto.getIdCard())){
-            if(userRepository.findByIdCard(employeeEditDto.getIdCard()).isPresent() || employeeRepository.findByIdCard(employeeEditDto.getIdCard()).isPresent()){
-                throw createValidationException("EmployeeEditDto","idCard",CommonConstants.THIS_FIELD_ALREADY_EXIST);
+        if (employeeEditDto.getIdCard() != null && !employeeEditDto.getIdCard().isEmpty() && !employee.getIdCard().equals(employeeEditDto.getIdCard())) {
+            if (userRepository.findByIdCard(employeeEditDto.getIdCard()).isPresent()) {
+                throw createValidationException("EmployeeEditDto", "idCard", CommonConstants.THIS_FIELD_ALREADY_EXIST);
             }
             employee.setIdCard(employeeEditDto.getIdCard());
         }
-        if(employeeEditDto.getPassword()!=null && !employeeEditDto.getPassword().isEmpty() && !employee.getPassword().equals(employeeEditDto.getPassword())){
-            BCryptPasswordEncoder bCryptPasswordEncoder= new BCryptPasswordEncoder();
-            employee.setPassword(bCryptPasswordEncoder.encode(employeeEditDto.getPassword()));
+        String newPassword = employeeEditDto.getPassword();
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        if (newPassword != null && !newPassword.isEmpty() && !bCryptPasswordEncoder.matches(newPassword, employee.getPassword())) {
+            // Chỉ mã hóa mật khẩu mới và cập nhật nếu nó khác mật khẩu cũ
+            employee.setPassword(bCryptPasswordEncoder.encode(newPassword));
         }
     }
+
     @Override
     public QueryListResult<EmployeeProjection> getListResult(String queryParameter) {
         try {
             log.info("EmployeeService:getListResult execution started.");
-            return employeeRepository.getListResult(readJsonQuery(queryParameter, QueryParameter.class));
+            return userRepository.getListResultEmployee(readJsonQuery(queryParameter, QueryParameter.class));
         } catch (Exception ex) {
             log.error("Exception occurred while persisting EmployeeService:getListResult to database , Exception message {}", ex.getMessage());
             throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());
@@ -196,7 +226,7 @@ public class EmployeeServiceImpl extends BaseServiceImpl implements IEmployeeSer
     public EmployeeProjection findByIdProjection(Long id) {
         try {
             log.info("EmployeeService:getListResult execution started.");
-            Optional<EmployeeProjection> employee = employeeRepository.findByIdProjection(id);
+            Optional<EmployeeProjection> employee = userRepository.findByIdEmployeeProjection(id);
             if (employee.isPresent()) {
                 return employee.get();
             }
@@ -209,54 +239,29 @@ public class EmployeeServiceImpl extends BaseServiceImpl implements IEmployeeSer
         }
     }
 
-    @Override
-    public void ChangeScreenMode(Long id, EScreenTheme screenTheme) {
-        try {
-            log.info("EmployeeService:ChangeScreenMode execution started.");
-            Optional<Employee> employee = findById(id);
-            employee.ifPresent(value -> {
-                value.setScreenTheme(screenTheme);
-                this.saveModel(value);
-            });
-        } catch (Exception ex) {
-            log.error("Exception occurred while persisting EmployeeService:ChangeScreenMode save to change screen mode , Exception message {}", ex.getMessage());
-            throw new ServiceBusinessExceptional(EResponseStatus.CHANGE_SCREEN_LIGHT_FAIL.getLabel(), EResponseStatus.CHANGE_SCREEN_LIGHT_FAIL.getCode());
-        }
-    }
 
     @Override
-    public Optional<Employee> findByNameLogin(String nameLogin) {
+    public Optional<User> findByEmail(String email) {
         try {
             log.info("EmployeeService:findByNameLogin execution started.");
-            return employeeRepository.findByNameLogin(nameLogin);
+            return userRepository.findByEmail(email);
         } catch (Exception ex) {
             log.error("Exception occurred while persisting EmployeeService:findByNameLogin to database , Exception message {}", ex.getMessage());
             throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());
         }
     }
 
-    @Override
-    public Optional<Employee> findByEmail(String email) {
-        try {
-            log.info("EmployeeService:findByNameLogin execution started.");
-            return employeeRepository.findByEmail(email);
-        } catch (Exception ex) {
-            log.error("Exception occurred while persisting EmployeeService:findByNameLogin to database , Exception message {}", ex.getMessage());
-            throw new ServiceBusinessExceptional(EResponseStatus.FETCH_DATA_FAIL.getLabel(), EResponseStatus.FETCH_DATA_FAIL.getCode());
-        }
-    }
-
-    private void createAndSaveSocialProvider(Employee employee, String providerId) {
+    private void createAndSaveSocialProvider(User user, String providerId) {
         SocialProvider socialProvider = new SocialProvider();
         socialProvider.setProviderId(providerId);
         socialProvider.setProvider(AuthProvider.local);
-        socialProvider.setEmployee(employee);
+        socialProvider.setUser(user);
 
         try {
             socialProviderService.saveModel(socialProvider);
         } catch (Exception ex) {
             log.error("Failed to save SocialProvider, deleting Employee: {}", ex.getMessage());
-            employeeRepository.delete(employee);
+            userRepository.delete(user);
             throw new ServiceBusinessExceptional(
                     EResponseStatus.SAVE_FAIL.getLabel(),
                     EResponseStatus.SAVE_FAIL.getCode()

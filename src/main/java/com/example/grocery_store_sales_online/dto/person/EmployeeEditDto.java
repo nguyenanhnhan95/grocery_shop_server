@@ -10,19 +10,20 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.util.List;
+
+import static com.example.grocery_store_sales_online.utils.CommonConstants.REGEX_CCCD;
+
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class EmployeeEditDto extends PersonDto{
-    @Size(max = 100,message = CommonConstants.THIS_FIELD_TOO_LONG)
-    @Size(min = 4,message = CommonConstants.THIS_FIELD_TOO_SHORT)
+    @SizeStringConstraint(sizeMin = 4, sizeMax = 100)
     @NotBlank(message = CommonConstants.THIS_FIELD_CANNOT_EMPTY_2)
     @Pattern(regexp = CommonConstants.REGEX_FULL_NAME,message = CommonConstants.THIS_FIELD_VALUE_NOT_FORMAT)
     private String name;
-    @Size(max = 70,message = CommonConstants.THIS_FIELD_TOO_LONG)
-    @Size(min = 6,message = CommonConstants.THIS_FIELD_TOO_SHORT)
+    @SizeStringConstraint(sizeMin = 4, sizeMax = 70)
     @NotBlank(message = CommonConstants.THIS_FIELD_CANNOT_EMPTY_2)
     @Pattern(regexp = CommonConstants.REGEX_NAME_LOGIN,message = CommonConstants.THIS_FIELD_VALUE_NOT_FORMAT)
     private String nameLogin;
@@ -30,10 +31,9 @@ public class EmployeeEditDto extends PersonDto{
     @Size(min = 9, message = CommonConstants.THIS_FIELD_TOO_SHORT)
     @Pattern(regexp = CommonConstants.REGEX_PHONE, message = CommonConstants.THIS_FIELD_VALUE_NOT_FORMAT)
     private String phone;
-    @Pattern(regexp = CommonConstants.REGEX_CCCD,message = CommonConstants.THIS_FIELD_VALUE_NOT_FORMAT)
+    @RegexConstraint(allowNull =true,regex = REGEX_CCCD)
     private String idCard;
-    @Size(max = 70,message = CommonConstants.THIS_FIELD_TOO_LONG)
-    @Size(min = 6,message = CommonConstants.THIS_FIELD_TOO_SHORT)
+    @SizeStringConstraint(sizeMin = 6, sizeMax = 70)
     @Pattern(regexp = CommonConstants.REGEX_EMAIL,message = CommonConstants.THIS_FIELD_VALUE_NOT_FORMAT)
     @Email(message = CommonConstants.THIS_FIELD_VALUE_NOT_FORMAT)
     private String email;

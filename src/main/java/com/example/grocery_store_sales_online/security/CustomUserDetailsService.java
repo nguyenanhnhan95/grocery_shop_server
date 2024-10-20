@@ -1,7 +1,9 @@
 package com.example.grocery_store_sales_online.security;
 
 import com.example.grocery_store_sales_online.enums.AuthProvider;
-import com.example.grocery_store_sales_online.model.person.Employee;
+import com.example.grocery_store_sales_online.enums.EAccountStatus;
+import com.example.grocery_store_sales_online.enums.EResponseStatus;
+import com.example.grocery_store_sales_online.exception.ServiceBusinessExceptional;
 import com.example.grocery_store_sales_online.model.person.SocialProvider;
 import com.example.grocery_store_sales_online.model.person.User;
 
@@ -12,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,55 +30,30 @@ import java.util.Optional;
 @Slf4j
 public class CustomUserDetailsService implements UserDetailsService {
     private final UserServiceImpl userService;
-    private final EmployeeServiceImpl employeeService;
-    private final ISocialProviderService socialProviderService;
-
-    private static final Logger logger = LoggerFactory.getLogger(CustomUserDetailsService.class);
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String email)
-            throws UsernameNotFoundException {
-        log.info("CustomUserDetailsService:loadUserByUsername execution started.");
-        Optional<User> user = userService.findByEmail(email);
-        if (user.isPresent()) {
-            List<SocialProvider> socialProviders = socialProviderService.findByIdUser(user.get().getId());
-            SocialProvider socialProvider = socialProviders.stream()
-                    .filter(each -> each.getProvider().equals(AuthProvider.local))
-                    .findFirst()
-                    .orElseThrow(() ->new UsernameNotFoundException("User not found with : " + email));
-            return UserPrincipal.createUser(user.get(),socialProvider.getProviderId(), "ROLE_USER");
-        } else {
-            Optional<Employee> employee = employeeService.findByNameLogin(email);
-            if(employee.isPresent()){
-                List<SocialProvider> socialProviders = socialProviderService.findByIdEmployee(employee.get().getId());
-                SocialProvider socialProvider = socialProviders.stream()
-                        .filter(each -> each.getProvider().equals(AuthProvider.local))
-                        .findFirst()
-                        .orElseThrow(() ->new UsernameNotFoundException("User not found with : " + email));
-                return UserPrincipal.createEmployee(employee.get(),socialProvider.getProviderId(), employee.get().getRoles());
-            }
-            throw new UsernameNotFoundException("User not found with : " + email);
-        }
-    }
+    public UserDetails loadUserByUsername(String email)  {
+        try {
+            log.info("CustomUserDetailsService:loadUserByUsername execution started.");
+            User user = userService.findByEmail(email)
+                    .orElseGet(() -> userService.findByNameLogin(email)
+                            .orElseThrow(() -> new UsernameNotFoundException("User not found with : " + email)));
 
-//    @Transactional
-//    public UserDetails loadUserById(Long id) {
-//        User user = userService.findById(id).orElse(null);
-//        if (user != null) {
-//            return UserPrincipal.createUser(user, "ROLE_USER");
-//        } else {
-//            throw new ResourceNotFoundException("User", "id", id, EResponseStatus.USER_NOT_FOUND);
-//        }
-//    }
-//    @Transactional
-//    public UserDetails loadEmployeeById(Long id){
-//        Employee employee =employeeService.findById(id).orElse(null);
-//        if(employee!=null){
-//            return UserPrincipal.createEmployee(employee,employee.getRoles());
-//        }else {
-//            throw new ResourceNotFoundException("Nhân viên", "id", id, EResponseStatus.USER_NOT_FOUND);
-//        }
-//    }
+            if (!user.getAccountStatus().equals(EAccountStatus.ACTIVATED)) {
+                throw new DisabledException(EResponseStatus.ACCOUNT_DISABLE.getLabel());
+            }
+            return UserPrincipal.create(user, user.getRoles());
+        }catch (DisabledException ex){
+            throw ex;
+        }catch (UsernameNotFoundException ex){
+            log.error("Exception occurred while persisting CustomUserDetailsService:loadUserByUsername login fail , Exception message {}", ex.getMessage());
+            throw ex;
+        }catch (Exception ex){
+            log.error("Exception occurred while persisting CustomUserDetailsService:loadUserByUsername login fail , Exception message {}", ex.getMessage());
+            throw new BadCredentialsException("Đang nhập thất bại");
+        }
+
+    }
 
 }

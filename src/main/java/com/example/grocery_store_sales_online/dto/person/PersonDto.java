@@ -23,8 +23,7 @@ public abstract  class PersonDto {
     @Size(max = 70,message = CommonConstants.THIS_FIELD_TOO_LONG)
     @Size(min = 6,message = CommonConstants.THIS_FIELD_TOO_SHORT)
     private String confirmPassword;
-    @Size(max = 70,message = CommonConstants.THIS_FIELD_TOO_LONG)
-    @Size(min = 6,message = CommonConstants.THIS_FIELD_TOO_SHORT)
+    @SizeStringConstraint(sizeMin = 6, sizeMax = 70)
 //    @Pattern(regexp = CommonConstants.REGEX_ADDRESS,message = CommonConstants.THIS_FIELD_VALUE_NOT_FORMAT)
     private String address;
 

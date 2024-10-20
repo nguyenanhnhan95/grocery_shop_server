@@ -1,17 +1,15 @@
 package com.example.grocery_store_sales_online.custom.validation.handle;
 
 import com.example.grocery_store_sales_online.custom.validation.IdCardConstraint;
-import com.example.grocery_store_sales_online.repository.employee.IEmployeeRepository;
 import com.example.grocery_store_sales_online.repository.user.IUserRepository;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class IdCardValidator implements ConstraintValidator<IdCardConstraint,String> {
-    private final IEmployeeRepository employeeRepository;
+
     private final IUserRepository userRepository;
 
-    public IdCardValidator(IEmployeeRepository employeeRepository, IUserRepository userRepository) {
-        this.employeeRepository = employeeRepository;
+    public IdCardValidator( IUserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -20,6 +18,6 @@ public class IdCardValidator implements ConstraintValidator<IdCardConstraint,Str
         if(idCard==null || idCard.isEmpty()){
             return true;
         }
-        return userRepository.findByIdCard(idCard.trim()).isEmpty() && employeeRepository.findByIdCard(idCard.trim()).isEmpty();
+        return userRepository.findByIdCard(idCard.trim()).isEmpty();
     }
 }
